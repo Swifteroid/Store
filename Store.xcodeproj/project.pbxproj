@@ -1,0 +1,132 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		17FD03661824B57DE33BF395 /* Base - Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Debug.xcconfig"; sourceTree = "<group>"; };
+		17FD05D666E8135024B884A1 /* Base - Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Release.xcconfig"; sourceTree = "<group>"; };
+		17FD0AE94F3460323CE8CDE6 /* macOS - Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Application.xcconfig"; sourceTree = "<group>"; };
+		17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
+		17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Framework.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		17FD02E0C962182AD60A2E0F /* accessory */ = {
+			isa = PBXGroup;
+			children = (
+				17FD0EA02252B51B1A9DA6AE /* configuration */,
+			);
+			path = accessory;
+			sourceTree = "<group>";
+		};
+		17FD037C0520A2809A109AEC /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */,
+				17FD0AE94F3460323CE8CDE6 /* macOS - Application.xcconfig */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		17FD07E65551B7F858A88F9F /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				17FD03661824B57DE33BF395 /* Base - Debug.xcconfig */,
+				17FD05D666E8135024B884A1 /* Base - Release.xcconfig */,
+			);
+			name = Configuration;
+			path = dependency/git/xenomorph/source/Configuration;
+			sourceTree = SOURCE_ROOT;
+		};
+		17FD097C9DAFB3CB8FEC5BEB /* Target */ = {
+			isa = PBXGroup;
+			children = (
+				17FD037C0520A2809A109AEC /* macOS */,
+				17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */,
+			);
+			name = Target;
+			path = dependency/git/xenomorph/source/Target;
+			sourceTree = SOURCE_ROOT;
+		};
+		17FD0C7F1F2DF43D22DA1F81 /* dependency */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = dependency;
+			sourceTree = "<group>";
+		};
+		17FD0EA02252B51B1A9DA6AE /* configuration */ = {
+			isa = PBXGroup;
+			children = (
+				17FD07E65551B7F858A88F9F /* Configuration */,
+				17FD097C9DAFB3CB8FEC5BEB /* Target */,
+			);
+			name = configuration;
+			sourceTree = "<group>";
+		};
+		E6B63BE01E838FD100AA678E = {
+			isa = PBXGroup;
+			children = (
+				17FD0C7F1F2DF43D22DA1F81 /* dependency */,
+				17FD02E0C962182AD60A2E0F /* accessory */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		E6B63BE11E838FD100AA678E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+			};
+			buildConfigurationList = E6B63BE41E838FD100AA678E /* Build configuration list for PBXProject "Store" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E6B63BE01E838FD100AA678E;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		E6B63BE51E838FD100AA678E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 17FD03661824B57DE33BF395 /* Base - Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		E6B63BE61E838FD100AA678E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 17FD05D666E8135024B884A1 /* Base - Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E6B63BE41E838FD100AA678E /* Build configuration list for PBXProject "Store" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6B63BE51E838FD100AA678E /* Debug */,
+				E6B63BE61E838FD100AA678E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E6B63BE11E838FD100AA678E /* Project object */;
+}

@@ -1,0 +1,6 @@
+[submodule "dependency/git/ignore"]
+	path = dependency/git/ignore
+	url = https://github.com/bitwild/gitignore
+[submodule "dependency/git/xenomorph"]
+	path = dependency/git/xenomorph
+	url = https://github.com/swifteroid/xenomorph
