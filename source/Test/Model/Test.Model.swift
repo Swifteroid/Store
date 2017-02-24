@@ -1,6 +1,5 @@
 import CoreData
 import Foundation
-import Nimble
 import Store
 
 internal class ModelTestCase: TestCase
@@ -13,62 +12,14 @@ internal class ModelTestCase: TestCase
     }
 
     override internal class func tearDown() {
-        Store.default = nil
-    }
+        if let store: Store = Store.default {
+            let coordinator: NSPersistentStoreCoordinator = store.coordinator
 
-    // MARK: -
+            for store: NSPersistentStore in store.coordinator.persistentStores {
+                try! coordinator.remove(store)
+            }
 
-    internal func test() {
-        let books: [BookModel] = Array(0 ..< 10).map({ BookModel(title: "Title \($0)", author: "Author \($0)", publisher: "Publisher \($0)") })
-        let bookSet: BookModelSet = BookModelSet(models: books)
-        try! bookSet.save()
-
-        bookSet.models = []
-        try! bookSet.load()
-        expect(bookSet.models).to(haveCount(10))
-
-        try! bookSet.delete()
-        expect(bookSet.models).to(beEmpty())
-
-        try! bookSet.load()
-        expect(bookSet.models).to(beEmpty())
-    }
-}
-
-// MARK: -
-
-private class BookModel: Model
-{
-    fileprivate var title: String!
-    fileprivate var author: String!
-    fileprivate var publisher: String!
-
-    fileprivate init(id: String? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil) {
-        super.init(id: id)
-        self.title = title
-        self.author = author
-        self.publisher = publisher
-    }
-}
-
-private class BookModelSet: ModelSet<BookModel, Void>
-{
-    override fileprivate func update(object: NSManagedObject, with model: BookModel, configuration: Void? = nil) -> NSManagedObject {
-        return object.setValues([
-            "title": model.title,
-            "author": model.author,
-            "publisher": model.publisher
-        ])
-    }
-
-    override fileprivate func construct(with object: NSManagedObject, configuration: Void? = nil) -> BookModel {
-        return super.update(model: BookModel(), with: object, configuration: configuration)
-    }
-
-    override func update(model: BookModel, with object: NSManagedObject, configuration: Void? = nil) -> BookModel {
-        model.title = object.value(forKey: "title") as! String
-        model.author = object.value(forKey: "author") as! String
-        model.publisher = object.value(forKey: "publisher") as! String
-        return super.update(model: model, with: object, configuration: configuration)
+            Store.default = nil
+        }
     }
 }
