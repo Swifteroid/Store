@@ -24,13 +24,13 @@ internal class ModelTestCase: TestCase
         try! bookSet.save()
 
         bookSet.models = []
-        bookSet.load()
+        try! bookSet.load()
         expect(bookSet.models).to(haveCount(10))
 
         try! bookSet.delete()
         expect(bookSet.models).to(beEmpty())
 
-        bookSet.load()
+        try! bookSet.load()
         expect(bookSet.models).to(beEmpty())
     }
 }
