@@ -1,35 +1,53 @@
-import Store
 import CoreData
+import Store
 
-internal class UserModel: Model
+internal class UserModel: Model<UserModelKey, NoConfiguration>, ModelSetElementProtocol
 {
+    internal typealias Set = UserModelSet
+
     internal var name: String!
     internal var address: String!
-    internal var books: [BookModel]!
 
     internal init(id: String? = nil, name: String? = nil, address: String? = nil) {
         super.init(id: id)
         self.name = name
         self.address = address
     }
+
+    override internal subscript(property: Key) -> Any? {
+        get {
+            switch property {
+                case .name: return self.name
+                case .address: return self.address
+            }
+        }
+        set {
+            switch property {
+                case .name:  self.name = newValue as! String
+                case .address: self.address = newValue as! String
+            }
+        }
+    }
 }
 
-internal class UserModelSet: ModelSet<UserModel, Void>
+internal class UserModelSet: ModelSet<UserModel>
 {
-    override internal func update(object: NSManagedObject, with user: UserModel, configuration: Void? = nil) -> NSManagedObject {
-        return object.setValues([
-            "name": user.name,
-            "address": user.address
-        ])
-    }
-
-    override internal func construct(with object: NSManagedObject, configuration: Void? = nil) -> UserModel {
+    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> UserModel {
         return super.update(model: UserModel(), with: object, configuration: configuration)
     }
+}
 
-    override func update(model user: UserModel, with object: NSManagedObject, configuration: Void? = nil) -> UserModel {
-        user.name = object.value(forKey: "name") as! String
-        user.address = object.value(forKey: "address") as! String
-        return super.update(model: user, with: object, configuration: configuration)
+internal enum UserModelKey: String, ModelKeyProtocol
+{
+    internal typealias Configuration = NoConfiguration
+
+    case name
+    case address
+
+    public static var all: [UserModelKey] {
+        return [
+            self.name,
+            self.address
+        ]
     }
 }

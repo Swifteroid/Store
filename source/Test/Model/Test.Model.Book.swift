@@ -7,10 +7,13 @@ internal class BookModelTestCase: ModelTestCase
 {
     internal func test() {
         let books: [BookModel] = Array(0 ..< 10).map({ BookModel(title: "Title \($0)", author: "Author \($0)", publisher: "Publisher \($0)") })
-        let bookSet: BookModelSet = BookModelSet(models: books)
-        try! bookSet.save()
+        var bookSet: BookModelSet
 
-        bookSet.models = []
+        bookSet = BookModelSet(models: books)
+        try! bookSet.save()
+        expect(bookSet.models.map({ $0.id })).toNot(allPass(beNil()))
+
+        bookSet = BookModelSet(models: books)
         try! bookSet.load()
         expect(bookSet.models).to(haveCount(10))
 

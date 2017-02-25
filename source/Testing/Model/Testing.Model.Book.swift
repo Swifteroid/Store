@@ -1,8 +1,10 @@
-import Store
 import CoreData
+import Store
 
-internal class BookModel: Model
+internal class BookModel: Model<BookModelKey, NoConfiguration>, ModelSetElementProtocol
 {
+    public typealias Set = BookModelSet
+
     internal var title: String!
     internal var author: String!
     internal var publisher: String!
@@ -13,26 +15,45 @@ internal class BookModel: Model
         self.author = author
         self.publisher = publisher
     }
+
+    override internal subscript(property: Key) -> Any? {
+        get {
+            switch property {
+                case .author: return self.author
+                case .publisher: return self.publisher
+                case .title: return self.title
+            }
+        }
+        set {
+            switch property {
+                case .author:  self.author = newValue as! String
+                case .publisher: self.publisher = newValue as! String
+                case .title: self.title = newValue as! String
+            }
+        }
+    }
 }
 
-internal class BookModelSet: ModelSet<BookModel, Void>
+internal class BookModelSet: ModelSet<BookModel>
 {
-    override internal func update(object: NSManagedObject, with book: BookModel, configuration: Void? = nil) -> NSManagedObject {
-        return object.setValues([
-            "title": book.title,
-            "author": book.author,
-            "publisher": book.publisher
-        ])
-    }
-
-    override internal func construct(with object: NSManagedObject, configuration: Void? = nil) -> BookModel {
+    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> BookModel {
         return super.update(model: BookModel(), with: object, configuration: configuration)
     }
+}
 
-    override func update(model book: BookModel, with object: NSManagedObject, configuration: Void? = nil) -> BookModel {
-        book.title = object.value(forKey: "title") as! String
-        book.author = object.value(forKey: "author") as! String
-        book.publisher = object.value(forKey: "publisher") as! String
-        return super.update(model: book, with: object, configuration: configuration)
+internal enum BookModelKey: String, ModelKeyProtocol
+{
+    internal typealias Configuration = NoConfiguration
+
+    case author
+    case publisher
+    case title
+
+    public static var all: [BookModelKey] {
+        return [
+            self.author,
+            self.publisher,
+            self.title
+        ]
     }
 }

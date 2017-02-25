@@ -1,14 +1,14 @@
-open class Model
+import Foundation
+
+open class Model<KeyType:ModelKeyProtocol, ConfigurationType:ModelConfigurationProtocol>: ModelProtocol where KeyType.Configuration == ConfigurationType
 {
+    public typealias Key = KeyType
+    public typealias Configuration = ConfigurationType
 
     /*
     String representable of core data object id.
     */
     open var id: String?
-
-    open var identified: Bool {
-        return self.id != nil
-    }
 
     // MARK: -
 
@@ -18,18 +18,8 @@ open class Model
 
     // MARK: -
 
-    @discardableResult open func load<Configuration>(configuration: Configuration? = nil) throws -> Self {
-        try ModelSet<Model, Configuration>(models: [self]).load(configuration: configuration)
-        return self
-    }
-
-    @discardableResult open func save<Configuration>(configuration: Configuration? = nil) throws -> Self {
-        try ModelSet<Model, Configuration>(models: [self]).save(configuration: configuration)
-        return self
-    }
-
-    @discardableResult open func delete<Configuration>(configuration: Configuration? = nil) throws -> Self {
-        try ModelSet<Model, Configuration>(models: [self]).delete(configuration: configuration)
-        return self
+    open subscript(key: Key) -> Any? {
+        get { abort() }
+        set { abort() }
     }
 }
