@@ -1,6 +1,7 @@
 import CoreData
+import Foundation
 
-open class ModelSet<ModelType:ModelProtocol>: ModelSetProtocol where ModelType.Key.Configuration == ModelType.Configuration
+open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Configuration == ModelType.Configuration
 {
     public typealias Model = ModelType
 
@@ -137,6 +138,31 @@ open class ModelSet<ModelType:ModelProtocol>: ModelSetProtocol where ModelType.K
         }
 
         self.models = []
+        return self
+    }
+}
+
+// MARK: -
+
+public protocol BatchableProtocol: ModelProtocol
+{
+    associatedtype Batch: BatchProtocol
+}
+
+extension BatchableProtocol
+{
+    @discardableResult public func load(configuration: Batch.Model.Configuration? = nil) throws -> Self {
+        try Batch(models: [self as! Batch.Model]).load(configuration: configuration)
+        return self
+    }
+
+    @discardableResult public func save(configuration: Batch.Model.Configuration? = nil) throws -> Self {
+        try Batch(models: [self as! Batch.Model]).save(configuration: configuration)
+        return self
+    }
+
+    @discardableResult public func delete(configuration: Batch.Model.Configuration? = nil) throws -> Self {
+        try Batch(models: [self as! Batch.Model]).delete(configuration: configuration)
         return self
     }
 }

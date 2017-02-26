@@ -10,13 +10,13 @@ extension Schema
         return entity(for: type(of: model))
     }
 
-    open func entity<ModelSet:ModelSetProtocol>(for set: ModelSet) -> NSEntityDescription? {
+    open func entity<Batch:BatchProtocol>(for set: Batch) -> NSEntityDescription? {
         return entity(for: type(of: set))
     }
 
     private func entity(for type: Any.Type) -> NSEntityDescription? {
         let string: String = String(describing: type)
-        let expression: NSRegularExpression = try! NSRegularExpression(pattern: "(\\w+)Model(?:Set)?")
+        let expression: NSRegularExpression = try! NSRegularExpression(pattern: "(\\w+)(?:Model|Batch)")
 
         if let match: NSTextCheckingResult = expression.matches(in: string, range: NSRange(0 ..< string.characters.count)).first {
             return self.entitiesByName[(string as NSString).substring(with: match.rangeAt(1))]

@@ -1,9 +1,9 @@
 import CoreData
 import Store
 
-internal class BookModel: Model<BookModelKey, NoConfiguration>, ModelSetElementProtocol
+internal class BookModel: Model<BookModelKey, NoConfiguration>, BatchableProtocol
 {
-    public typealias Set = BookModelSet
+    public typealias Batch = BookBatch
 
     internal var title: String!
     internal var author: String!
@@ -34,7 +34,7 @@ internal class BookModel: Model<BookModelKey, NoConfiguration>, ModelSetElementP
     }
 }
 
-internal class BookModelSet: ModelSet<BookModel>
+internal class BookBatch: Batch<BookModel>
 {
     override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> BookModel {
         return super.update(model: BookModel(), with: object, configuration: configuration)

@@ -9,21 +9,19 @@
 /* Begin PBXBuildFile section */
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
 		17FD00602094F4F64F4AA918 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.swift */; };
-		17FD01F5A12FF237DE27E6AC /* Model.Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD00DC2DA73E925995B77C /* Model.Key.swift */; };
 		17FD02532D5F9052D3CAC84E /* Testing.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Testing.Model.Book.swift */; };
 		17FD03FC7625C79B85FE333D /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05FA44C66778BB925C8E /* Migration.swift */; };
 		17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */; };
 		17FD05F812CBDE154A4FCF3A /* Testing.Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD091DBFC2D248A26C048E /* Testing.Model.User.swift */; };
-		17FD07080DC0E2C125A95D8A /* Model.Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0E19AD2FC1A0DE103554 /* Model.Protocol.swift */; };
 		17FD074DCC1E98BD812963A1 /* Test.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */; };
-		17FD07C77BF7F7A9E2F2151C /* Model.Set.Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD018FF3AFA8DC74DEA393 /* Model.Set.Protocol.swift */; };
+		17FD07F5C266D315A1A8B2F2 /* Model.Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07E5B1C4793149700DA4 /* Model.Protocol.swift */; };
 		17FD08AEC750303E7FC903B3 /* Test.Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD04474F74538B52D9DD2A /* Test.Store.swift */; };
 		17FD08D09F5F1019333CC247 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0292DF60342AD0693245 /* Test.swift */; };
-		17FD0B1DAF2158502274C030 /* Model.Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0D757E98B7ED0EC23D58 /* Model.Configuration.swift */; };
+		17FD0AC13B4D5BE2C93E6A2A /* Batch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07B122ED1AF20F93FB0A /* Batch.swift */; };
 		17FD0C719C976A9789FBB9BE /* Test.Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0A49EC0685345EF4E819 /* Test.Model.User.swift */; };
-		17FD0CA0B5F6613358705D86 /* Model.Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD081385243FB22AD325BF /* Model.Set.swift */; };
 		17FD0CF496FE510E536E2B08 /* Store.Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0951E1ED302B0F56D96A /* Store.Schema.swift */; };
 		17FD0DEE69FF52C8D41A1749 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0BECD5BD4310CAEF64A0 /* Model.swift */; };
+		17FD0E49167DAA1D916817DC /* Batch.Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0063AB70BBBC8C369947 /* Batch.Protocol.swift */; };
 		E605B64F1E86644700A0E60A /* Nimble.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E605B6511E86761A00A0E60A /* library.xcdatamodeld */; };
 		E60746591E83969200B75E21 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; };
@@ -54,8 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		17FD00DC2DA73E925995B77C /* Model.Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Key.swift; sourceTree = "<group>"; };
-		17FD018FF3AFA8DC74DEA393 /* Model.Set.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Set.Protocol.swift; sourceTree = "<group>"; };
+		17FD0063AB70BBBC8C369947 /* Batch.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.Protocol.swift; sourceTree = "<group>"; };
 		17FD01B0C7FAE8A41DB8632F /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = file.private; path = Cartfile.private; sourceTree = "<group>"; };
 		17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.Foundation.FileManager.swift; sourceTree = "<group>"; };
 		17FD0234B5B36D7E2C1B4F09 /* Testing.Model.Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testing.Model.Book.swift; sourceTree = "<group>"; };
@@ -67,7 +64,8 @@
 		17FD05B26BF65B69CA906D45 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		17FD05D666E8135024B884A1 /* Base - Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Release.xcconfig"; sourceTree = "<group>"; };
 		17FD05FA44C66778BB925C8E /* Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
-		17FD081385243FB22AD325BF /* Model.Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Set.swift; sourceTree = "<group>"; };
+		17FD07B122ED1AF20F93FB0A /* Batch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.swift; sourceTree = "<group>"; };
+		17FD07E5B1C4793149700DA4 /* Model.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Protocol.swift; sourceTree = "<group>"; };
 		17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Book.swift; sourceTree = "<group>"; };
 		17FD091DBFC2D248A26C048E /* Testing.Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testing.Model.User.swift; sourceTree = "<group>"; };
 		17FD0951E1ED302B0F56D96A /* Store.Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Schema.swift; sourceTree = "<group>"; };
@@ -77,8 +75,6 @@
 		17FD0BECD5BD4310CAEF64A0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		17FD0C03C3B71159746705FC /* Nimble.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Nimble.framework.dSYM; path = Carthage/Build/Mac/Nimble.framework.dSYM; sourceTree = "<group>"; };
 		17FD0C103D052A2CEAE211F2 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
-		17FD0D757E98B7ED0EC23D58 /* Model.Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Configuration.swift; sourceTree = "<group>"; };
-		17FD0E19AD2FC1A0DE103554 /* Model.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Protocol.swift; sourceTree = "<group>"; };
 		17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		17FD0EA3D14033A8AF4F64C8 /* framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = framework.plist; sourceTree = "<group>"; };
 		17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Framework.xcconfig"; sourceTree = "<group>"; };
@@ -191,6 +187,7 @@
 				17FD0E8B566F3E718D4349C0 /* Migration */,
 				17FD051731CEE662B84A1EA9 /* Extension */,
 				17FD0C37314167BAF98C87EB /* Testing */,
+				17FD0F2C192740A2066F45AD /* Batch */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -275,6 +272,15 @@
 			name = configuration;
 			sourceTree = "<group>";
 		};
+		17FD0F2C192740A2066F45AD /* Batch */ = {
+			isa = PBXGroup;
+			children = (
+				17FD07B122ED1AF20F93FB0A /* Batch.swift */,
+				17FD0063AB70BBBC8C369947 /* Batch.Protocol.swift */,
+			);
+			path = Batch;
+			sourceTree = "<group>";
+		};
 		17FD0F6C24AB8D8CFAF28897 /* framework */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,11 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				17FD0BECD5BD4310CAEF64A0 /* Model.swift */,
-				17FD081385243FB22AD325BF /* Model.Set.swift */,
-				17FD00DC2DA73E925995B77C /* Model.Key.swift */,
-				17FD0D757E98B7ED0EC23D58 /* Model.Configuration.swift */,
-				17FD0E19AD2FC1A0DE103554 /* Model.Protocol.swift */,
-				17FD018FF3AFA8DC74DEA393 /* Model.Set.Protocol.swift */,
+				17FD07E5B1C4793149700DA4 /* Model.Protocol.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -399,12 +401,10 @@
 				17FD03FC7625C79B85FE333D /* Migration.swift in Sources */,
 				17FD00602094F4F64F4AA918 /* Store.swift in Sources */,
 				17FD0CF496FE510E536E2B08 /* Store.Schema.swift in Sources */,
-				17FD0B1DAF2158502274C030 /* Model.Configuration.swift in Sources */,
-				17FD01F5A12FF237DE27E6AC /* Model.Key.swift in Sources */,
-				17FD07080DC0E2C125A95D8A /* Model.Protocol.swift in Sources */,
+				17FD07F5C266D315A1A8B2F2 /* Model.Protocol.swift in Sources */,
 				17FD0DEE69FF52C8D41A1749 /* Model.swift in Sources */,
-				17FD07C77BF7F7A9E2F2151C /* Model.Set.Protocol.swift in Sources */,
-				17FD0CA0B5F6613358705D86 /* Model.Set.swift in Sources */,
+				17FD0E49167DAA1D916817DC /* Batch.Protocol.swift in Sources */,
+				17FD0AC13B4D5BE2C93E6A2A /* Batch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
