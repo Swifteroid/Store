@@ -12,7 +12,10 @@ open class Model<KeyType:ModelKeyProtocol, ConfigurationType:ModelConfigurationP
 
     // MARK: -
 
-    public init(id: String? = nil) {
+    public init() {
+    }
+
+    public init(id: String?) {
         self.id = id
     }
 

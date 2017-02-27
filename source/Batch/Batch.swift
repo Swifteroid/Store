@@ -62,7 +62,10 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
 
     @discardableResult open func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
         for key in Model.Key.for(configuration: configuration) {
-            model[key] = object.value(forKey: key.rawValue)
+
+            // Todo: use to work in Swift 3.0.2, watch for https://bugs.swift.org/browse/SR-4382
+
+            model[key] = object.value(forKey: key.rawValue as! String)
         }
 
         return model
@@ -110,7 +113,10 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
 
     @discardableResult open func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration? = nil) -> NSManagedObject {
         for key in Model.Key.for(configuration: configuration) {
-            object.setValue(model[key], forKey: key.rawValue)
+
+            // Todo: use to work in Swift 3.0.2, watch for https://bugs.swift.org/browse/SR-4382
+
+            object.setValue(model[key], forKey: key.rawValue as! String)
         }
 
         return object
