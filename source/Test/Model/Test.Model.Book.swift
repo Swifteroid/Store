@@ -16,6 +16,9 @@ internal class BookModelTestCase: ModelTestCase
         batch = BookBatch(models: books)
         try! batch.load()
         expect(batch.models).to(haveCount(10))
+        expect(batch.models.first?.author).toNot(beNil())
+        expect(batch.models.first?.publisher).toNot(beNil())
+        expect(batch.models.first?.title).toNot(beNil())
 
         try! batch.delete()
         expect(batch.models).to(beEmpty())

@@ -15,23 +15,6 @@ internal class BookModel: Model<BookModelKey, NoConfiguration>, BatchableProtoco
         self.author = author
         self.publisher = publisher
     }
-
-    override internal subscript(property: Key) -> Any? {
-        get {
-            switch property {
-                case .author: return self.author
-                case .publisher: return self.publisher
-                case .title: return self.title
-            }
-        }
-        set {
-            switch property {
-                case .author:  self.author = newValue as! String
-                case .publisher: self.publisher = newValue as! String
-                case .title: self.title = newValue as! String
-            }
-        }
-    }
 }
 
 internal class BookBatch: Batch<BookModel>

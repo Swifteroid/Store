@@ -13,21 +13,6 @@ internal class UserModel: Model<UserModelKey, NoConfiguration>, BatchableProtoco
         self.name = name
         self.address = address
     }
-
-    override internal subscript(property: Key) -> Any? {
-        get {
-            switch property {
-                case .name: return self.name
-                case .address: return self.address
-            }
-        }
-        set {
-            switch property {
-                case .name:  self.name = newValue as! String
-                case .address: self.address = newValue as! String
-            }
-        }
-    }
 }
 
 internal class UserBatch: Batch<UserModel>

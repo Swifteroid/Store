@@ -16,6 +16,8 @@ internal class UserModelTestCase: ModelTestCase
         batch = UserBatch(models: users)
         try! batch.load()
         expect(batch.models).to(haveCount(10))
+        expect(batch.models.first?.name).toNot(beNil())
+        expect(batch.models.first?.address).toNot(beNil())
 
         try! batch.delete()
         expect(batch.models).to(beEmpty())
