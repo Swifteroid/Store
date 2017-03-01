@@ -38,6 +38,8 @@ open class Store
                     return nil
                 }
             }
+        } else if !fileManager.directoryExists(atUrl: storeUrl.deletingLastPathComponent(), create: true) {
+            return nil
         }
 
         if let schema: Schema = schema ?? schemas.last?.0 {
