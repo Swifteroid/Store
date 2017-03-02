@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
-		17FD00602094F4F64F4AA918 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.swift */; };
+		17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */; };
 		17FD02532D5F9052D3CAC84E /* Testing.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Testing.Model.Book.swift */; };
 		17FD03FC7625C79B85FE333D /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05FA44C66778BB925C8E /* Migration.swift */; };
 		17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */; };
@@ -61,7 +61,7 @@
 		17FD03661824B57DE33BF395 /* Base - Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Debug.xcconfig"; sourceTree = "<group>"; };
 		17FD04474F74538B52D9DD2A /* Test.Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Store.swift; sourceTree = "<group>"; };
 		17FD0510C2CBD0A269F32C1F /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = file.resolved; path = Cartfile.resolved; sourceTree = "<group>"; };
-		17FD05B26BF65B69CA906D45 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Coordinator.swift; sourceTree = "<group>"; };
 		17FD05D666E8135024B884A1 /* Base - Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Release.xcconfig"; sourceTree = "<group>"; };
 		17FD05FA44C66778BB925C8E /* Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
 		17FD07B122ED1AF20F93FB0A /* Batch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.swift; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 		17FD0E287E1D49F1FB7070E3 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				17FD05B26BF65B69CA906D45 /* Store.swift */,
+				17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */,
 				17FD0951E1ED302B0F56D96A /* Store.Schema.swift */,
 			);
 			path = Store;
@@ -399,7 +399,7 @@
 			files = (
 				17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */,
 				17FD03FC7625C79B85FE333D /* Migration.swift in Sources */,
-				17FD00602094F4F64F4AA918 /* Store.swift in Sources */,
+				17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */,
 				17FD0CF496FE510E536E2B08 /* Store.Schema.swift in Sources */,
 				17FD07F5C266D315A1A8B2F2 /* Model.Protocol.swift in Sources */,
 				17FD0DEE69FF52C8D41A1749 /* Model.swift in Sources */,

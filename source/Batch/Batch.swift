@@ -5,7 +5,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
 {
     public typealias Model = ModelType
 
-    open var store: Store?
+    open var coordinator: Coordinator?
 
     open var models: [Model] = []
 
@@ -21,8 +21,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
         // Todo: try! or try?
         // Todo: request will pull everything, must limit this to ids only, if have any.
 
-        let store: Store = (self.store ?? Store.default)
-        let coordinator: NSPersistentStoreCoordinator = store.coordinator
+        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
         let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
         let request: NSFetchRequest<NSManagedObject> = self.prepare(request: NSFetchRequest(), configuration: configuration)
         var models: Models = (identified: [:], loaded: [])
@@ -48,8 +47,8 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
     }
 
     @discardableResult open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Model.Configuration? = nil) -> NSFetchRequest<Result> {
-        let store: Store = (self.store ?? Store.default)
-        let entity: NSEntityDescription? = store.schema.entity(for: self)
+        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
+        let entity: NSEntityDescription? = coordinator.schema.entity(for: self)
 
         request.entity = entity
 
@@ -78,8 +77,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
             return self
         }
 
-        let store: Store = (self.store ?? Store.default)
-        let coordinator: NSPersistentStoreCoordinator = store.coordinator
+        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
         let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
         var models: [NSManagedObject: Model] = [:]
 
@@ -88,7 +86,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
         for model in self.models {
             if let object: NSManagedObject = try context.existingObject(with: model) {
                 self.update(object: object, with: model, configuration: configuration)
-            } else if let entity: NSEntityDescription = store.schema.entity(for: model) {
+            } else if let entity: NSEntityDescription = coordinator.schema.entity(for: model) {
                 let object: NSManagedObject = NSManagedObject(entity: entity, insertInto: context)
                 self.update(object: object, with: model, configuration: configuration)
                 models[object] = model
@@ -129,8 +127,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
             return self
         }
 
-        let store: Store = (self.store ?? Store.default)
-        let coordinator: NSPersistentStoreCoordinator = store.coordinator
+        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
         let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
         for model in self.models {

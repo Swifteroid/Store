@@ -1,20 +1,21 @@
 import CoreData
 
-open class Store
-{
-    open static var `default`: Store!
+public typealias Coordinator = NSPersistentStoreCoordinator
 
-    open var coordinator: NSPersistentStoreCoordinator
+private var coordinator: Coordinator!
+
+extension Coordinator
+{
+    open static var `default`: Coordinator! {
+        get { return coordinator }
+        set { coordinator = newValue }
+    }
 
     open var schema: Schema {
-        return coordinator.managedObjectModel
+        return self.managedObjectModel
     }
 
-    public init(coordinator: NSPersistentStoreCoordinator) {
-        self.coordinator = coordinator
-    }
-
-    public init?(storeUrl: URL, schemaUrl: URL, handler: () -> (Bool)) {
+    public convenience init?(storeUrl: URL, schemaUrl: URL, handler: () -> (Bool)) {
         let fileManager: FileManager = FileManager.default
         let schemas: [(Schema, URL)] = Schema.schemas(at: schemaUrl)
         var schema: Schema?
@@ -43,15 +44,13 @@ open class Store
         }
 
         if let schema: Schema = schema ?? schemas.last?.0 {
-            let coordinator: NSPersistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: schema)
+            self.init(managedObjectModel: schema)
 
             do {
-                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeUrl, options: nil)
+                try self.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeUrl, options: nil)
             } catch {
                 return nil
             }
-
-            self.coordinator = coordinator
         } else {
             return nil
         }
