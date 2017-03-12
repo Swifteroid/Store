@@ -18,7 +18,6 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
     @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
         typealias Models = (identified: [String: Model], loaded: [Model])
 
-        // Todo: try! or try?
         // Todo: request will pull everything, must limit this to ids only, if have any.
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
@@ -97,6 +96,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
         }
 
         if context.hasChanges {
+            NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
             try context.save()
         }
 
@@ -137,6 +137,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
         }
 
         if context.hasChanges {
+            NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
             try context.save()
         }
 

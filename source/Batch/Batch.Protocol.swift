@@ -39,3 +39,18 @@ extension BatchableProtocol
         return self
     }
 }
+
+// MARK: -
+
+public struct BatchNotification
+{
+    public static let willSaveContext: Notification.Name = Notification.Name("BatchWillSaveNotification")
+}
+
+extension BatchNotification
+{
+    public struct Key
+    {
+        public static let context: String = "context"
+    }
+}
