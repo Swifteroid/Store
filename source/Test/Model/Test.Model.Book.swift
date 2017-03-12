@@ -6,6 +6,11 @@ import Store
 internal class BookModelTestCase: ModelTestCase
 {
     internal func test() {
+        let book: BookModel = BookModel(title: "Title", author: "Author", publisher: "Publisher")
+        try! book.save()
+        try! book.load()
+        try! book.delete()
+
         let books: [BookModel] = Array(0 ..< 10).map({ BookModel(title: "Title \($0)", author: "Author \($0)", publisher: "Publisher \($0)") })
         var batch: BookBatch
 

@@ -147,31 +147,6 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
 
 // MARK: -
 
-public protocol BatchableProtocol: ModelProtocol
-{
-    associatedtype Batch: BatchProtocol
-}
-
-extension BatchableProtocol
-{
-    @discardableResult public func load(configuration: Batch.Model.Configuration? = nil) throws -> Self {
-        try Batch(models: [self as! Batch.Model]).load(configuration: configuration)
-        return self
-    }
-
-    @discardableResult public func save(configuration: Batch.Model.Configuration? = nil) throws -> Self {
-        try Batch(models: [self as! Batch.Model]).save(configuration: configuration)
-        return self
-    }
-
-    @discardableResult public func delete(configuration: Batch.Model.Configuration? = nil) throws -> Self {
-        try Batch(models: [self as! Batch.Model]).delete(configuration: configuration)
-        return self
-    }
-}
-
-// MARK: -
-
 extension NSManagedObject
 {
     open func setValues(_ values: [String: Any]) -> Self {

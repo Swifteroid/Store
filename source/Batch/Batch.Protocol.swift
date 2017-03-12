@@ -7,19 +7,35 @@ public protocol BatchProtocol: class
     var models: [Model] { get set }
 
     init(models: [Model])
+
+    @discardableResult func load(configuration: Model.Configuration?) throws -> Self
+
+    @discardableResult func save(configuration: Model.Configuration?) throws -> Self
+
+    @discardableResult func delete(configuration: Model.Configuration?) throws -> Self
 }
 
-extension BatchProtocol
+// MARK: -
+
+public protocol BatchableProtocol: ModelProtocol
 {
-    @discardableResult public func load(configuration: Model.Configuration? = nil) throws -> Self {
-        abort()
+    associatedtype Batch: BatchProtocol
+}
+
+extension BatchableProtocol
+{
+    @discardableResult public func load(configuration: Batch.Model.Configuration? = nil) throws -> Self {
+        try (Batch(models: [self as! Batch.Model]) as Batch).load(configuration: configuration)
+        return self
     }
 
-    @discardableResult public func save(configuration: Model.Configuration? = nil) throws -> Self {
-        abort()
+    @discardableResult public func save(configuration: Batch.Model.Configuration? = nil) throws -> Self {
+        try Batch(models: [self as! Batch.Model]).save(configuration: configuration)
+        return self
     }
 
-    @discardableResult public func delete(configuration: Model.Configuration? = nil) throws -> Self {
-        abort()
+    @discardableResult public func delete(configuration: Batch.Model.Configuration? = nil) throws -> Self {
+        try (Batch(models: [self as! Batch.Model]) as Batch).delete(configuration: configuration)
+        return self
     }
 }
