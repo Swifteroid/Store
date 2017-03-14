@@ -6,12 +6,13 @@ import Store
 internal class UserModelTestCase: ModelTestCase
 {
     internal func test() {
-        let user: UserModel = UserModel(name: "Name", address: "Address")
+        let user: UserModel = UserModel.fake()
+
         try! user.save()
         try! user.load()
         try! user.delete()
 
-        let users: [UserModel] = Array(0 ..< 10).map({ UserModel(name: "Name \($0)", address: "Address \($0)") })
+        let users: [UserModel] = (0 ..< 10).map({ _ in UserModel.fake() })
         var batch: UserBatch
 
         batch = UserBatch(models: users)

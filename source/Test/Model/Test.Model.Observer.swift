@@ -10,7 +10,7 @@ internal class ModelObserverTestCase: ModelTestCase
         let model: BookModel
         var expectations: [XCTestExpectation] = []
 
-        model = BookModel(title: "Title", author: "Author", publisher: "Publisher")
+        model = BookModel.fake()
         expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate.rawValue, object: observer))
         try! model.save()
         expect(observer.models.first?.id).to(equal(model.id))

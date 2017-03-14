@@ -1,4 +1,5 @@
 import CoreData
+import Fakery
 import Store
 
 internal class UserModel: Model<UserModelKey, NoConfiguration>, BatchableProtocol
@@ -34,5 +35,18 @@ internal enum UserModelKey: String, ModelKeyProtocol
             self.name,
             self.address
         ]
+    }
+}
+
+// MARK: -
+
+extension UserModel
+{
+    internal static func fake() -> UserModel {
+        let faker: Faker = Faker()
+        return UserModel(
+            name: faker.name.name(),
+            address: faker.address.streetAddress(includeSecondary: true)
+        )
     }
 }

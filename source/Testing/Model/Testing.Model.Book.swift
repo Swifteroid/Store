@@ -1,4 +1,5 @@
 import CoreData
+import Fakery
 import Store
 
 internal class BookModel: Model<BookModelKey, NoConfiguration>, BatchableProtocol
@@ -38,5 +39,19 @@ internal enum BookModelKey: String, ModelKeyProtocol
             self.publisher,
             self.title
         ]
+    }
+}
+
+// MARK: -
+
+extension BookModel
+{
+    internal static func fake() -> BookModel {
+        let faker: Faker = Faker()
+        return BookModel(
+            title: faker.commerce.productName(),
+            author: faker.name.name(),
+            publisher: faker.company.name()
+        )
     }
 }

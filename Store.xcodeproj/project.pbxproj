@@ -27,6 +27,8 @@
 		E605B64F1E86644700A0E60A /* Nimble.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E605B6511E86761A00A0E60A /* library.xcdatamodeld */; };
 		E60746591E83969200B75E21 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; };
+		E6E9F6691E9B6A4A0009A096 /* Fakery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6E9F6681E9B6A360009A096 /* Fakery.framework */; };
+		E6E9F66A1E9B6A4C0009A096 /* Fakery.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E6E9F6681E9B6A360009A096 /* Fakery.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E6E9F66A1E9B6A4C0009A096 /* Fakery.framework in Embed Frameworks */,
 				E605B64F1E86644700A0E60A /* Nimble.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -87,6 +90,8 @@
 		E60746411E83949000B75E21 /* Store.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Store.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E607464A1E83949000B75E21 /* Store - Test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Store - Test.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E642BFD91E87A9630001C699 /* 1.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.1.0.xcdatamodel; sourceTree = "<group>"; };
+		E6E9F6671E9B6A360009A096 /* Fakery.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Fakery.framework.dSYM; path = Carthage/Build/Mac/Fakery.framework.dSYM; sourceTree = "<group>"; };
+		E6E9F6681E9B6A360009A096 /* Fakery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fakery.framework; path = Carthage/Build/Mac/Fakery.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6E9F6691E9B6A4A0009A096 /* Fakery.framework in Frameworks */,
 				E60746591E83969200B75E21 /* Nimble.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,6 +184,7 @@
 		17FD0862C4BFB7514CB7A91F /* dsym */ = {
 			isa = PBXGroup;
 			children = (
+				E6E9F6671E9B6A360009A096 /* Fakery.framework.dSYM */,
 				17FD0C03C3B71159746705FC /* Nimble.framework.dSYM */,
 			);
 			name = dsym;
@@ -289,6 +296,7 @@
 		17FD0F6C24AB8D8CFAF28897 /* framework */ = {
 			isa = PBXGroup;
 			children = (
+				E6E9F6681E9B6A360009A096 /* Fakery.framework */,
 				17FD0C103D052A2CEAE211F2 /* Nimble.framework */,
 			);
 			name = framework;
@@ -460,7 +468,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = dependency/Carthage/Build/Mac;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).test";
 			};
 			name = Debug;
 		};
@@ -468,7 +476,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = dependency/Carthage/Build/Mac;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).test";
 			};
 			name = Release;
 		};
@@ -476,7 +484,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FD03661824B57DE33BF395 /* Base - Debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = dependency/Carthage/Build/Mac;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swifteroid.store;
 			};
 			name = Debug;
 		};
@@ -484,7 +494,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FD05D666E8135024B884A1 /* Base - Release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = dependency/Carthage/Build/Mac;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swifteroid.store;
 			};
 			name = Release;
 		};
