@@ -160,7 +160,7 @@ extension NSManagedObject
 
 extension NSManagedObjectContext
 {
-    fileprivate convenience init(coordinator: NSPersistentStoreCoordinator, concurrency: NSManagedObjectContextConcurrencyType) {
+    public convenience init(coordinator: NSPersistentStoreCoordinator, concurrency: NSManagedObjectContextConcurrencyType) {
         self.init(concurrencyType: concurrency)
         self.persistentStoreCoordinator = coordinator
     }

@@ -12,22 +12,22 @@ open class Migration
 {
 
     /*
-    Migrates data store at the given url using specified schemas with identifiers, managed object models must
-    be ordered by their version, identifiers are used primarily for logging.
+    Migrates data store at the given url using specified schemas and returns final schema used by the store, schemas must
+    be ordered by their version.
     */
-    open func migrate(store: URL, schemas: [(NSManagedObjectModel, URL)]) throws -> NSManagedObjectModel? {
+    @discardableResult open func migrate(store: URL, schemas: [Schema]) throws -> Schema? {
 
         // First things first, we must figure what schema is used with data store. We do this in reverse order, because
         // if for whatever reason the earlier schema will be compatible, we will be migrating our data in loops, potentially
         // damaging it along the way.
 
         let metadata: [String: AnyObject] = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: store) as [String: AnyObject]
-        let index: Int = schemas.reversed().index(where: { $0.0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }) ?? -1
+        let index: Int = schemas.reversed().index(where: { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }) ?? -1
 
         if index == -1 {
-            throw Error.noCompatibleManagedObjectModel
+            throw Error.noCompatibleSchema
         } else if index == 0 {
-            return schemas.last!.0
+            return schemas.last!
         }
 
         let fileManager: FileManager = FileManager.default
@@ -38,12 +38,15 @@ open class Migration
             .appendingPathComponent("\(store.deletingPathExtension().lastPathComponent) - \(dateFormatter.string(from: Date()))", isDirectory: false)
             .appendingPathExtension(store.pathExtension)
 
-        guard fileManager.directoryExists(atUrl: backupUrl.deletingLastPathComponent(), create: true) else { return nil }
+        guard fileManager.directoryExists(at: backupUrl.deletingLastPathComponent(), create: true) else {
+            throw Error.file("Cannot provide backup directory for migration.")
+        }
+
         try! fileManager.copyItem(at: store, to: backupUrl)
 
         for i in schemas.count - 1 - index ..< schemas.count - 1 {
-            let sourceSchema: NSManagedObjectModel = schemas[i].0
-            let destinationSchema: NSManagedObjectModel = schemas[i + 1].0
+            let sourceSchema: Schema = schemas[i]
+            let destinationSchema: Schema = schemas[i + 1]
 
             let migrationManager: NSMigrationManager = NSMigrationManager(sourceModel: sourceSchema, destinationModel: destinationSchema)
             let mappingModel: NSMappingModel = self.getMappingModel(source: sourceSchema, destination: destinationSchema)
@@ -51,7 +54,9 @@ open class Migration
             let temporaryUrl: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString)
             let migrationUrl: URL = temporaryUrl.appendingPathComponent(store.lastPathComponent)
 
-            guard fileManager.directoryExists(atUrl: temporaryUrl, create: true) else { return nil }
+            guard fileManager.directoryExists(at: temporaryUrl, create: true) else {
+                throw Error.file("Cannot provide temporary directory for migration.")
+            }
 
             try! migrationManager.migrateStore(
                 from: store,
@@ -79,10 +84,10 @@ open class Migration
             try! fileManager.removeItem(at: temporaryUrl)
         }
 
-        return schemas.last!.0
+        return schemas.last!
     }
 
-    open func getMappingModel(source: NSManagedObjectModel, destination: NSManagedObjectModel) -> NSMappingModel {
+    open func getMappingModel(source: Schema, destination: Schema) -> NSMappingModel {
         let mappingModel: NSMappingModel? = NSMappingModel(from: Bundle.allBundles, forSourceModel: source, destinationModel: destination)
         return mappingModel ?? (try! NSMappingModel.inferredMappingModel(forSourceModel: source, destinationModel: destination))
     }
@@ -95,7 +100,8 @@ extension Migration
 {
     public enum Error: Swift.Error
     {
-        case noCompatibleManagedObjectModel
+        case noCompatibleSchema
+        case file(String)
     }
 }
 

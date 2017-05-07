@@ -18,7 +18,7 @@ extension Schema
         let string: String = String(describing: type)
         let expression: NSRegularExpression = try! NSRegularExpression(pattern: "(\\w+)(?:Model|Batch)")
 
-        if let match: NSTextCheckingResult = expression.matches(in: string, range: NSRange(0 ..< string.characters.count)).first {
+        if let match: NSTextCheckingResult = expression.firstMatch(in: string, range: NSRange(0 ..< string.characters.count)) {
             return self.entitiesByName[(string as NSString).substring(with: match.rangeAt(1))]
         }
 
@@ -28,7 +28,7 @@ extension Schema
     // MARK: -
 
     /*
-    Returns all schemas at the specified url, which is typically the compiled momd-type file. Schemas will be sorted by name
+    Returns all schemas at the specified url, which is typically a compiled `momd` type file. Schemas will be sorted by name
     in ascending order, which should go in line if semver is used for versioning.
     */
     open class func schemas(at url: URL) -> [(Schema, URL)] {

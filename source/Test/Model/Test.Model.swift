@@ -6,9 +6,9 @@ internal class ModelTestCase: TestCase
 {
     override internal class func setUp() {
         let storeUrl: URL = Coordinator.url(for: "Store - Test")
-        let schemaUrl: URL = Bundle(for: self).url(forResource: "library", withExtension: "momd")!
+        let schemaUrl: URL = PathUtility.librarySchemaUrl
         try! FileManager.default.removeItem(at: storeUrl)
-        Coordinator.default = Coordinator(storeUrl: storeUrl, schemaUrl: schemaUrl, handler: { true })!
+        Coordinator.default = Coordinator(store: storeUrl, schema: schemaUrl, handler: { true })!
     }
 
     override internal class func tearDown() {

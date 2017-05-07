@@ -1,7 +1,7 @@
 import CoreData
 import Foundation
 
-open class ModelObserver<Model:ModelProtocol & BatchableProtocol & Equatable>
+open class ModelObserver<Model:BatchableProtocol & Equatable>
 {
     private var observer: Any?
 

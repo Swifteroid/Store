@@ -6,18 +6,19 @@ private var coordinator: Coordinator!
 
 extension Coordinator
 {
-    open static var `default`: Coordinator! {
-        get { return coordinator }
-        set { coordinator = newValue }
+    public convenience init(schema: Schema) {
+        self.init(managedObjectModel: schema)
     }
 
-    open var schema: Schema {
-        return self.managedObjectModel
-    }
-
-    public convenience init?(storeUrl: URL, schemaUrl: URL, handler: () -> (Bool)) {
+    /*
+    Sets up coordinator with store at the given url. If store already exists it will be automatically migrated to the latest schema found
+    at specified schema url, typically compiled momd file. If it doesn't exist it will be created using the latest schema. Handler is invoked
+    when migration fails and specifies whether store should be deleted, so it can be recreated. Inside it you can ask user if he really wants
+    to delete broken data file or attempt to repair it.
+    */
+    public convenience init?(store storeUrl: URL, schema schemaUrl: URL, handler: () -> (Bool)) {
         let fileManager: FileManager = FileManager.default
-        let schemas: [(Schema, URL)] = Schema.schemas(at: schemaUrl)
+        let schemas: [Schema] = Schema.schemas(at: schemaUrl).map({ $0.0 })
         var schema: Schema?
 
         // If we have store at the given url we wanna try migrating it, otherwise it will be created
@@ -39,11 +40,11 @@ extension Coordinator
                     return nil
                 }
             }
-        } else if !fileManager.directoryExists(atUrl: storeUrl.deletingLastPathComponent(), create: true) {
+        } else if !fileManager.directoryExists(at: storeUrl.deletingLastPathComponent(), create: true) {
             return nil
         }
 
-        if let schema: Schema = schema ?? schemas.last?.0 {
+        if let schema: Schema = schema ?? schemas.last {
             self.init(managedObjectModel: schema)
 
             do {
@@ -54,6 +55,17 @@ extension Coordinator
         } else {
             return nil
         }
+    }
+
+    // MARK: -
+
+    open static var `default`: Coordinator! {
+        get { return coordinator }
+        set { coordinator = newValue }
+    }
+
+    open var schema: Schema {
+        return self.managedObjectModel
     }
 
     // MARK: -
