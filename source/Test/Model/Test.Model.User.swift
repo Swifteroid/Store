@@ -8,9 +8,15 @@ internal class UserModelTestCase: ModelTestCase
     internal func test() {
         let user: UserModel = UserModel.fake()
 
+        expect(user.exists).to(beFalse())
         try! user.save()
+        expect(user.exists).toNot(beFalse())
+
         try! user.load()
+
+        expect(user.exists).toNot(beFalse())
         try! user.delete()
+        expect(user.exists).to(beFalse())
 
         let users: [UserModel] = (0 ..< 10).map({ _ in UserModel.fake() })
         var batch: UserBatch

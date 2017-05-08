@@ -8,9 +8,15 @@ internal class BookModelTestCase: ModelTestCase
     internal func test() {
         let book: BookModel = BookModel.fake()
 
+        expect(book.exists).to(beFalse())
         try! book.save()
+        expect(book.exists).toNot(beFalse())
+
         try! book.load()
+
+        expect(book.exists).toNot(beFalse())
         try! book.delete()
+        expect(book.exists).to(beFalse())
 
         let books: [BookModel] = (0 ..< 10).map({ _ in BookModel.fake() })
         var batch: BookBatch

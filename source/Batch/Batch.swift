@@ -15,6 +15,24 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
 
     // MARK: -
 
+    public func exist(models: [Model]? = nil) -> Bool {
+        let models: [Model] = models ?? self.models
+        if models.isEmpty { return false }
+
+        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
+        let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+
+        // If any model doesn't exist than we return false.
+
+        for model in models {
+            if (try? context.existingObject(with: model)) ?? nil == nil { // This is priceless…
+                return false
+            }
+        }
+
+        return true
+    }
+
     @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
         typealias Models = (identified: [String: Model], loaded: [Model])
 

@@ -8,11 +8,19 @@ public protocol BatchProtocol: class
 
     init(models: [Model])
 
+    func exist(models: [Model]?) -> Bool
+    func exists(model: Model) -> Bool
+
     @discardableResult func load(configuration: Model.Configuration?) throws -> Self
-
     @discardableResult func save(configuration: Model.Configuration?) throws -> Self
-
     @discardableResult func delete(configuration: Model.Configuration?) throws -> Self
+}
+
+extension BatchProtocol
+{
+    public func exists(model: Model) -> Bool {
+        return self.exist(models: [model])
+    }
 }
 
 // MARK: -
@@ -20,10 +28,16 @@ public protocol BatchProtocol: class
 public protocol BatchableProtocol: ModelProtocol
 {
     associatedtype Batch: BatchProtocol
+
+    var exists: Bool { get }
 }
 
 extension BatchableProtocol
 {
+    public var exists: Bool {
+        return (Batch(models: []) as Batch).exist(models: [self as! Batch.Model])
+    }
+
     @discardableResult public func load(configuration: Batch.Model.Configuration? = nil) throws -> Self {
         try (Batch(models: [self as! Batch.Model]) as Batch).load(configuration: configuration)
         return self
