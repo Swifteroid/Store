@@ -174,6 +174,72 @@ extension NSManagedObject
     }
 }
 
+// MARK: relationship
+
+extension NSManagedObject
+{
+
+    /*
+    Returns related models using model construction method in batch derived from specified batchable protocol.
+    */
+    open func relationship<T:BatchableProtocol>(for name: String) -> [T] where T.Key.Configuration == T.Configuration {
+        let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
+        var models: [T] = []
+
+        for object in self.mutableSetValue(forKey: name).allObjects as! [NSManagedObject] {
+            let model: T = batch.construct(with: object)
+            model.id = String(objectId: object.objectID)
+            models.append(model)
+        }
+
+        return models
+    }
+
+    /*
+    Sets new relationship objects replacing all existing ones.
+    */
+    open func relationship(set objects: [NSManagedObject], for name: String) {
+        let set: NSMutableSet = self.mutableSetValue(forKey: name)
+        set.removeAllObjects()
+        set.addObjects(from: objects)
+    }
+
+    /*
+    Sets new relationship models.
+    */
+    open func relationship<Model:ModelProtocol>(set models: [Model], for name: String) throws {
+        guard let context: NSManagedObjectContext = self.managedObjectContext else { throw RelationshipError.noContext }
+        var objects: [NSManagedObject] = []
+
+        for model in models {
+            if let object: NSManagedObject = try context.existingObject(with: model) {
+                objects.append(object)
+            } else {
+                throw RelationshipError.noObject
+            }
+        }
+
+        self.relationship(set: objects, for: name)
+    }
+}
+
+extension NSManagedObject
+{
+    public enum RelationshipError: Error
+    {
+        /*
+        Managed object upon which a relationship is being updated has no context making it impossible to retrieve model
+        managed objects.
+        */
+        case noContext
+
+        /*
+        Cannot retrieve model's managed object, it's probably not saved or got deleted. 
+        */
+        case noObject
+    }
+}
+
 // MARK: -
 
 extension NSManagedObjectContext

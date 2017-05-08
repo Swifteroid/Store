@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
 		17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */; };
-		17FD02532D5F9052D3CAC84E /* Testing.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Testing.Model.Book.swift */; };
+		17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */; };
 		17FD03B452168BA6C34893F8 /* Test.Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07B5F5FE7CF615064197 /* Test.Migration.swift */; };
 		17FD03FC7625C79B85FE333D /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05FA44C66778BB925C8E /* Migration.swift */; };
 		17FD054745289379020A0115 /* Model.Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD031A2F3C58FC0FB9EC08 /* Model.Observer.swift */; };
 		17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */; };
-		17FD05F812CBDE154A4FCF3A /* Testing.Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD091DBFC2D248A26C048E /* Testing.Model.User.swift */; };
+		17FD05F812CBDE154A4FCF3A /* Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD091DBFC2D248A26C048E /* Model.User.swift */; };
 		17FD074DCC1E98BD812963A1 /* Test.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */; };
 		17FD07F5C266D315A1A8B2F2 /* Model.Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07E5B1C4793149700DA4 /* Model.Protocol.swift */; };
 		17FD08AEC750303E7FC903B3 /* Test.Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD04474F74538B52D9DD2A /* Test.Store.swift */; };
@@ -64,7 +64,7 @@
 		17FD0154703E758882907F95 /* Migration.Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Utility.swift; sourceTree = "<group>"; };
 		17FD01B0C7FAE8A41DB8632F /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = file.private; path = Cartfile.private; sourceTree = "<group>"; };
 		17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.Foundation.FileManager.swift; sourceTree = "<group>"; };
-		17FD0234B5B36D7E2C1B4F09 /* Testing.Model.Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testing.Model.Book.swift; sourceTree = "<group>"; };
+		17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Book.swift; sourceTree = "<group>"; };
 		17FD029283DBA3603FFF0867 /* test.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = test.plist; sourceTree = "<group>"; };
 		17FD0292DF60342AD0693245 /* Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		17FD02E9D406040C55FBF3A4 /* Utility.Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.Path.swift; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 		17FD07B5F5FE7CF615064197 /* Test.Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Migration.swift; sourceTree = "<group>"; };
 		17FD07E5B1C4793149700DA4 /* Model.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Protocol.swift; sourceTree = "<group>"; };
 		17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Book.swift; sourceTree = "<group>"; };
-		17FD091DBFC2D248A26C048E /* Testing.Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testing.Model.User.swift; sourceTree = "<group>"; };
+		17FD091DBFC2D248A26C048E /* Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.User.swift; sourceTree = "<group>"; };
 		17FD0951E1ED302B0F56D96A /* Store.Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Schema.swift; sourceTree = "<group>"; };
 		17FD0A49EC0685345EF4E819 /* Test.Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.User.swift; sourceTree = "<group>"; };
 		17FD0AE94F3460323CE8CDE6 /* macOS - Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Application.xcconfig"; sourceTree = "<group>"; };
@@ -173,8 +173,8 @@
 		17FD0712F8EB0DFC290CD2FE /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				17FD0234B5B36D7E2C1B4F09 /* Testing.Model.Book.swift */,
-				17FD091DBFC2D248A26C048E /* Testing.Model.User.swift */,
+				17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */,
+				17FD091DBFC2D248A26C048E /* Model.User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -463,8 +463,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */,
-				17FD02532D5F9052D3CAC84E /* Testing.Model.Book.swift in Sources */,
-				17FD05F812CBDE154A4FCF3A /* Testing.Model.User.swift in Sources */,
+				17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */,
+				17FD05F812CBDE154A4FCF3A /* Model.User.swift in Sources */,
 				17FD08D09F5F1019333CC247 /* Test.swift in Sources */,
 				17FD08AEC750303E7FC903B3 /* Test.Store.swift in Sources */,
 				17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */,

@@ -8,6 +8,7 @@ internal class UserModel: Model<UserModelKey, NoConfiguration>, BatchableProtoco
 
     internal var name: String!
     internal var address: String!
+    internal var books: [BookModel]!
 
     internal init(id: String? = nil, name: String? = nil, address: String? = nil) {
         super.init(id: id)
@@ -18,8 +19,20 @@ internal class UserModel: Model<UserModelKey, NoConfiguration>, BatchableProtoco
 
 internal class UserBatch: Batch<UserModel>
 {
-    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> UserModel {
+    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
         return super.update(model: UserModel(), with: object, configuration: configuration)
+    }
+
+    override internal func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration?) -> Model {
+        super.update(model: model, with: object, configuration: configuration)
+        model.books = object.relationship(for: "book")
+        return model
+    }
+
+    override internal func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration?) -> NSManagedObject {
+        super.update(object: object, with: model, configuration: configuration)
+        try! object.relationship(set: model.books, for: "book")
+        return object
     }
 }
 
