@@ -1,7 +1,7 @@
 import CoreData
 import Foundation
 
-open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Configuration == ModelType.Configuration
+open class Batch<ModelType:ModelProtocol>: BatchProtocol
 {
     public typealias Model = ModelType
 
@@ -77,13 +77,6 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
     }
 
     @discardableResult open func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
-        for key in Model.Key.for(configuration: configuration) {
-
-            // Todo: use to work in Swift 3.0.2, watch for https://bugs.swift.org/browse/SR-4382
-
-            model[key] = object.value(forKey: key.rawValue as! String)
-        }
-
         return model
     }
 
@@ -128,13 +121,6 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol where ModelType.Key.Con
     }
 
     @discardableResult open func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration? = nil) -> NSManagedObject {
-        for key in Model.Key.for(configuration: configuration) {
-
-            // Todo: use to work in Swift 3.0.2, watch for https://bugs.swift.org/browse/SR-4382
-
-            object.setValue(model[key], forKey: key.rawValue as! String)
-        }
-
         return object
     }
 
@@ -172,6 +158,14 @@ extension NSManagedObject
         self.setValuesForKeys(values)
         return self
     }
+
+    public func value(set value: Any?, for key: String) {
+        self.setValue(value, forKey: key)
+    }
+
+    public func value<Value>(for key: String) -> Value {
+        return self.value(forKey: key) as! Value
+    }
 }
 
 // MARK: relationship
@@ -182,7 +176,7 @@ extension NSManagedObject
     /*
     Returns related models using model construction method in batch derived from specified batchable protocol.
     */
-    open func relationship<T:BatchableProtocol>(for name: String) -> [T] where T.Key.Configuration == T.Configuration {
+    open func relationship<T:BatchableProtocol>(for name: String) -> [T] {
         let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
         var models: [T] = []
 

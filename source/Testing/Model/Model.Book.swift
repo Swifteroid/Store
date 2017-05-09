@@ -2,7 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal class BookModel: Model<BookModelKey, NoConfiguration>, BatchableProtocol
+internal class BookModel: Model<NoConfiguration>, BatchableProtocol
 {
     public typealias Batch = BookBatch
 
@@ -20,25 +20,32 @@ internal class BookModel: Model<BookModelKey, NoConfiguration>, BatchableProtoco
 
 internal class BookBatch: Batch<BookModel>
 {
-    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> BookModel {
-        return super.update(model: BookModel(), with: object, configuration: configuration)
+    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+        return super.update(model: Model(), with: object, configuration: configuration)
+    }
+
+    override internal func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+        model.title = object.value(for: Key.title)
+        model.author = object.value(for: Key.author)
+        model.publisher = object.value(for: Key.publisher)
+        return model
+    }
+
+    override internal func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration? = nil) -> NSManagedObject {
+        object.value(set: model.title, for: Key.title)
+        object.value(set: model.author, for: Key.author)
+        object.value(set: model.publisher, for: Key.publisher)
+        return object
     }
 }
 
-internal enum BookModelKey: String, ModelKeyProtocol
+extension BookBatch
 {
-    internal typealias Configuration = NoConfiguration
-
-    case author
-    case publisher
-    case title
-
-    public static var all: [BookModelKey] {
-        return [
-            self.author,
-            self.publisher,
-            self.title
-        ]
+    fileprivate struct Key
+    {
+        fileprivate static let title: String = "title"
+        fileprivate static let author: String = "author"
+        fileprivate static let publisher: String = "publisher"
     }
 }
 
