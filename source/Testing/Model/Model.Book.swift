@@ -2,16 +2,16 @@ import CoreData
 import Fakery
 import Store
 
-internal class BookModel: Model<NoConfiguration>, BatchableProtocol
+internal class BookModel: InitialisableModel<NoConfiguration>, BatchableProtocol
 {
-    public typealias Batch = BookBatch
+    internal typealias Batch = BookBatch
 
     internal var title: String!
     internal var author: String!
     internal var publisher: String!
 
-    internal init(id: String? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil) {
-        super.init(id: id)
+    internal convenience init(id: String? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil) {
+        self.init(id: id)
         self.title = title
         self.author = author
         self.publisher = publisher
@@ -20,10 +20,6 @@ internal class BookModel: Model<NoConfiguration>, BatchableProtocol
 
 internal class BookBatch: Batch<BookModel>
 {
-    override internal func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
-        return super.update(model: Model(), with: object, configuration: configuration)
-    }
-
     override internal func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) -> Model {
         model.title = object.value(for: Key.title)
         model.author = object.value(for: Key.author)

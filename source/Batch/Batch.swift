@@ -73,7 +73,15 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
     }
 
     @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
-        abort()
+
+        // Ideally this should be done in extension, but there seem to be no way to trick around the dynamic dispatch
+        // on generic type. Todo: possible?
+
+        if let InitialisableModel = Model.self as? InitialisableProtocol.Type {
+            return self.update(model: InitialisableModel.init() as! Model, with: object, configuration: configuration)
+        } else {
+            abort()
+        }
     }
 
     @discardableResult open func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) -> Model {

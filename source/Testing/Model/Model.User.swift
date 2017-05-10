@@ -2,7 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal class UserModel: Model<NoConfiguration>, BatchableProtocol
+internal class UserModel: InitialisableModel<NoConfiguration>, BatchableProtocol
 {
     internal typealias Batch = UserBatch
 
@@ -10,8 +10,8 @@ internal class UserModel: Model<NoConfiguration>, BatchableProtocol
     internal var address: String!
     internal var books: [BookModel] = []
 
-    internal init(id: String? = nil, name: String? = nil, address: String? = nil) {
-        super.init(id: id)
+    internal convenience init(id: String? = nil, name: String? = nil, address: String? = nil) {
+        self.init(id: id)
         self.name = name
         self.address = address
     }
@@ -19,10 +19,6 @@ internal class UserModel: Model<NoConfiguration>, BatchableProtocol
 
 internal class UserBatch: Batch<UserModel>
 {
-    override internal func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
-        return self.update(model: UserModel(), with: object, configuration: configuration)
-    }
-
     override internal func update(model: Model, with object: Object, configuration: Model.Configuration?) -> Model {
         model.name = object.value(for: Key.name)
         model.address = object.value(for: Key.address)

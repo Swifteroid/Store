@@ -14,6 +14,10 @@ public protocol BatchProtocol: class
     @discardableResult func load(configuration: Model.Configuration?) throws -> Self
     @discardableResult func save(configuration: Model.Configuration?) throws -> Self
     @discardableResult func delete(configuration: Model.Configuration?) throws -> Self
+
+    @discardableResult func construct(with object: Object, configuration: Model.Configuration?) -> Model
+    @discardableResult func update(model: Model, with object: Object, configuration: Model.Configuration?) -> Model
+    @discardableResult func update(object: Object, with model: Model, configuration: Model.Configuration?) -> Object
 }
 
 extension BatchProtocol
@@ -21,6 +25,13 @@ extension BatchProtocol
     public func exists(model: Model) -> Bool {
         return self.exist(models: [model])
     }
+}
+
+// MARK: -
+
+public protocol InitialisableProtocol
+{
+    init()
 }
 
 // MARK: -

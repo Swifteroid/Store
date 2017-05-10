@@ -11,12 +11,15 @@ open class Model<ConfigurationType:ModelConfigurationProtocol>: NSObject, ModelP
 
     // MARK: -
 
-    override public init() {
-        super.init()
-    }
-
-    public init(id: String?) {
-        super.init()
+    public convenience init(id: String?) {
+        self.init()
         self.id = id
+    }
+}
+
+open class InitialisableModel<ConfigurationType:ModelConfigurationProtocol>: Model<ConfigurationType>, InitialisableProtocol
+{
+    override public required init() {
+        super.init()
     }
 }
