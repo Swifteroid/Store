@@ -10,6 +10,7 @@
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
 		17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */; };
 		17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */; };
+		17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD06B915850D45AD6F0C31 /* Store.Object.swift */; };
 		17FD03B452168BA6C34893F8 /* Test.Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07B5F5FE7CF615064197 /* Test.Migration.swift */; };
 		17FD03FC7625C79B85FE333D /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05FA44C66778BB925C8E /* Migration.swift */; };
 		17FD054745289379020A0115 /* Model.Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD031A2F3C58FC0FB9EC08 /* Model.Observer.swift */; };
@@ -75,6 +76,7 @@
 		17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Coordinator.swift; sourceTree = "<group>"; };
 		17FD05D666E8135024B884A1 /* Base - Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Release.xcconfig"; sourceTree = "<group>"; };
 		17FD05FA44C66778BB925C8E /* Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
+		17FD06B915850D45AD6F0C31 /* Store.Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Object.swift; sourceTree = "<group>"; };
 		17FD0747D2D1D5255CB1AB2C /* test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; path = test; sourceTree = "<group>"; };
 		17FD07B122ED1AF20F93FB0A /* Batch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.swift; sourceTree = "<group>"; };
 		17FD07B5F5FE7CF615064197 /* Test.Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Migration.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 			children = (
 				17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */,
 				17FD0951E1ED302B0F56D96A /* Store.Schema.swift */,
+				17FD06B915850D45AD6F0C31 /* Store.Object.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				17FD0E49167DAA1D916817DC /* Batch.Protocol.swift in Sources */,
 				17FD0AC13B4D5BE2C93E6A2A /* Batch.swift in Sources */,
 				17FD054745289379020A0115 /* Model.Observer.swift in Sources */,
+				17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

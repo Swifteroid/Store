@@ -1,6 +1,5 @@
 import Foundation
 import CoreData
-import Swift
 
 public typealias Schema = NSManagedObjectModel
 

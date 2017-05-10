@@ -19,18 +19,18 @@ internal class UserModel: Model<NoConfiguration>, BatchableProtocol
 
 internal class UserBatch: Batch<UserModel>
 {
-    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+    override internal func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
         return self.update(model: UserModel(), with: object, configuration: configuration)
     }
 
-    override internal func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration?) -> Model {
+    override internal func update(model: Model, with object: Object, configuration: Model.Configuration?) -> Model {
         model.name = object.value(for: Key.name)
         model.address = object.value(for: Key.address)
         model.books = object.relationship(for: Key.book)
         return model
     }
 
-    override internal func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration?) -> NSManagedObject {
+    override internal func update(object: Object, with model: Model, configuration: Model.Configuration?) -> Object {
         object.value(set: model.name, for: Key.name)
         object.value(set: model.address, for: Key.address)
         try! object.relationship(set: model.books, for: Key.book)

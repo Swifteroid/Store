@@ -40,7 +40,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
         let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-        let request: NSFetchRequest<NSManagedObject> = self.prepare(request: NSFetchRequest(), configuration: configuration)
+        let request: NSFetchRequest<Object> = self.prepare(request: NSFetchRequest(), configuration: configuration)
         var models: Models = (identified: [:], loaded: [])
 
         for model in self.models {
@@ -49,7 +49,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
             }
         }
 
-        for object: NSManagedObject in try context.fetch(request) {
+        for object: Object in try context.fetch(request) {
             if let model: Model = models.identified[String(objectId: object.objectID)] {
                 models.loaded.append(self.update(model: model, with: object, configuration: configuration))
             } else {
@@ -72,11 +72,11 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         return request
     }
 
-    @discardableResult open func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+    @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
         abort()
     }
 
-    @discardableResult open func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+    @discardableResult open func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) -> Model {
         return model
     }
 
@@ -89,15 +89,15 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
         let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-        var models: [NSManagedObject: Model] = [:]
+        var models: [Object: Model] = [:]
 
         // Acquire objects for updating. 
 
         for model in self.models {
-            if let object: NSManagedObject = try context.existingObject(with: model) {
+            if let object: Object = try context.existingObject(with: model) {
                 self.update(object: object, with: model, configuration: configuration)
             } else if let entity: NSEntityDescription = coordinator.schema.entity(for: model) {
-                let object: NSManagedObject = NSManagedObject(entity: entity, insertInto: context)
+                let object: Object = Object(entity: entity, insertInto: context)
                 self.update(object: object, with: model, configuration: configuration)
                 models[object] = model
             }
@@ -120,7 +120,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         return self
     }
 
-    @discardableResult open func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration? = nil) -> NSManagedObject {
+    @discardableResult open func update(object: Object, with model: Model, configuration: Model.Configuration? = nil) -> Object {
         return object
     }
 
@@ -135,7 +135,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
         for model in self.models {
-            if let object: NSManagedObject = try context.existingObject(with: model) {
+            if let object: Object = try context.existingObject(with: model) {
                 context.delete(object)
             }
         }
@@ -152,7 +152,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
 // MARK: -
 
-extension NSManagedObject
+extension Object
 {
     open func setValues(_ values: [String: Any]) -> Self {
         self.setValuesForKeys(values)
@@ -170,7 +170,7 @@ extension NSManagedObject
 
 // MARK: relationship
 
-extension NSManagedObject
+extension Object
 {
 
     /*
@@ -180,7 +180,7 @@ extension NSManagedObject
         let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
         var models: [T] = []
 
-        for object in self.mutableSetValue(forKey: name).allObjects as! [NSManagedObject] {
+        for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
             let model: T = batch.construct(with: object)
             model.id = String(objectId: object.objectID)
             models.append(model)
@@ -192,7 +192,7 @@ extension NSManagedObject
     /*
     Sets new relationship objects replacing all existing ones.
     */
-    open func relationship(set objects: [NSManagedObject], for name: String) {
+    open func relationship(set objects: [Object], for name: String) {
         let set: NSMutableSet = self.mutableSetValue(forKey: name)
         set.removeAllObjects()
         set.addObjects(from: objects)
@@ -203,10 +203,10 @@ extension NSManagedObject
     */
     open func relationship<Model:ModelProtocol>(set models: [Model], for name: String) throws {
         guard let context: NSManagedObjectContext = self.managedObjectContext else { throw RelationshipError.noContext }
-        var objects: [NSManagedObject] = []
+        var objects: [Object] = []
 
         for model in models {
-            if let object: NSManagedObject = try context.existingObject(with: model) {
+            if let object: Object = try context.existingObject(with: model) {
                 objects.append(object)
             } else {
                 throw RelationshipError.noObject
@@ -217,7 +217,7 @@ extension NSManagedObject
     }
 }
 
-extension NSManagedObject
+extension Object
 {
     public enum RelationshipError: Error
     {
@@ -243,7 +243,7 @@ extension NSManagedObjectContext
         self.persistentStoreCoordinator = coordinator
     }
 
-    fileprivate func existingObject<Model:ModelProtocol>(with model: Model) throws -> NSManagedObject? {
+    fileprivate func existingObject<Model:ModelProtocol>(with model: Model) throws -> Object? {
         if let modelId: String = model.id, let url: URL = URL(string: modelId), let objectId: NSManagedObjectID = self.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) {
             return try self.existingObject(with: objectId)
         } else {

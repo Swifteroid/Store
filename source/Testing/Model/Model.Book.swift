@@ -20,18 +20,18 @@ internal class BookModel: Model<NoConfiguration>, BatchableProtocol
 
 internal class BookBatch: Batch<BookModel>
 {
-    override internal func construct(with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+    override internal func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
         return super.update(model: Model(), with: object, configuration: configuration)
     }
 
-    override internal func update(model: Model, with object: NSManagedObject, configuration: Model.Configuration? = nil) -> Model {
+    override internal func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) -> Model {
         model.title = object.value(for: Key.title)
         model.author = object.value(for: Key.author)
         model.publisher = object.value(for: Key.publisher)
         return model
     }
 
-    override internal func update(object: NSManagedObject, with model: Model, configuration: Model.Configuration? = nil) -> NSManagedObject {
+    override internal func update(object: Object, with model: Model, configuration: Model.Configuration? = nil) -> Object {
         object.value(set: model.title, for: Key.title)
         object.value(set: model.author, for: Key.author)
         object.value(set: model.publisher, for: Key.publisher)
