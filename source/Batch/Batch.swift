@@ -50,11 +50,11 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         }
 
         for object: Object in try context.fetch(request) {
-            if let model: Model = models.identified[String(objectId: object.objectID)] {
+            if let model: Model = models.identified[String(id: object.objectID)] {
                 models.loaded.append(self.update(model: model, with: object, configuration: configuration))
             } else {
                 let model: Model = self.construct(with: object, configuration: configuration)
-                model.id = String(objectId: object.objectID)
+                model.id = String(id: object.objectID)
                 models.loaded.append(model)
             }
         }
@@ -122,7 +122,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         // Update ids of inserted models.
 
         for (object, model) in models {
-            model.id = String(objectId: object.objectID)
+            model.id = String(id: object.objectID)
         }
 
         return self
@@ -160,90 +160,6 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
 // MARK: -
 
-extension Object
-{
-    open func setValues(_ values: [String: Any]) -> Self {
-        self.setValuesForKeys(values)
-        return self
-    }
-
-    public func value(set value: Any?, for key: String) {
-        self.setValue(value, forKey: key)
-    }
-
-    public func value<Value>(for key: String) -> Value {
-        return self.value(forKey: key) as! Value
-    }
-}
-
-// MARK: relationship
-
-extension Object
-{
-
-    /*
-    Returns related models using model construction method in batch derived from specified batchable protocol.
-    */
-    open func relationship<T:BatchableProtocol>(for name: String) -> [T] {
-        let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
-        var models: [T] = []
-
-        for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
-            let model: T = batch.construct(with: object)
-            model.id = String(objectId: object.objectID)
-            models.append(model)
-        }
-
-        return models
-    }
-
-    /*
-    Sets new relationship objects replacing all existing ones.
-    */
-    open func relationship(set objects: [Object], for name: String) {
-        let set: NSMutableSet = self.mutableSetValue(forKey: name)
-        set.removeAllObjects()
-        set.addObjects(from: objects)
-    }
-
-    /*
-    Sets new relationship models.
-    */
-    open func relationship<Model:ModelProtocol>(set models: [Model], for name: String) throws {
-        guard let context: NSManagedObjectContext = self.managedObjectContext else { throw RelationshipError.noContext }
-        var objects: [Object] = []
-
-        for model in models {
-            if let object: Object = try context.existingObject(with: model) {
-                objects.append(object)
-            } else {
-                throw RelationshipError.noObject
-            }
-        }
-
-        self.relationship(set: objects, for: name)
-    }
-}
-
-extension Object
-{
-    public enum RelationshipError: Error
-    {
-        /*
-        Managed object upon which a relationship is being updated has no context making it impossible to retrieve model
-        managed objects.
-        */
-        case noContext
-
-        /*
-        Cannot retrieve model's managed object, it's probably not saved or got deleted. 
-        */
-        case noObject
-    }
-}
-
-// MARK: -
-
 extension NSManagedObjectContext
 {
     public convenience init(coordinator: NSPersistentStoreCoordinator, concurrency: NSManagedObjectContextConcurrencyType) {
@@ -251,20 +167,11 @@ extension NSManagedObjectContext
         self.persistentStoreCoordinator = coordinator
     }
 
-    fileprivate func existingObject<Model:ModelProtocol>(with model: Model) throws -> Object? {
+    public func existingObject<Model:ModelProtocol>(with model: Model) throws -> Object? {
         if let modelId: String = model.id, let url: URL = URL(string: modelId), let objectId: NSManagedObjectID = self.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) {
             return try self.existingObject(with: objectId)
         } else {
             return nil
         }
-    }
-}
-
-// MARK: -
-
-extension String
-{
-    fileprivate init(objectId: NSManagedObjectID) {
-        self = objectId.uriRepresentation().absoluteString
     }
 }
