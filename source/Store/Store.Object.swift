@@ -49,7 +49,7 @@ extension Object
     Sets new relationship models.
     */
     open func relationship<Model:ModelProtocol>(set models: [Model], for name: String) throws {
-        guard let context: NSManagedObjectContext = self.managedObjectContext else { throw RelationshipError.noContext }
+        guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
         var objects: [Object] = []
 
         for model in models {

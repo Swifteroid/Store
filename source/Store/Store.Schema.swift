@@ -1,6 +1,9 @@
-import Foundation
 import CoreData
+import Foundation
 
+/*
+Schema is an attempt to avoid confusion between core data object models and actual store models.
+*/
 public typealias Schema = NSManagedObjectModel
 
 extension Schema

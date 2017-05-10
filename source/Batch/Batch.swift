@@ -20,7 +20,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         if models.isEmpty { return false }
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
         // If any model doesn't exist than we return false.
 
@@ -39,7 +39,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         // Todo: request will pull everything, must limit this to ids only, if have any.
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
         let request: NSFetchRequest<Object> = self.prepare(request: NSFetchRequest(), configuration: configuration)
         var models: Models = (identified: [:], loaded: [])
 
@@ -96,7 +96,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         }
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
         var models: [Object: Model] = [:]
 
         // Acquire objects for updating. 
@@ -140,7 +140,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         }
 
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: NSManagedObjectContext = NSManagedObjectContext(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
         for model in self.models {
             if let object: Object = try context.existingObject(with: model) {
@@ -155,23 +155,5 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
         self.models = []
         return self
-    }
-}
-
-// MARK: -
-
-extension NSManagedObjectContext
-{
-    public convenience init(coordinator: NSPersistentStoreCoordinator, concurrency: NSManagedObjectContextConcurrencyType) {
-        self.init(concurrencyType: concurrency)
-        self.persistentStoreCoordinator = coordinator
-    }
-
-    public func existingObject<Model:ModelProtocol>(with model: Model) throws -> Object? {
-        if let modelId: String = model.id, let url: URL = URL(string: modelId), let objectId: NSManagedObjectID = self.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url) {
-            return try self.existingObject(with: objectId)
-        } else {
-            return nil
-        }
     }
 }
