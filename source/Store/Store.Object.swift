@@ -10,8 +10,8 @@ extension Object
         self.setValue(value, forKey: key)
     }
 
-    public func value<Value>(for key: String) -> Value {
-        return self.value(forKey: key) as! Value
+    public func value<Value>(for key: String) -> Value? {
+        return self.value(forKey: key) as! Value?
     }
 }
 

@@ -48,4 +48,8 @@ internal class PathUtility
     internal static var librarySchemaUrl: URL {
         return Bundle(for: self).url(forResource: "library", withExtension: "momd")!
     }
+
+    internal static var genericSchemaUrl: URL {
+        return Bundle(for: self).url(forResource: "generic", withExtension: "momd")!
+    }
 }

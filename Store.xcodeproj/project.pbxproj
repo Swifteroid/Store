@@ -12,6 +12,7 @@
 		17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */; };
 		17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD06B915850D45AD6F0C31 /* Store.Object.swift */; };
 		17FD03B452168BA6C34893F8 /* Test.Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07B5F5FE7CF615064197 /* Test.Migration.swift */; };
+		17FD03B5263F65F71348D583 /* Test.Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0CA19A89F54D70281C7D /* Test.Object.swift */; };
 		17FD03FC7625C79B85FE333D /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05FA44C66778BB925C8E /* Migration.swift */; };
 		17FD054745289379020A0115 /* Model.Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD031A2F3C58FC0FB9EC08 /* Model.Observer.swift */; };
 		17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */; };
@@ -32,6 +33,7 @@
 		E605B64F1E86644700A0E60A /* Nimble.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E605B6511E86761A00A0E60A /* library.xcdatamodeld */; };
 		E60746591E83969200B75E21 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; };
+		E64105FB1EE0993A00FAC57D /* generic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E64105F91EE0993A00FAC57D /* generic.xcdatamodeld */; };
 		E6E9F6691E9B6A4A0009A096 /* Fakery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6E9F6681E9B6A360009A096 /* Fakery.framework */; };
 		E6E9F66A1E9B6A4C0009A096 /* Fakery.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E6E9F6681E9B6A360009A096 /* Fakery.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -92,6 +94,7 @@
 		17FD0BECD5BD4310CAEF64A0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		17FD0C03C3B71159746705FC /* Nimble.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Nimble.framework.dSYM; path = Carthage/Build/Mac/Nimble.framework.dSYM; sourceTree = "<group>"; };
 		17FD0C103D052A2CEAE211F2 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
+		17FD0CA19A89F54D70281C7D /* Test.Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Object.swift; sourceTree = "<group>"; };
 		17FD0D39D4156F8596008D0B /* Test.Model.Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Observer.swift; sourceTree = "<group>"; };
 		17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		17FD0EA3D14033A8AF4F64C8 /* framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = framework.plist; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 		E605B6531E86761A00A0E60A /* 1.0.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.1.xcdatamodel; sourceTree = "<group>"; };
 		E60746411E83949000B75E21 /* Store.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Store.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E607464A1E83949000B75E21 /* Store - Test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Store - Test.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E64105FA1EE0993A00FAC57D /* generic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = generic.xcdatamodel; sourceTree = "<group>"; };
 		E642BFD91E87A9630001C699 /* 1.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.1.0.xcdatamodel; sourceTree = "<group>"; };
 		E6E9F6671E9B6A360009A096 /* Fakery.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Fakery.framework.dSYM; path = Carthage/Build/Mac/Fakery.framework.dSYM; sourceTree = "<group>"; };
 		E6E9F6681E9B6A360009A096 /* Fakery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fakery.framework; path = Carthage/Build/Mac/Fakery.framework; sourceTree = "<group>"; };
@@ -151,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				17FD04474F74538B52D9DD2A /* Test.Store.swift */,
+				17FD0CA19A89F54D70281C7D /* Test.Object.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				E605B6511E86761A00A0E60A /* library.xcdatamodeld */,
+				E64105F91EE0993A00FAC57D /* generic.xcdatamodeld */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -471,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */,
+				E64105FB1EE0993A00FAC57D /* generic.xcdatamodeld in Sources */,
 				17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */,
 				17FD05F812CBDE154A4FCF3A /* Model.User.swift in Sources */,
 				17FD08D09F5F1019333CC247 /* Test.swift in Sources */,
@@ -482,6 +489,7 @@
 				17FD03B452168BA6C34893F8 /* Test.Migration.swift in Sources */,
 				17FD0DE24B1ED6FE7C9EAD92 /* Utility.Path.swift in Sources */,
 				17FD0A67277E08679114CEC1 /* Migration.Utility.swift in Sources */,
+				17FD03B5263F65F71348D583 /* Test.Object.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +596,16 @@
 			);
 			currentVersion = E642BFD91E87A9630001C699 /* 1.1.0.xcdatamodel */;
 			path = library.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		E64105F91EE0993A00FAC57D /* generic.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E64105FA1EE0993A00FAC57D /* generic.xcdatamodel */,
+			);
+			currentVersion = E64105FA1EE0993A00FAC57D /* generic.xcdatamodel */;
+			path = generic.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

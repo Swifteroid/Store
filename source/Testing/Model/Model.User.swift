@@ -19,14 +19,14 @@ internal class UserModel: InitialisableModel<NoConfiguration>, BatchableProtocol
 
 internal class UserBatch: Batch<UserModel>
 {
-    override internal func update(model: Model, with object: Object, configuration: Model.Configuration?) -> Model {
+    override internal func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) -> Model {
         model.name = object.value(for: Key.name)
         model.address = object.value(for: Key.address)
         model.books = object.relationship(for: Key.book)
         return model
     }
 
-    override internal func update(object: Object, with model: Model, configuration: Model.Configuration?) -> Object {
+    override internal func update(object: Object, with model: Model, configuration: Model.Configuration? = nil) -> Object {
         object.value(set: model.name, for: Key.name)
         object.value(set: model.address, for: Key.address)
         try! object.relationship(set: model.books, for: Key.book)

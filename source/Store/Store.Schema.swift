@@ -8,6 +8,10 @@ public typealias Schema = NSManagedObjectModel
 
 extension Schema
 {
+    open func entity(for name: String) -> NSEntityDescription? {
+        return self.entitiesByName[name]
+    }
+
     open func entity<Model:ModelProtocol>(for model: Model) -> NSEntityDescription? {
         return entity(for: type(of: model))
     }
