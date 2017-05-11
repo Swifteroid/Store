@@ -33,16 +33,25 @@ extension Object
 
 extension Object
 {
+    @nonobjc open func relationship(for name: String) -> [Object] {
+        return self.mutableSetValue(forKey: name).allObjects as! [Object]
+    }
+
+    @nonobjc open func relationship(for name: String) -> Object? {
+        return self.value(forKey: name) as! Object?
+    }
+
+    // MARK: -
 
     /*
     Returns related models using model construction method in batch derived from specified batchable protocol.
     */
-    open func relationship<T:BatchableProtocol>(for name: String) -> [T] {
-        let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
-        var models: [T] = []
+    open func relationship<Model:BatchableProtocol>(for name: String) -> [Model] {
+        let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
+        var models: [Model] = []
 
         for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
-            let model: T = batch.construct(with: object)
+            let model: Model = batch.construct(with: object)
             model.id = String(id: object.objectID)
             models.append(model)
         }
@@ -50,10 +59,10 @@ extension Object
         return models
     }
 
-    open func relationship<T:BatchableProtocol>(for name: String) -> T? {
+    open func relationship<Model:BatchableProtocol>(for name: String) -> Model? {
         if let object: Object = self.value(for: name) {
-            let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
-            let model: T = batch.construct(with: object)
+            let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
+            let model: Model = batch.construct(with: object)
             model.id = String(id: object.objectID)
             return model
         } else {
