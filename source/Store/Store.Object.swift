@@ -36,14 +36,33 @@ extension Object
         return models
     }
 
+    open func relationship<T:BatchableProtocol>(for name: String) -> T? {
+        if let object: Object = self.value(for: name) {
+            let batch: Batch<T> = T.Batch(models: []) as! Batch<T>
+            let model: T = batch.construct(with: object)
+            model.id = String(id: object.objectID)
+            return model
+        } else {
+            return nil
+        }
+    }
+
+    // MARK: -
+
     /*
     Sets new relationship objects replacing all existing ones.
     */
-    open func relationship(set objects: [Object], for name: String) {
+    @nonobjc open func relationship(set objects: [Object], for name: String) {
         let set: NSMutableSet = self.mutableSetValue(forKey: name)
         set.removeAllObjects()
         set.addObjects(from: objects)
     }
+
+    @nonobjc open func relationship(set object: Object?, for name: String) {
+        self.value(set: object, for: name)
+    }
+
+    // MARK: -
 
     /*
     Sets new relationship models.
@@ -61,6 +80,19 @@ extension Object
         }
 
         self.relationship(set: objects, for: name)
+    }
+
+    open func relationship<Model:ModelProtocol>(set model: Model?, for name: String) throws {
+        if let model: Model = model {
+            guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
+            if let object: Object = try context.existingObject(with: model) {
+                self.relationship(set: object, for: name)
+            } else {
+                throw RelationshipError.noObject
+            }
+        } else {
+            self.relationship(set: nil, for: name)
+        }
     }
 }
 
