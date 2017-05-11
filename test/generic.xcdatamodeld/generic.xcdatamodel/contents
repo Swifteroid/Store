@@ -3,8 +3,9 @@
     <entity name="Foo" syncable="YES">
         <attribute name="optional" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="required" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Foo" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="Foo" positionX="-63" positionY="-18" width="128" height="90"/>
     </elements>
 </model>

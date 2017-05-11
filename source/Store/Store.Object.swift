@@ -6,12 +6,26 @@ public typealias Object = NSManagedObject
 
 extension Object
 {
-    public func value(set value: Any?, for key: String) {
-        self.setValue(value, forKey: key)
+    public func value<Value>(set value: Value?, for key: String, transform: ((Value) -> Any?)? = nil) {
+        if let value: Value = value, let transform: ((Value) -> Any?) = transform {
+            self.setValue(transform(value), forKey: key)
+        } else {
+            self.setValue(value, forKey: key)
+        }
     }
 
     public func value<Value>(for key: String) -> Value? {
         return self.value(forKey: key) as! Value?
+    }
+
+    public func value<Raw, Transformed>(for key: String, transform: ((Raw) -> Transformed?)?) -> Transformed? {
+        let value: Raw? = self.value(forKey: key) as! Raw?
+
+        if let value: Raw = value, let transform: ((Raw) -> Transformed?) = transform {
+            return transform(value)
+        } else {
+            return value as! Transformed?
+        }
     }
 }
 
