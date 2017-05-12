@@ -3,6 +3,7 @@ import Foundation
 public protocol BatchProtocol: class
 {
     associatedtype Model: ModelProtocol
+    associatedtype Configuration: ModelConfigurationProtocol = Model.Configuration
 
     var models: [Model] { get set }
 
@@ -11,13 +12,13 @@ public protocol BatchProtocol: class
     func exist(models: [Model]?) -> Bool
     func exists(model: Model) -> Bool
 
-    @discardableResult func load(configuration: Model.Configuration?) throws -> Self
-    @discardableResult func save(configuration: Model.Configuration?) throws -> Self
-    @discardableResult func delete(configuration: Model.Configuration?) throws -> Self
+    @discardableResult func load(configuration: Configuration?) throws -> Self
+    @discardableResult func save(configuration: Configuration?) throws -> Self
+    @discardableResult func delete(configuration: Configuration?) throws -> Self
 
-    @discardableResult func construct(with object: Object, configuration: Model.Configuration?) -> Model
-    @discardableResult func update(model: Model, with object: Object, configuration: Model.Configuration?) -> Model
-    @discardableResult func update(object: Object, with model: Model, configuration: Model.Configuration?) -> Object
+    @discardableResult func construct(with object: Object, configuration: Configuration?) -> Model
+    @discardableResult func update(model: Model, with object: Object, configuration: Configuration?) -> Model
+    @discardableResult func update(object: Object, with model: Model, configuration: Configuration?) -> Object
 }
 
 extension BatchProtocol
@@ -43,24 +44,24 @@ public protocol BatchableProtocol: ModelProtocol
     var exists: Bool { get }
 }
 
-extension BatchableProtocol
+extension BatchableProtocol where Batch.Model == Self, Batch.Configuration == Self.Configuration
 {
     public var exists: Bool {
-        return (Batch(models: []) as Batch).exist(models: [self as! Batch.Model])
+        return (Batch(models: []) as Batch).exist(models: [self])
     }
 
-    @discardableResult public func load(configuration: Batch.Model.Configuration? = nil) throws -> Self {
-        try (Batch(models: [self as! Batch.Model]) as Batch).load(configuration: configuration)
+    @discardableResult public func load(configuration: Configuration? = nil) throws -> Self {
+        try (Batch(models: [self]) as Batch).load(configuration: configuration)
         return self
     }
 
-    @discardableResult public func save(configuration: Batch.Model.Configuration? = nil) throws -> Self {
-        try Batch(models: [self as! Batch.Model]).save(configuration: configuration)
+    @discardableResult public func save(configuration: Configuration? = nil) throws -> Self {
+        try Batch(models: [self]).save(configuration: configuration)
         return self
     }
 
-    @discardableResult public func delete(configuration: Batch.Model.Configuration? = nil) throws -> Self {
-        try (Batch(models: [self as! Batch.Model]) as Batch).delete(configuration: configuration)
+    @discardableResult public func delete(configuration: Configuration? = nil) throws -> Self {
+        try (Batch(models: [self]) as Batch).delete(configuration: configuration)
         return self
     }
 }
