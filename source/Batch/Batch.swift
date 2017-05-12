@@ -5,13 +5,18 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 {
     public typealias Model = ModelType
 
-    open var coordinator: Coordinator?
-
-    open var models: [Model] = []
+    public init() {
+    }
 
     public required init(models: [Model]) {
         self.models = models
     }
+
+    // MARK: -
+
+    open var coordinator: Coordinator?
+
+    open var models: [Model] = []
 
     // MARK: -
 

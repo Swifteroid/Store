@@ -1,6 +1,6 @@
 import Foundation
 
-open class Model<ConfigurationType:ModelConfigurationProtocol>: NSObject, ModelProtocol
+open class Model<ConfigurationType:ModelConfigurationProtocol>: ModelProtocol
 {
     public typealias Configuration = ConfigurationType
 
