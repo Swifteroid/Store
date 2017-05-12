@@ -71,15 +71,19 @@ extension Coordinator
     // MARK: -
 
     /*
-    Returns store url for specified application name.
+    Returns store url for specified application / domain name located in application support folder.
     */
-    open class func url(for name: String) -> URL {
+    @nonobjc open class func url(for name: String, file: String? = nil) -> URL {
 
         // The directory the application uses to store the Core Data store file. This code uses a file 
         // named "Store.sqlite" in the application data directory.
 
-        let supportUrl: URL = try! FileManager.default.url(for: FileManager.SearchPathDirectory.applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask, appropriateFor: nil, create: true)
-        let storeUrl: URL = supportUrl.appendingPathComponent(name, isDirectory: true).appendingPathComponent("Store", isDirectory: true)
-        return storeUrl.appendingPathComponent("Store.sqlite", isDirectory: false)
+        let url: URL = try! FileManager.default.url(for: FileManager.SearchPathDirectory.applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask, appropriateFor: nil, create: true)
+        return url.appendingPathComponent(name, isDirectory: true).appendingPathComponent("\(file ?? "Store/Store").sqlite", isDirectory: false)
+    }
+
+    @nonobjc open class func url(for bundle: Bundle, file: String? = nil) -> URL {
+        let name: String = bundle.object(forInfoDictionaryKey: kCFBundleNameKey as String) as? String ?? bundle.object(forInfoDictionaryKey: kCFBundleIdentifierKey as String) as! String
+        return self.url(for: name, file: file)
     }
 }

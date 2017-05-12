@@ -86,6 +86,7 @@
 		17FD07B5F5FE7CF615064197 /* Test.Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Migration.swift; sourceTree = "<group>"; };
 		17FD07E5B1C4793149700DA4 /* Model.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Protocol.swift; sourceTree = "<group>"; };
 		17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Book.swift; sourceTree = "<group>"; };
+		17FD08C5C85112377CC6D852 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		17FD091DBFC2D248A26C048E /* Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.User.swift; sourceTree = "<group>"; };
 		17FD0951E1ED302B0F56D96A /* Store.Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Schema.swift; sourceTree = "<group>"; };
 		17FD0A49EC0685345EF4E819 /* Test.Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.User.swift; sourceTree = "<group>"; };
@@ -377,6 +378,7 @@
 				17FD098CEBA40DA914603C1A /* product */,
 				17FD0875A929F2B81ABF0673 /* source */,
 				17FD0923FF76BC2D796E1029 /* test */,
+				17FD08C5C85112377CC6D852 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
