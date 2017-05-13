@@ -1,16 +1,17 @@
 import CoreData
 import Foundation
 
-open class ModelObserver<Model:BatchableProtocol & Equatable>
+public protocol ModelObserverProtocol: class
 {
-    private var observer: Any?
+    associatedtype Model: BatchableProtocol
+}
 
-    open var models: [Model] = []
-
-    // MARK: -
+open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
+{
+    public typealias Model = ModelType
 
     public init() {
-        self.observer = NotificationCenter.default.addObserver(forName: Notification.Name.NSManagedObjectContextDidSave, object: nil, queue: OperationQueue.main, using: { [weak self] in self?.handleContextNotification($0) })
+        self.observer = NotificationCenter.default.addObserver(forName: Notification.Name.NSManagedObjectContextDidSave, object: nil, queue: OperationQueue.current, using: { [weak self] in self?.handleContextNotification($0) })
     }
 
     public convenience init(models: [Model]) {
@@ -23,6 +24,12 @@ open class ModelObserver<Model:BatchableProtocol & Equatable>
             NotificationCenter.default.removeObserver(observer)
         }
     }
+
+    // MARK: -
+
+    private var observer: Any?
+
+    open var models: [Model] = []
 
     // MARK: -
 
