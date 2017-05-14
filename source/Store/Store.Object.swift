@@ -2,6 +2,11 @@ import CoreData
 
 public typealias Object = NSManagedObject
 
+extension Object
+{
+    public typealias Id = NSManagedObjectID
+}
+
 // MARK: kvc
 
 extension Object

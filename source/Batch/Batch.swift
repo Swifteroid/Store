@@ -69,11 +69,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
     }
 
     @discardableResult open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Model.Configuration? = nil) -> NSFetchRequest<Result> {
-        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let entity: NSEntityDescription? = coordinator.schema.entity(for: self)
-
-        request.entity = entity
-
+        request.entity = (self.coordinator ?? Coordinator.default)?.schema.entity(for: self)
         return request
     }
 
@@ -109,7 +105,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         for model in self.models {
             if let object: Object = try context.existingObject(with: model) {
                 self.update(object: object, with: model, configuration: configuration)
-            } else if let entity: NSEntityDescription = coordinator.schema.entity(for: model) {
+            } else if let entity: Entity = coordinator.schema.entity(for: model) {
                 let object: Object = Object(entity: entity, insertInto: context)
                 self.update(object: object, with: model, configuration: configuration)
                 models[object] = model

@@ -6,29 +6,45 @@ Schema is an attempt to avoid confusion between core data object models and actu
 */
 public typealias Schema = NSManagedObjectModel
 
+private let entityNameExpression = try! NSRegularExpression(pattern: "(\\w+)(?:Model|Batch)")
+private var entityNameCache: [String: String] = [:]
+
 extension Schema
 {
-    open func entity(for name: String) -> NSEntityDescription? {
+    open func entity(for name: String) -> Entity? {
         return self.entitiesByName[name]
     }
 
-    open func entity<Model:ModelProtocol>(for model: Model) -> NSEntityDescription? {
+    open func entity<Model:ModelProtocol>(for model: Model) -> Entity? {
         return entity(for: type(of: model))
     }
 
-    open func entity<Batch:BatchProtocol>(for set: Batch) -> NSEntityDescription? {
-        return entity(for: type(of: set))
+    open func entity<Model:ModelProtocol>(for model: Model.Type) -> Entity? {
+        return entity(for: model)
     }
 
-    private func entity(for type: Any.Type) -> NSEntityDescription? {
-        let string: String = String(describing: type)
-        let expression: NSRegularExpression = try! NSRegularExpression(pattern: "(\\w+)(?:Model|Batch)")
+    open func entity<Batch:BatchProtocol>(for batch: Batch) -> Entity? {
+        return entity(for: type(of: batch))
+    }
 
-        if let match: NSTextCheckingResult = expression.firstMatch(in: string, range: NSRange(0 ..< string.characters.count)) {
-            return self.entitiesByName[(string as NSString).substring(with: match.rangeAt(1))]
+    open func entity<Batch:BatchProtocol>(for batch: Batch.Type) -> Entity? {
+        return entity(for: batch)
+    }
+
+    private func entity(for type: Any.Type) -> Entity? {
+        let string: String = String(describing: type)
+        let name: String
+
+        if let string: String = entityNameCache[string] {
+            name = string
+        } else if let match: NSTextCheckingResult = entityNameExpression.firstMatch(in: string, range: NSRange(0 ..< string.characters.count)) {
+            name = (string as NSString).substring(with: match.rangeAt(1))
+            entityNameCache[string] = name
+        } else {
+            name = string
         }
 
-        return nil
+        return self.entitiesByName[name]
     }
 
     // MARK: -

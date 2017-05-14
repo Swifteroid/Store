@@ -21,6 +21,8 @@ public protocol BatchProtocol: class
     @discardableResult func update(object: Object, with model: Model, configuration: Configuration?) -> Object
 }
 
+// MARK: -
+
 extension BatchProtocol
 {
     public func exists(model: Model) -> Bool {
