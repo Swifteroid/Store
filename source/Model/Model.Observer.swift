@@ -74,41 +74,45 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
             return
         }
 
-        var models: (identified: [String: Model], unidentified: [Model]) = (identified: [:], unidentified: [])
         let configuration: Batch.Configuration? = self.configuration as! Batch.Configuration?
         let batch: Batch = Batch(models: [])
+
+        // In order to preserve the order of models we must take care of properly updating them, deletions
+        // should also be made from high to low index.
+
+        var modelIndexes: [String: Int] = [:]
+        var deletionIndexes: [Int] = []
 
         // Todo: This can be optimised further by not re-looping, using lazy model construction and checking
         // todo: if any models got actually changed.
 
-        for model in self.models {
-            if let id: String = model.id {
-                models.identified[id] = model
-            } else {
-                models.unidentified.append(model)
+        for i in 0 ..< self.models.count {
+            if let id: String = self.models[i].id {
+                modelIndexes[id] = i
             }
         }
 
         for (id, object) in objects.inserted {
             let model: Model = batch.construct(with: object, configuration: configuration) as! Model
-            let id: String = String(id: id)
-            model.id = id
-            models.identified[id] = model
-        }
-
-        for (id, _) in objects.deleted {
-            if let _: Model = models.identified.removeValue(forKey: String(id: id)) {
-                // Something got changed…
-            }
+            model.id = String(id: id)
+            self.models.append(model)
         }
 
         for (id, object) in objects.updated {
-            if let model: Model = models.identified[String(id: id)] {
-                batch.update(model: model as! Batch.Model, with: object, configuration: configuration)
+            if let index: Int = modelIndexes[String(id: id)] {
+                batch.update(model: self.models[index] as! Batch.Model, with: object, configuration: configuration)
             }
         }
 
-        self.models = models.identified.values + models.unidentified
+        for (id, _) in objects.deleted {
+            if let index: Int = modelIndexes[String(id: id)] {
+                deletionIndexes.append(index)
+            }
+        }
+
+        for index in deletionIndexes.sorted(by: { $0 > $1 }) {
+            self.models.remove(at: index)
+        }
 
         NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
     }

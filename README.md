@@ -6,8 +6,13 @@ Store is a Core Data framework that provides convenient interface for data manag
 - [x] Automatic and configurable migrations
 - [x] No `NSManagedObject` inheritance
 - [x] Awesome relationship management
+- [x] Customisable model change observerations
 
-## Use 🏗
+## Concept 🔬
+
+…
+
+## Use 👷
 
 Model and batch are two primary building blocks – models represent data, batches do the heavy lifting, including loading, saving and deleting. Here's a book model example from testing [sources](source/Testing/Model/Model.Book.swift):
 

@@ -1,4 +1,4 @@
-public protocol ModelProtocol: class, Equatable
+public protocol ModelProtocol: class, Equatable, Hashable
 {
     associatedtype Configuration: ModelConfigurationProtocol
 
@@ -9,6 +9,13 @@ extension ModelProtocol
 {
     public var identified: Bool {
         return self.id != nil
+    }
+}
+
+extension ModelProtocol
+{
+    public var hashValue: Int {
+        return ObjectIdentifier(self).hashValue
     }
 }
 
