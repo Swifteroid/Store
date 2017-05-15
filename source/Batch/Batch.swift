@@ -70,6 +70,13 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
     @discardableResult open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Model.Configuration? = nil) -> NSFetchRequest<Result> {
         request.entity = (self.coordinator ?? Coordinator.default)?.schema.entity(for: self)
+
+        if let configuration: FetchConfiguration = (configuration as? ModelFetchConfigurationProtocol)?.fetch {
+            if let limit: Int = configuration.limit { request.fetchLimit = limit }
+            if let offset: Int = configuration.offset { request.fetchOffset = offset }
+            if let sort: [NSSortDescriptor] = configuration.sort { request.sortDescriptors = sort }
+        }
+
         return request
     }
 
