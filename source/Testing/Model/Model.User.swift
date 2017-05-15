@@ -2,7 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal class UserModel: InitialisableModel<NoConfiguration>, BatchableProtocol
+internal class UserModel: InitialisableModel<UserConfiguration>, BatchableProtocol
 {
     internal typealias Batch = UserBatch
 
@@ -34,6 +34,11 @@ internal class UserBatch: Batch<UserModel>
     }
 }
 
+internal struct UserConfiguration: ModelConfigurationProtocol, ModelFetchConfigurationProtocol
+{
+    internal var fetch: FetchConfiguration?
+}
+
 extension UserBatch
 {
     fileprivate struct Key
@@ -48,11 +53,18 @@ extension UserBatch
 
 extension UserModel
 {
-    internal static func fake() -> UserModel {
+    internal static func fake(name: String? = nil) -> UserModel {
         let faker: Faker = Faker()
         return UserModel(
-            name: faker.name.name(),
+            name: name ?? faker.name.name(),
             address: faker.address.streetAddress(includeSecondary: true)
         )
+    }
+}
+
+extension UserModel: CustomStringConvertible
+{
+    public var description: String {
+        return "\(type(of: self))(name: \(self.name ?? ""))"
     }
 }
