@@ -1,6 +1,9 @@
 import CoreData
 import Foundation
 
+/// Batch is a load / save / delete operation, occasionally search, it is responsible for all Core Data handling and populating models
+/// and objects. It's typically one time thing and disposed immediately, it shouldn't be used to store models as they get modified. 
+
 open class Batch<ModelType:ModelProtocol>: BatchProtocol
 {
     public typealias Model = ModelType
@@ -12,11 +15,31 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         self.models = models
     }
 
+    public convenience init(remodels: [Model]) {
+        self.init()
+        self.remodels = remodels
+    }
+
+    public convenience init(models: [Model], remodels: [Model]) {
+        self.init()
+        self.models = models
+        self.remodels = remodels
+    }
+
     // MARK: -
 
     open var coordinator: Coordinator?
 
+    /// Explicitly defined or resulted set of models, which may change after each operation, thus, two identical operations invoked 
+    /// consecutively may product different result, because their input may differ.   
+
     open var models: [Model] = []
+
+    /// Models to use during loading instead of creating new ones. They are slightly different from assigned ones in a way that reusable
+    /// can be either used or not, depending on whether request returns associated objects, whether models imply that they all should 
+    /// be returned and populated.
+
+    open var remodels: [Model] = []
 
     // MARK: -
 
@@ -38,33 +61,53 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         return true
     }
 
+    /// Depending on whether models are provided / empty or not load operation either pulls and updates these exact models or uses standard
+    /// fetch operation. Therefore, provided fetch configuration will only be used when models are not explicitly specified. Providing
+    /// remodels will result in a full fetch and will also reuse available models instead of creating new ones where possible.
+
     @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
-        typealias Models = (identified: [Object.Id: Model], loaded: [Model])
-
-        // Todo: request will pull everything, must limit this to ids only, if have any.
-
         let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
         let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-        let request: NSFetchRequest<Object> = self.prepare(request: NSFetchRequest(), configuration: configuration)
-        var models: Models = (identified: [:], loaded: [])
+        let models: [Model] = self.models
+        var loaded: [Model] = []
+        var failed: [Model] = []
 
-        for model in self.models {
-            if let id: Object.Id = model.id {
-                models.identified[id] = model
+        if models.isEmpty {
+            let request: NSFetchRequest<Object> = self.prepare(request: NSFetchRequest(), configuration: configuration)
+            var remodels: [Object.Id: Model] = [:]
+
+            for model in self.remodels {
+                if let id: Object.Id = model.id {
+                    remodels[id] = model
+                }
+            }
+
+            for object: Object in try context.fetch(request) {
+                if let model: Model = remodels[object.objectID] {
+                    self.update(model: model, with: object, configuration: configuration)
+                    loaded.append(model)
+                } else {
+                    let model: Model = self.construct(with: object, configuration: configuration)
+                    model.id = object.objectID
+                    loaded.append(model)
+                }
+            }
+        } else {
+            for model in models {
+                if let object: Object = try context.existingObject(with: model) {
+                    loaded.append(self.update(model: model, with: object, configuration: configuration))
+                } else {
+                    failed.append(model)
+                }
             }
         }
 
-        for object: Object in try context.fetch(request) {
-            if let model: Model = models.identified[object.objectID] {
-                models.loaded.append(self.update(model: model, with: object, configuration: configuration))
-            } else {
-                let model: Model = self.construct(with: object, configuration: configuration)
-                model.id = object.objectID
-                models.loaded.append(model)
-            }
+        self.models = loaded
+
+        if !failed.isEmpty {
+            throw Error.load(failed)
         }
 
-        self.models = models.loaded
         return self
     }
 
@@ -163,5 +206,13 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
         self.models = []
         return self
+    }
+}
+
+extension Batch
+{
+    public enum Error: Swift.Error
+    {
+        case load([Model])
     }
 }
