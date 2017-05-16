@@ -7,16 +7,24 @@ public protocol ModelObserverProtocol: class
     associatedtype Batch: BatchProtocol
     associatedtype Configuration: ModelConfigurationProtocol
 
+    /// Invoked when loading models for the first time when they are not explicitly specified and when consequently
+    /// updating them. 
+
+    func update()
+
     /// Invoked when the default notification center posts `NSManagedObjectContextDidSave` notification with provided
     /// context and changed objects.
 
     func update(context: Context, inserted: Set<Object>, deleted: Set<Object>, updated: Set<Object>)
 }
 
-/*
-Model observer provides a way of smart global model change tracking by listening for `NSManagedObjectContext` change notifications and selectively 
-merging those changes into observer.
-*/
+/// Model observer provides a way of smart global model change tracking by listening for `NSManagedObjectContext` notifications
+/// and selectively merging those changes. 
+/// 
+/// When models are explicitly assigned it monitors only those models and never performs full fetch. When models are not set 
+/// it works in an opposite way. This provides strictly selective observations and more classic fetch style, which makes better
+/// use of fetch configuration.
+
 open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
 {
     public typealias Model = ModelType
