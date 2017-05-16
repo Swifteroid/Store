@@ -32,7 +32,7 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         if let models: [Model] = models {
             self.models = models
         } else {
-            self.models = try! Batch(models: []).load(configuration: self.configuration as! Batch.Configuration?).models as! [Model]
+            self.update()
         }
 
         self.observer = NotificationCenter.default.addObserver(forName: Notification.Name.NSManagedObjectContextDidSave, object: nil, queue: OperationQueue.current, using: { [weak self] in self?.handleContextNotification($0) })
@@ -50,11 +50,37 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
 
     open var mode: ModelObserverMode
 
-    open var models: [Model]
-
     open var configuration: Configuration?
 
+    open var models: [Model] {
+        get {
+            return self.observed ?? self.assigned ?? []
+        }
+        set {
+            self.assigned = newValue.isEmpty ? nil : newValue
+            self.observed = nil
+        }
+    }
+
+    /// Explicitly assigned models for observing.
+
+    private var assigned: [Model]?
+
+    /// Models discovered during observing.
+
+    private var observed: [Model]?
+
+    open var remodels: [Model] = []
+
     // MARK: -
+
+    open func update() {
+        let batch: Batch = Batch(models: (self.assigned as! [Batch.Model]?), remodels: (self.remodels + (self.observed ?? []) as! [Batch.Model]))
+        try! batch.load(configuration: self.configuration as! Batch.Configuration?)
+
+        self.observed = (batch.models as! [Model])
+        NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
+    }
 
     open func update(context: Context, inserted: Set<Object>, deleted: Set<Object>, updated: Set<Object>) {
         guard let entity: Entity = (context.coordinator ?? Coordinator.default)?.schema.entity(for: Model.self) else { return }
@@ -69,13 +95,19 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         for object in self.mode.contains(.delete) ? deleted : [] { if object.entity == entity { deletedById[object.objectID] = object } }
         for object in self.mode.contains(.update) ? updated : [] { if object.entity == entity { updatedById[object.objectID] = object } }
 
+        // If there's no changes we can stop here, otherwise, if there's no explicitly assigned models we should use standard
+        // update to do a proper fetch.
+
         if insertedById.isEmpty && deletedById.isEmpty && updatedById.isEmpty {
             return
+        } else if self.assigned == nil {
+            return self.update()
         }
 
         let configuration: Batch.Configuration? = self.configuration as! Batch.Configuration?
         let batch: Batch = Batch(models: [])
-        var models: [Model] = self.models
+        var observed: [Model] = self.models
+        var updated: Bool = !insertedById.isEmpty
 
         // In order to preserve the order of models we must take care of properly updating them, deletions
         // should also be made from high to low index.
@@ -84,11 +116,8 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         var deletionIndexes: [Int] = []
         var objectsByModel: [Model: Object?] = [:]
 
-        // Todo: This can be optimised further by not re-looping, using lazy model construction and checking
-        // todo: if any models got actually changed.
-
-        for i in 0 ..< models.count {
-            if let id: Object.Id = models[i].id {
+        for i in 0 ..< observed.count {
+            if let id: Object.Id = observed[i].id {
                 modelIndexes[id] = i
             }
         }
@@ -99,34 +128,37 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
             objectsByModel[model] = object
             model.id = id
 
-            models.append(model)
+            observed.append(model)
         }
 
         for (id, object) in updatedById {
             if let index: Int = modelIndexes[id] {
-                batch.update(model: models[index] as! Batch.Model, with: object, configuration: configuration)
-                objectsByModel[models[index]] = object
+                batch.update(model: observed[index] as! Batch.Model, with: object, configuration: configuration)
+                objectsByModel[observed[index]] = object
+                updated = true
             }
         }
 
         for (id, _) in deletedById {
             if let index: Int = modelIndexes[id] {
                 deletionIndexes.append(index)
+                updated = true
             }
         }
 
         // Remove deleted models based on descending collected deletion indexes.
 
         for index in deletionIndexes.sorted(by: { $0 > $1 }) {
-            models.remove(at: index)
+            observed.remove(at: index)
         }
 
-        // Serious black magic here… typically we want to ensure that updates happen as if they were real fetches, hence
-        // we must make sure that fetch configuration applies to models.
+        // Serious black magic here… typically we want to ensure that updates happen as if they were real fetches, therefore, we must 
+        // make sure that fetch configuration applies to models. This is still a shady area, offset configuration doesn't get applied
+        // here, because it's not clear how it would work. Suggestions are welcome! 
 
         if !insertedById.isEmpty, let configuration: FetchConfiguration = (configuration as? ModelFetchConfigurationProtocol)?.fetch {
             if let sort: [NSSortDescriptor] = configuration.sort, !sort.isEmpty {
-                models.sort(by: {
+                observed.sort(by: {
                     if objectsByModel[$0] == nil { objectsByModel[$0] = try? context.existingObject(with: $0) }
                     if objectsByModel[$1] == nil { objectsByModel[$1] = try? context.existingObject(with: $1) }
 
@@ -153,17 +185,16 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
                 })
             }
 
-            // Note, that offset fetch configuration doesn't apply here, because it's not clear how it would
-            // work. Suggestions are welcome! 
-
-            if let limit: Int = configuration.limit, models.count > limit {
-                models = Array(models.prefix(limit))
+            if let limit: Int = configuration.limit, observed.count > limit {
+                observed = Array(observed.prefix(limit))
             }
         }
 
-        self.models = models
+        self.observed = observed
 
-        NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
+        if updated {
+            NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
+        }
     }
 
     // MARK: -

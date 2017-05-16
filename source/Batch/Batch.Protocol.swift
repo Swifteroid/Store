@@ -7,7 +7,9 @@ public protocol BatchProtocol: class
 
     var models: [Model] { get set }
 
-    init(models: [Model])
+    var remodels: [Model] { get set }
+
+    init(models: [Model]?, remodels: [Model]?)
 
     func exist(models: [Model]?) -> Bool
     func exists(model: Model) -> Bool
@@ -27,6 +29,18 @@ extension BatchProtocol
 {
     public func exists(model: Model) -> Bool {
         return self.exist(models: [model])
+    }
+
+    public init() {
+        self.init(models: [], remodels: [])
+    }
+
+    public init(models: [Model]) {
+        self.init(models: models, remodels: [])
+    }
+
+    public init(remodels: [Model]) {
+        self.init(models: [], remodels: remodels)
     }
 }
 

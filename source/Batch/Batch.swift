@@ -8,22 +8,9 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 {
     public typealias Model = ModelType
 
-    public init() {
-    }
-
-    public required init(models: [Model]) {
-        self.models = models
-    }
-
-    public convenience init(remodels: [Model]) {
-        self.init()
-        self.remodels = remodels
-    }
-
-    public convenience init(models: [Model], remodels: [Model]) {
-        self.init()
-        self.models = models
-        self.remodels = remodels
+    public required init(models: [Model]? = nil, remodels: [Model]? = nil) {
+        self.models = models ?? []
+        self.remodels = remodels ?? []
     }
 
     // MARK: -
@@ -33,13 +20,13 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
     /// Explicitly defined or resulted set of models, which may change after each operation, thus, two identical operations invoked 
     /// consecutively may product different result, because their input may differ.   
 
-    open var models: [Model] = []
+    open var models: [Model]
 
     /// Models to use during loading instead of creating new ones. They are slightly different from assigned ones in a way that reusable
     /// can be either used or not, depending on whether request returns associated objects, whether models imply that they all should 
     /// be returned and populated.
 
-    open var remodels: [Model] = []
+    open var remodels: [Model]
 
     // MARK: -
 
@@ -66,8 +53,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
     /// remodels will result in a full fetch and will also reuse available models instead of creating new ones where possible.
 
     @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
-        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: (self.coordinator ?? Coordinator.default), concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
         let models: [Model] = self.models
         var loaded: [Model] = []
         var failed: [Model] = []
