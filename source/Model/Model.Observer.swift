@@ -80,7 +80,7 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         // In order to preserve the order of models we must take care of properly updating them, deletions
         // should also be made from high to low index.
 
-        var modelIndexes: [String: Int] = [:]
+        var modelIndexes: [Object.Id: Int] = [:]
         var deletionIndexes: [Int] = []
         var objectsByModel: [Model: Object?] = [:]
 
@@ -88,14 +88,13 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         // todo: if any models got actually changed.
 
         for i in 0 ..< models.count {
-            if let id: String = models[i].id {
+            if let id: Object.Id = models[i].id {
                 modelIndexes[id] = i
             }
         }
 
         for (id, object) in insertedById {
             let model: Model = batch.construct(with: object, configuration: configuration) as! Model
-            let id: String = String(id: id)
 
             objectsByModel[model] = object
             model.id = id
@@ -104,14 +103,14 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         }
 
         for (id, object) in updatedById {
-            if let index: Int = modelIndexes[String(id: id)] {
+            if let index: Int = modelIndexes[id] {
                 batch.update(model: models[index] as! Batch.Model, with: object, configuration: configuration)
                 objectsByModel[models[index]] = object
             }
         }
 
         for (id, _) in deletedById {
-            if let index: Int = modelIndexes[String(id: id)] {
+            if let index: Int = modelIndexes[id] {
                 deletionIndexes.append(index)
             }
         }

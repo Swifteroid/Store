@@ -57,7 +57,7 @@ extension Object
 
         for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
             let model: Model = batch.construct(with: object)
-            model.id = String(id: object.objectID)
+            model.id = object.objectID
             models.append(model)
         }
 
@@ -68,7 +68,7 @@ extension Object
         if let object: Object = self.value(for: name) {
             let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
             let model: Model = batch.construct(with: object)
-            model.id = String(id: object.objectID)
+            model.id = object.objectID
             return model
         } else {
             return nil

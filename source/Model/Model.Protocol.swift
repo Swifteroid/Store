@@ -4,7 +4,7 @@ public protocol ModelProtocol: class, Equatable, Hashable
 {
     associatedtype Configuration: ModelConfigurationProtocol
 
-    var id: String? { get set }
+    var id: Object.Id? { get set }
 }
 
 extension ModelProtocol

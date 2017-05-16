@@ -39,7 +39,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
     }
 
     @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
-        typealias Models = (identified: [String: Model], loaded: [Model])
+        typealias Models = (identified: [Object.Id: Model], loaded: [Model])
 
         // Todo: request will pull everything, must limit this to ids only, if have any.
 
@@ -49,17 +49,17 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         var models: Models = (identified: [:], loaded: [])
 
         for model in self.models {
-            if let id: String = model.id {
+            if let id: Object.Id = model.id {
                 models.identified[id] = model
             }
         }
 
         for object: Object in try context.fetch(request) {
-            if let model: Model = models.identified[String(id: object.objectID)] {
+            if let model: Model = models.identified[object.objectID] {
                 models.loaded.append(self.update(model: model, with: object, configuration: configuration))
             } else {
                 let model: Model = self.construct(with: object, configuration: configuration)
-                model.id = String(id: object.objectID)
+                model.id = object.objectID
                 models.loaded.append(model)
             }
         }
@@ -130,7 +130,7 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         // Update ids of inserted models.
 
         for (object, model) in models {
-            model.id = String(id: object.objectID)
+            model.id = object.objectID
         }
 
         return self

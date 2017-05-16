@@ -10,7 +10,7 @@ internal class UserModel: InitialisableModel<UserConfiguration>, BatchableProtoc
     internal var address: String!
     internal var books: [BookModel] = []
 
-    internal convenience init(id: String? = nil, name: String? = nil, address: String? = nil) {
+    internal convenience init(id: Object.Id? = nil, name: String? = nil, address: String? = nil) {
         self.init(id: id)
         self.name = name
         self.address = address

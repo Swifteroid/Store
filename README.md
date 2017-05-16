@@ -10,7 +10,7 @@ Store is a Core Data framework that provides convenient interface for data manag
 
 ## Concept 🔬
 
-…
+Store framework is all about balanced separation of concern. While working with data models you often want to treat them no different to any other of your code and Core Data quickly becomes a real pain when dealing with non-primitive attribute types, beyond basic relationship handling, object context management, etc. A small abstraction layer to extract data from managed objects and populate it back in is a decent way forward and this is exactly what Store is all about.
 
 ## Use 👷
 

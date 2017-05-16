@@ -10,8 +10,8 @@ extension Context
     }
 
     open func existingObject<Model:ModelProtocol>(with model: Model) throws -> Object? {
-        if let modelId: String = model.id, let url: URL = URL(string: modelId), let objectId: NSManagedObjectID = self.coordinator?.managedObjectID(forURIRepresentation: url) {
-            return try self.existingObject(with: objectId)
+        if let id: Object.Id = model.id {
+            return try self.existingObject(with: id)
         } else {
             return nil
         }

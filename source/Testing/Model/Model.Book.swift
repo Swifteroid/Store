@@ -10,7 +10,7 @@ internal class BookModel: InitialisableModel<NoConfiguration>, BatchableProtocol
     internal var author: String!
     internal var publisher: String!
 
-    internal convenience init(id: String? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil) {
+    internal convenience init(id: Object.Id? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil) {
         self.init(id: id)
         self.title = title
         self.author = author
