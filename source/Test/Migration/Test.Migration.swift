@@ -1,10 +1,16 @@
 import Store
 import Foundation
 import Nimble
+import XCTest
 
 internal class MigrationTestCase: ModelTestCase
 {
     internal func test() {
+
+        // Make sure migration data is setup as expected during migration.
+
+        let expectation: XCTestExpectation = self.expectation(description: "…")
+        MigrationData_1_0_0.callback = { expectation.fulfill() }
 
         // Prepare output directory and testing stores.
 
@@ -22,6 +28,8 @@ internal class MigrationTestCase: ModelTestCase
         for url in stores.map({ $0.0 }) {
             expect(expression: { try Migration().migrate(store: url, schemas: schemas) }).toNot(throwError())
         }
+
+        self.waitForExpectations(timeout: 0)
     }
 }
 

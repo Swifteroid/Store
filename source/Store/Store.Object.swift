@@ -11,12 +11,20 @@ extension Object
 
 extension Object
 {
-    public func value<Value>(set value: Value?, for key: String, transform: ((Value) -> Any?)? = nil) {
+    @discardableResult public func value<Value>(set value: Value?, for key: String, transform: ((Value) -> Any?)? = nil) -> Self {
         if let value: Value = value, let transform: ((Value) -> Any?) = transform {
             self.setValue(transform(value), forKey: key)
         } else {
             self.setValue(value, forKey: key)
         }
+        return self
+    }
+
+    @discardableResult public func value(set value: [String: Any?]) -> Self {
+        for (key, value) in value {
+            self.setValue(value, forKey: key)
+        }
+        return self
     }
 
     public func value<Value>(for key: String) -> Value? {

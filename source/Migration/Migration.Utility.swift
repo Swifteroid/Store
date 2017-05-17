@@ -55,7 +55,12 @@ open class MigrationUtility
         // Creates new store or validates that existing one is compatible with the specified schema. Todo: is this 
         // todo: the only / correct way of doing this?
 
-        try! Coordinator(managedObjectModel: schema).addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: destinationStoreUrl)
+        let coordinator: Coordinator = Coordinator(managedObjectModel: schema)
+        try! coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: destinationStoreUrl)
+
+        if let data: MigrationDataProtocol = self.data(for: name) {
+            data.setUp(coordinator: coordinator)
+        }
 
         return destinationStoreUrl
     }
@@ -67,5 +72,68 @@ open class MigrationUtility
 
     open static func setUpPersistentStores(at url: URL, schemas: [(Schema, URL)], template templateUrl: URL? = nil) -> [(URL, Schema)] {
         return schemas.map({ (self.setUpPersistentStore(at: url, name: $1.deletingPathExtension().lastPathComponent, schema: $0, template: templateUrl)!, $0) })
+    }
+
+    // MARK: -
+
+    private static var dataModuleNames: [String] = []
+
+    /// Looks up for the named migration data class and returns an instance.
+
+    open static func data(for name: String) -> MigrationDataProtocol? {
+        let className: String = "\(MigrationData.self)_\(name.replacingOccurrences(of: ".", with: "_"))"
+
+        // There is an easy and not so easy way of doing this. First is to check and just see if we have the required 
+        // class. This typically would fail, because this class would usually be in another bundle and will simply not 
+        // be recognised unless we specify module name, which we can't find out easily. Lastly we can check all loaded 
+        // classes and try to match our one and save it's module name for later magic.
+
+        if let DataClass: MigrationDataProtocol.Type = NSClassFromString(className) as? MigrationDataProtocol.Type {
+            return DataClass.init()
+        }
+
+        for moduleName in self.dataModuleNames {
+            if let DataClass: MigrationDataProtocol.Type = NSClassFromString("\(moduleName).\(className)") as? MigrationDataProtocol.Type {
+                return DataClass.init()
+            }
+        }
+
+        let classCount: Int = Int(objc_getClassList(nil, 0))
+        let classes: AutoreleasingUnsafeMutablePointer<AnyClass?> = AutoreleasingUnsafeMutablePointer(UnsafeMutablePointer<AnyClass?>.allocate(capacity: classCount))
+
+        objc_getClassList(classes, Int32(classCount))
+
+        for i in 0 ..< classCount {
+            if let DataClass: MigrationDataProtocol.Type = classes[i] as? MigrationDataProtocol.Type {
+
+                // We know this is a migration data class and now is a good idea to save to get the module name
+                // and cache it in known data module name list for later reuse.
+
+                let fullClassName: String = NSStringFromClass(DataClass)
+                let expression: NSRegularExpression = try! NSRegularExpression(pattern: "^(\\w+)\\..+$")
+                var moduleName: String?
+
+                if let match: NSTextCheckingResult = expression.firstMatch(in: fullClassName, range: NSRange(location: 0, length: fullClassName.characters.count)) {
+                    moduleName = (fullClassName as NSString).substring(with: match.rangeAt(1))
+
+                    if self.dataModuleNames.contains(moduleName!) {
+                        moduleName = nil
+                    } else {
+                        self.dataModuleNames.append(moduleName!)
+                    }
+                }
+
+                // If class name matches, then great, return it! Otherwise if we know this is a new module name
+                // then we can attempt to rematch class with that module name to avoid further iterations.
+
+                if fullClassName.hasSuffix(className) {
+                    return DataClass.init()
+                } else if let moduleName: String = moduleName, let DataClass: MigrationDataProtocol.Type = NSClassFromString("\(moduleName).\(className)") as? MigrationDataProtocol.Type {
+                    return DataClass.init()
+                }
+            }
+        }
+
+        return nil
     }
 }
