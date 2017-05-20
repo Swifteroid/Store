@@ -50,10 +50,15 @@ open class MigrationUtility
         if let storeUrl: URL = templateStoreUrl, let supportUrl: URL = templateSupportUrl, fileManager.fileExists(atPath: storeUrl.path) && fileManager.fileExists(atPath: supportUrl.path) {
             try! fileManager.copyItem(at: storeUrl, to: destinationStoreUrl)
             try! fileManager.copyItem(at: supportUrl, to: destinationSupportUrl)
+
+            // Verify that copied store schema is compatible with current schema. 
+
+            if !schema.compatible(with: try! Coordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: destinationStoreUrl)) {
+                return nil
+            }
         }
 
-        // Creates new store or validates that existing one is compatible with the specified schema. Todo: is this 
-        // todo: the only / correct way of doing this?
+        // Creates new store or validates that existing one is compatible with the specified schema.
 
         let data: MigrationDataProtocol? = self.data(for: name)
         let schema: Schema = data?.setUp(schema: schema) ?? schema

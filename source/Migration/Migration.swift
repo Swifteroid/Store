@@ -21,8 +21,8 @@ open class Migration
         // if for whatever reason the earlier schema will be compatible, we will be migrating our data in loops, potentially
         // damaging it along the way.
 
-        let metadata: [String: AnyObject] = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: store) as [String: AnyObject]
-        let index: Int = schemas.reversed().index(where: { $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) }) ?? -1
+        let metadata: [String: Any] = try Coordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: store)
+        let index: Int = schemas.reversed().index(where: { $0.compatible(with: metadata) }) ?? -1
 
         if index == -1 {
             throw Error.noCompatibleSchema
@@ -70,7 +70,7 @@ open class Migration
             // Replace source store.
 
             if #available(OSX 10.11, *) {
-                try! NSPersistentStoreCoordinator(managedObjectModel: destinationSchema).replacePersistentStore(
+                try! Coordinator(managedObjectModel: destinationSchema).replacePersistentStore(
                     at: store,
                     destinationOptions: nil,
                     withPersistentStoreFrom: migrationUrl,

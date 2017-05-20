@@ -4,7 +4,7 @@ public typealias Context = NSManagedObjectContext
 
 extension Context
 {
-    public convenience init(coordinator: NSPersistentStoreCoordinator, concurrency: NSManagedObjectContextConcurrencyType) {
+    public convenience init(coordinator: Coordinator, concurrency: NSManagedObjectContextConcurrencyType) {
         self.init(concurrencyType: concurrency)
         self.coordinator = coordinator
     }

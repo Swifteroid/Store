@@ -49,6 +49,12 @@ extension Schema
 
     // MARK: -
 
+    open func compatible(with metadata: [String: Any]) -> Bool {
+        return self.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+    }
+
+    // MARK: -
+
     /*
     Returns all schemas at the specified url, which is typically a compiled `momd` type file. Schemas will be sorted by name
     in ascending order, which should go in line if semver is used for versioning.
