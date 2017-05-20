@@ -55,12 +55,12 @@ open class MigrationUtility
         // Creates new store or validates that existing one is compatible with the specified schema. Todo: is this 
         // todo: the only / correct way of doing this?
 
+        let data: MigrationDataProtocol? = self.data(for: name)
+        let schema: Schema = data?.setUp(schema: schema) ?? schema
         let coordinator: Coordinator = Coordinator(managedObjectModel: schema)
-        try! coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: destinationStoreUrl)
 
-        if let data: MigrationDataProtocol = self.data(for: name) {
-            data.setUp(coordinator: coordinator)
-        }
+        try! coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: destinationStoreUrl)
+        data?.setUp(coordinator: coordinator)
 
         return destinationStoreUrl
     }

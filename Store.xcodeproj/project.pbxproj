@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
 		17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */; };
+		17FD01F93A4BDA43BFA200D7 /* Migration.Data.1.0.1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0A8B688592F35A12FA00 /* Migration.Data.1.0.1.swift */; };
 		17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */; };
 		17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD06B915850D45AD6F0C31 /* Store.Object.swift */; };
 		17FD03B452168BA6C34893F8 /* Test.Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07B5F5FE7CF615064197 /* Test.Migration.swift */; };
@@ -98,6 +99,7 @@
 		17FD0928D14C257016233F7A /* Test.Model.Relationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Relationship.swift; sourceTree = "<group>"; };
 		17FD0951E1ED302B0F56D96A /* Store.Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Schema.swift; sourceTree = "<group>"; };
 		17FD0A49EC0685345EF4E819 /* Test.Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.User.swift; sourceTree = "<group>"; };
+		17FD0A8B688592F35A12FA00 /* Migration.Data.1.0.1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Data.1.0.1.swift; sourceTree = "<group>"; };
 		17FD0AE94F3460323CE8CDE6 /* macOS - Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Application.xcconfig"; sourceTree = "<group>"; };
 		17FD0B25044E79C93F75D0C8 /* Test.Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.swift; sourceTree = "<group>"; };
 		17FD0BECD5BD4310CAEF64A0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				17FD025AEE1CCB4193B08CEB /* Migration.Data.1.0.0.swift */,
+				17FD0A8B688592F35A12FA00 /* Migration.Data.1.0.1.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				17FD0EE3EDAF889BCF78F53E /* Test.Batch.swift in Sources */,
 				17FD0DADC6A662EDAC547B3E /* Test.Model.Relationship.swift in Sources */,
 				17FD0565A5180CB7901A5C64 /* Migration.Data.1.0.0.swift in Sources */,
+				17FD01F93A4BDA43BFA200D7 /* Migration.Data.1.0.1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
