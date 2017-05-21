@@ -31,7 +31,7 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
     public typealias Batch = Model.Batch
     public typealias Configuration = Model.Configuration
 
-    /// - parameter models: Providing `nil` models will result in all models being loaded in accordance with specified configuration.
+    /// - Parameter models: Providing `nil` models will result in all models being loaded in accordance with specified configuration.
 
     public init(mode: ModelObserverMode? = nil, models: [Model]? = nil, configuration: Configuration? = nil) {
         self.mode = mode ?? .all

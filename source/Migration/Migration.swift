@@ -11,11 +11,13 @@ import Foundation
 open class Migration
 {
 
-    /*
-    Migrates data store at the given url using specified schemas and returns final schema used by the store, schemas must
-    be ordered by their version.
-    */
-    @discardableResult open func migrate(store: URL, schemas: [Schema]) throws -> Schema? {
+    /// Migrates data store at the given url using specified schemas and returns final schema used by the store, schemas must
+    /// be ordered by their version.
+    ///
+    /// - Parameter bundle: Bundles where to look for mapping models, if there no mapping models, make sure to pass an
+    ///   empty array, otherwise all bundles will be searched, which will result in some overhead.
+
+    @discardableResult open func migrate(store: URL, schemas: [Schema], bundles: [Bundle]? = nil) throws -> Schema? {
 
         // First things first, we must figure what schema is used with data store. We do this in reverse order, because
         // if for whatever reason the earlier schema will be compatible, we will be migrating our data in loops, potentially
@@ -49,7 +51,7 @@ open class Migration
             let destinationSchema: Schema = schemas[i + 1]
 
             let migrationManager: NSMigrationManager = NSMigrationManager(sourceModel: sourceSchema, destinationModel: destinationSchema)
-            let mappingModel: NSMappingModel = self.getMappingModel(source: sourceSchema, destination: destinationSchema)
+            let mapping: NSMappingModel = self.mapping(from: sourceSchema, to: destinationSchema, in: bundles)
 
             let temporaryUrl: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString)
             let migrationUrl: URL = temporaryUrl.appendingPathComponent(store.lastPathComponent)
@@ -62,7 +64,7 @@ open class Migration
                 from: store,
                 sourceType: NSSQLiteStoreType,
                 options: nil,
-                with: mappingModel,
+                with: mapping,
                 toDestinationURL: migrationUrl,
                 destinationType: NSSQLiteStoreType,
                 destinationOptions: nil)
@@ -87,9 +89,12 @@ open class Migration
         return schemas.last!
     }
 
-    open func getMappingModel(source: Schema, destination: Schema) -> NSMappingModel {
-        let mappingModel: NSMappingModel? = NSMappingModel(from: Bundle.allBundles, forSourceModel: source, destinationModel: destination)
-        return mappingModel ?? (try! NSMappingModel.inferredMappingModel(forSourceModel: source, destinationModel: destination))
+    /// Find existing mapping model for two schemas or create an inferred one if it doesn't exist. 
+
+    open func mapping(from source: Schema, to destination: Schema, in bundles: [Bundle]? = nil) -> NSMappingModel {
+        let bundles: [Bundle] = bundles ?? Bundle.allBundles + Bundle.allFrameworks
+        let mapping: NSMappingModel? = NSMappingModel(from: bundles, forSourceModel: source, destinationModel: destination)
+        return mapping ?? (try! NSMappingModel.inferredMappingModel(forSourceModel: source, destinationModel: destination))
     }
 
     public init() {

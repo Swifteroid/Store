@@ -9,8 +9,15 @@ internal class MigrationTestCase: ModelTestCase
 
         // Make sure migration data is setup as expected during migration.
 
-        let expectation: XCTestExpectation = self.expectation(description: "…")
-        MigrationData_1_0_0.callback = { expectation.fulfill() }
+        let expectation = (
+            data: self.expectation(description: "Migration data set up invocation"),
+            policy: self.expectation(description: "Migration policy begin invocation")
+        )
+
+        expectation.policy.assertForOverFulfill = false
+
+        MigrationData_1_0_0.callback = { expectation.data.fulfill() }
+        MigrationPolicy_1_1_0.callback = { expectation.policy.fulfill() }
 
         // Prepare output directory and testing stores.
 

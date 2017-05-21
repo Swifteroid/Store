@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
 		17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */; };
+		17FD01CD4C5E0B3BBAF11338 /* Migration.Policy.1.1.0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD03115F10C35BFFB27F54 /* Migration.Policy.1.1.0.swift */; };
 		17FD01F93A4BDA43BFA200D7 /* Migration.Data.1.0.1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0A8B688592F35A12FA00 /* Migration.Data.1.0.1.swift */; };
 		17FD02532D5F9052D3CAC84E /* Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0234B5B36D7E2C1B4F09 /* Model.Book.swift */; };
 		17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD06B915850D45AD6F0C31 /* Store.Object.swift */; };
@@ -40,6 +41,7 @@
 		E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E605B6511E86761A00A0E60A /* library.xcdatamodeld */; };
 		E60746591E83969200B75E21 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17FD0C103D052A2CEAE211F2 /* Nimble.framework */; };
 		E64105FB1EE0993A00FAC57D /* generic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E64105F91EE0993A00FAC57D /* generic.xcdatamodeld */; };
+		E64D9D581EF126EB0073E164 /* library.1.1.1.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = E64D9D561EF126CC0073E164 /* library.1.1.1.xcmappingmodel */; };
 		E6E9F6691E9B6A4A0009A096 /* Fakery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6E9F6681E9B6A360009A096 /* Fakery.framework */; };
 		E6E9F66A1E9B6A4C0009A096 /* Fakery.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E6E9F6681E9B6A360009A096 /* Fakery.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -81,6 +83,7 @@
 		17FD0292DF60342AD0693245 /* Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		17FD02E9D406040C55FBF3A4 /* Utility.Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.Path.swift; sourceTree = "<group>"; };
 		17FD02FE09DC90C14E5428BC /* Migration.Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Data.swift; sourceTree = "<group>"; };
+		17FD03115F10C35BFFB27F54 /* Migration.Policy.1.1.0.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Policy.1.1.0.swift; sourceTree = "<group>"; };
 		17FD031A2F3C58FC0FB9EC08 /* Model.Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Observer.swift; sourceTree = "<group>"; };
 		17FD03661824B57DE33BF395 /* Base - Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Debug.xcconfig"; sourceTree = "<group>"; };
 		17FD04474F74538B52D9DD2A /* Test.Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Store.swift; sourceTree = "<group>"; };
@@ -118,6 +121,7 @@
 		E607464A1E83949000B75E21 /* Store - Test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Store - Test.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64105FA1EE0993A00FAC57D /* generic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = generic.xcdatamodel; sourceTree = "<group>"; };
 		E642BFD91E87A9630001C699 /* 1.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.1.0.xcdatamodel; sourceTree = "<group>"; };
+		E64D9D561EF126CC0073E164 /* library.1.1.1.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = library.1.1.1.xcmappingmodel; sourceTree = "<group>"; };
 		E6E9F6671E9B6A360009A096 /* Fakery.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Fakery.framework.dSYM; path = Carthage/Build/Mac/Fakery.framework.dSYM; sourceTree = "<group>"; };
 		E6E9F6681E9B6A360009A096 /* Fakery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fakery.framework; path = Carthage/Build/Mac/Fakery.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,6 +262,7 @@
 			children = (
 				E605B6511E86761A00A0E60A /* library.xcdatamodeld */,
 				E64105F91EE0993A00FAC57D /* generic.xcdatamodeld */,
+				E64D9D561EF126CC0073E164 /* library.1.1.1.xcmappingmodel */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -286,6 +291,7 @@
 			children = (
 				17FD025AEE1CCB4193B08CEB /* Migration.Data.1.0.0.swift */,
 				17FD0A8B688592F35A12FA00 /* Migration.Data.1.0.1.swift */,
+				17FD03115F10C35BFFB27F54 /* Migration.Policy.1.1.0.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -515,6 +521,7 @@
 				17FD08AEC750303E7FC903B3 /* Test.Store.swift in Sources */,
 				17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */,
 				17FD074DCC1E98BD812963A1 /* Test.Model.Book.swift in Sources */,
+				E64D9D581EF126EB0073E164 /* library.1.1.1.xcmappingmodel in Sources */,
 				17FD0C719C976A9789FBB9BE /* Test.Model.User.swift in Sources */,
 				17FD09078313E08C032F4660 /* Test.Model.Observer.swift in Sources */,
 				17FD03B452168BA6C34893F8 /* Test.Migration.swift in Sources */,
@@ -524,6 +531,7 @@
 				17FD0DADC6A662EDAC547B3E /* Test.Model.Relationship.swift in Sources */,
 				17FD0565A5180CB7901A5C64 /* Migration.Data.1.0.0.swift in Sources */,
 				17FD01F93A4BDA43BFA200D7 /* Migration.Data.1.0.1.swift in Sources */,
+				17FD01CD4C5E0B3BBAF11338 /* Migration.Policy.1.1.0.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
