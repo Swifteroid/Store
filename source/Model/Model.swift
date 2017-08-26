@@ -4,9 +4,6 @@ open class Model<ConfigurationType:ModelConfigurationProtocol>: ModelProtocol
 {
     public typealias Configuration = ConfigurationType
 
-    /*
-    String representable of core data object id.
-    */
     open var id: Object.Id?
 
     // MARK: -

@@ -56,38 +56,47 @@ extension Object
 
     // MARK: -
 
-    /*
-    Returns related models using model construction method in batch derived from specified batchable protocol.
-    */
-    open func relationship<Model:BatchableProtocol>(for name: String) -> [Model] {
+    /// Returns related models using model construction method in batch derived from specified batchable protocol.
+
+    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, cache remodels: [Object.Id: Model]? = nil, construct: Bool = true) -> [Model] {
+        guard construct || !(remodels?.isEmpty ?? true) else { return [] }
+
+        // Todo: find a way to not create new batch every single time.
+
         let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
         var models: [Model] = []
 
         for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
-            let model: Model = batch.construct(with: object)
-            model.id = object.objectID
-            models.append(model)
+            if let model: Model = remodels?[object.objectID] {
+                models.append(model)
+            } else if construct {
+                models.append(batch.construct(with: object, configuration: configuration))
+            }
         }
 
         return models
     }
 
-    open func relationship<Model:BatchableProtocol>(for name: String) -> Model? {
-        if let object: Object = self.value(for: name) {
-            let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
-            let model: Model = batch.construct(with: object)
-            model.id = object.objectID
+    /// Returns related model either constructing one or using existing from cache with matching id. In many cases models
+    /// are hierarchically interrelated and reference each other, thus, to avoid `child` model from constructing `parent`
+    /// we can pass a list of existing parents, which will be reused.
+
+    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, cache remodels: [Object.Id: Model]? = nil, construct: Bool = true) -> Model? {
+        guard construct || !(remodels?.isEmpty ?? true), let object: Object = self.value(for: name) else { return nil }
+
+        // Todo: find a way to not create new batch every single time.
+
+        if let model: Model = remodels?[object.objectID] {
             return model
         } else {
-            return nil
+            return construct ? (Model.Batch(models: []) as! Batch<Model>).construct(with: object) : nil
         }
     }
 
     // MARK: -
 
-    /*
-    Sets new relationship objects replacing all existing ones.
-    */
+    /// Sets new relationship objects replacing all existing ones.
+
     @nonobjc open func relationship(set objects: [Object], for name: String) {
         let set: NSMutableSet = self.mutableSetValue(forKey: name)
         set.removeAllObjects()
@@ -100,9 +109,8 @@ extension Object
 
     // MARK: -
 
-    /*
-    Sets new relationship models.
-    */
+    /// Sets new relationship models.
+
     open func relationship<Model:ModelProtocol>(set models: [Model], for name: String) throws {
         guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
         var objects: [Object] = []

@@ -70,12 +70,9 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 
             for object: Object in try context.fetch(request) {
                 if let model: Model = remodels[object.objectID] {
-                    self.update(model: model, with: object, configuration: configuration)
-                    loaded.append(model)
+                    loaded.append(self.update(model: model, with: object, configuration: configuration))
                 } else {
-                    let model: Model = self.construct(with: object, configuration: configuration)
-                    model.id = object.objectID
-                    loaded.append(model)
+                    loaded.append(self.construct(with: object, configuration: configuration))
                 }
             }
         } else {
@@ -115,7 +112,9 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         // on generic type. Todo: possible?
 
         if let InitialisableModel = Model.self as? InitialisableProtocol.Type {
-            return self.update(model: InitialisableModel.init() as! Model, with: object, configuration: configuration)
+            let model: Model = InitialisableModel.init() as! Model
+            model.id = object.objectID
+            return self.update(model: model, with: object, configuration: configuration)
         } else {
             abort()
         }
