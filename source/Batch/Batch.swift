@@ -111,10 +111,8 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         // Ideally this should be done in extension, but there seem to be no way to trick around the dynamic dispatch
         // on generic type. Todo: possible?
 
-        if let InitialisableModel = Model.self as? InitialisableProtocol.Type {
-            let model: Model = InitialisableModel.init() as! Model
-            model.id = object.objectID
-            return self.update(model: model, with: object, configuration: configuration)
+        if let InitialisableModel = Model.self as? ModelInitialiserProtocol.Type {
+            return self.update(model: InitialisableModel.init(id: object.objectID) as! Model, with: object, configuration: configuration)
         } else {
             abort()
         }

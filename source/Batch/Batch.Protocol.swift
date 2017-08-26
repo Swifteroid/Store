@@ -46,13 +46,6 @@ extension BatchProtocol
 
 // MARK: -
 
-public protocol InitialisableProtocol
-{
-    init()
-}
-
-// MARK: -
-
 public protocol BatchableProtocol: ModelProtocol
 {
     associatedtype Batch: BatchProtocol

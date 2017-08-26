@@ -27,6 +27,13 @@ public func ==<Lhs:ModelProtocol, Rhs:ModelProtocol>(lhs: Lhs, rhs: Rhs) -> Bool
 
 // MARK: -
 
+public protocol ModelInitialiserProtocol
+{
+    init(id: Object.Id?)
+}
+
+// MARK: -
+
 public protocol ModelConfigurationProtocol
 {
 }

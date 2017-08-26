@@ -14,9 +14,10 @@ open class Model<ConfigurationType:ModelConfigurationProtocol>: ModelProtocol
     }
 }
 
-open class InitialisableModel<ConfigurationType:ModelConfigurationProtocol>: Model<ConfigurationType>, InitialisableProtocol
+open class InitialisableModel<ConfigurationType:ModelConfigurationProtocol>: Model<ConfigurationType>, ModelInitialiserProtocol
 {
-    override public required init() {
+    public required init(id: Object.Id? = nil) {
         super.init()
+        self.id = id
     }
 }
