@@ -57,20 +57,25 @@ extension Object
     // MARK: -
 
     /// Returns related models using model construction method in batch derived from specified batchable protocol.
+    ///
+    /// - parameter construct: construct model instead of using cache.
+    /// - parameter update: update cached model.
 
-    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, cache remodels: [Object.Id: Model]? = nil, construct: Bool = true) -> [Model] {
-        guard construct || !(remodels?.isEmpty ?? true) else { return [] }
+    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> [Model] {
 
         // Todo: find a way to not create new batch every single time.
 
+        let cache: ModelCache? = (self.managedObjectContext as? CacheableContext)?.cache
         let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
         var models: [Model] = []
 
         for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
-            if let model: Model = remodels?[object.objectID] {
+            if construct != true, let model: Model = cache?.model(with: object.objectID) {
+                models.append(update == true ? batch.update(model: model, with: object, configuration: configuration) : model)
+            } else if construct != false {
+                let model: Model = batch.construct(with: object, configuration: configuration)
                 models.append(model)
-            } else if construct {
-                models.append(batch.construct(with: object, configuration: configuration))
+                cache?.add(model: model)
             }
         }
 
@@ -80,17 +85,25 @@ extension Object
     /// Returns related model either constructing one or using existing from cache with matching id. In many cases models
     /// are hierarchically interrelated and reference each other, thus, to avoid `child` model from constructing `parent`
     /// we can pass a list of existing parents, which will be reused.
+    ///
+    /// - parameter construct: construct model instead of using cache.
+    /// - parameter update: update cached model.
 
-    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, cache remodels: [Object.Id: Model]? = nil, construct: Bool = true) -> Model? {
-        guard construct || !(remodels?.isEmpty ?? true), let object: Object = self.value(for: name) else { return nil }
+    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> Model? {
+        guard let object: Object = self.value(for: name) else { return nil }
+        let cache: ModelCache? = (self.managedObjectContext as? CacheableContext)?.cache
 
         // Todo: find a way to not create new batch every single time.
 
-        if let model: Model = remodels?[object.objectID] {
+        if construct != true, let model: Model = cache?.model(with: object.objectID) {
+            return update == true ? (Model.Batch(models: []) as! Batch<Model>).update(model: model, with: object, configuration: configuration) : model
+        } else if construct != false {
+            let model: Model = (Model.Batch(models: []) as! Batch<Model>).construct(with: object)
+            cache?.add(model: model)
             return model
-        } else {
-            return construct ? (Model.Batch(models: []) as! Batch<Model>).construct(with: object) : nil
         }
+
+        return nil
     }
 
     // MARK: -

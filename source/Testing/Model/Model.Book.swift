@@ -10,11 +10,16 @@ internal class BookModel: InitialisableModel<NoConfiguration>, BatchableProtocol
     internal var author: String!
     internal var publisher: String!
 
-    internal convenience init(id: Object.Id? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil) {
+    internal var user: UserModel?
+
+    internal convenience init(id: Object.Id? = nil, title: String? = nil, author: String? = nil, publisher: String? = nil, user: UserModel? = nil) {
         self.init(id: id)
+
         self.title = title
         self.author = author
         self.publisher = publisher
+
+        self.user = user
     }
 }
 
@@ -24,6 +29,9 @@ internal class BookBatch: Batch<BookModel>
         model.title = object.value(for: Key.title)!
         model.author = object.value(for: Key.author)!
         model.publisher = object.value(for: Key.publisher)!
+
+        model.user = object.relationship(for: Key.user)
+
         return model
     }
 
@@ -31,6 +39,9 @@ internal class BookBatch: Batch<BookModel>
         object.value(set: model.title, for: Key.title)
         object.value(set: model.author, for: Key.author)
         object.value(set: model.publisher, for: Key.publisher)
+
+        object.value(set: model.user, for: Key.user)
+
         return object
     }
 }
@@ -42,6 +53,8 @@ extension BookBatch
         fileprivate static let title: String = "title"
         fileprivate static let author: String = "author"
         fileprivate static let publisher: String = "publisher"
+
+        fileprivate static let user: String = "user"
     }
 }
 

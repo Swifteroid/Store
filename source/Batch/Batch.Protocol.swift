@@ -5,11 +5,15 @@ public protocol BatchProtocol: class
     associatedtype Model: ModelProtocol
     associatedtype Configuration: ModelConfigurationProtocol = Model.Configuration
 
+    init(coordinator: Coordinator?, context: Context?, cache: ModelCache?, models: [Model]?)
+
+    var coordinator: Coordinator? { get set }
+
+    var context: Context? { get set }
+
+    var cache: ModelCache? { get set }
+
     var models: [Model] { get set }
-
-    var remodels: [Model] { get set }
-
-    init(models: [Model]?, remodels: [Model]?)
 
     func exist(models: [Model]?) -> Bool
     func exists(model: Model) -> Bool
@@ -18,7 +22,7 @@ public protocol BatchProtocol: class
     @discardableResult func save(configuration: Configuration?) throws -> Self
     @discardableResult func delete(configuration: Configuration?) throws -> Self
 
-    @discardableResult func construct(with object: Object, configuration: Configuration?) -> Model
+    @discardableResult func construct(with object: Object, configuration: Configuration?, cache: ModelCache?) -> Model
     @discardableResult func update(model: Model, with object: Object, configuration: Configuration?) -> Model
     @discardableResult func update(object: Object, with model: Model, configuration: Configuration?) -> Object
 }
@@ -31,16 +35,14 @@ extension BatchProtocol
         return self.exist(models: [model])
     }
 
-    public init() {
-        self.init(models: [], remodels: [])
+    public init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
+        self.init(coordinator: coordinator, context: context, cache: cache, models: models)
     }
 
-    public init(models: [Model]) {
-        self.init(models: models, remodels: [])
-    }
+    // MARK: -
 
-    public init(remodels: [Model]) {
-        self.init(models: [], remodels: remodels)
+    @discardableResult func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) -> Model {
+        return self.construct(with: object, configuration: configuration, cache: cache)
     }
 }
 

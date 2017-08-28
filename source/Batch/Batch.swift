@@ -8,25 +8,25 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
 {
     public typealias Model = ModelType
 
-    public required init(models: [Model]? = nil, remodels: [Model]? = nil) {
+    public required init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
+        self.coordinator = coordinator
+        self.context = context
+        self.cache = cache
         self.models = models ?? []
-        self.remodels = remodels ?? []
     }
 
     // MARK: -
 
     open var coordinator: Coordinator?
 
+    open var context: Context?
+
+    open var cache: ModelCache?
+
     /// Explicitly defined or resulted set of models, which may change after each operation, thus, two identical operations invoked 
-    /// consecutively may product different result, because their input may differ.   
+    /// consecutively may product different result, because their input may differ.
 
     open var models: [Model]
-
-    /// Models to use during loading instead of creating new ones. They are slightly different from assigned ones in a way that reusable
-    /// can be either used or not, depending on whether request returns associated objects, whether models imply that they all should 
-    /// be returned and populated.
-
-    open var remodels: [Model]
 
     // MARK: -
 
@@ -53,32 +53,42 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
     /// remodels will result in a full fetch and will also reuse available models instead of creating new ones where possible.
 
     @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
-        let context: Context = Context(coordinator: (self.coordinator ?? Coordinator.default), concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+
+        // Cache explicitly specified by the batch has higher priority over one specified in cacheable context.  
+
+        let context: Context = self.context ?? CacheableContext(coordinator: (self.coordinator ?? Coordinator.default), concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType, cache: self.cache)
+        let cache: ModelCache? = self.cache ?? (context as? CacheableContext)?.cache
         let models: [Model] = self.models
         var loaded: [Model] = []
         var failed: [Model] = []
 
+        // It's worth mentioning that models retrieved from cache get updated – this behaviour is different when accessing relationships
+        // and allows to avoid unnecessary updated.
+
         if models.isEmpty {
             let request: NSFetchRequest<Object> = self.prepare(request: NSFetchRequest(), configuration: configuration)
-            var remodels: [Object.Id: Model] = [:]
-
-            for model in self.remodels {
-                if let id: Object.Id = model.id {
-                    remodels[id] = model
-                }
-            }
 
             for object: Object in try context.fetch(request) {
-                if let model: Model = remodels[object.objectID] {
+                if let model: Model = cache?.model(with: object.objectID) {
                     loaded.append(self.update(model: model, with: object, configuration: configuration))
                 } else {
-                    loaded.append(self.construct(with: object, configuration: configuration))
+                    let model: Model = self.construct(with: object, configuration: configuration, cache: cache)
+                    loaded.append(model)
+                    cache?.add(model: model)
                 }
             }
         } else {
+
+            // It is essential to add loaded models to cache before they get updated, otherwise interrelated relationships may end
+            // up creating exact copies of these models.
+
+            cache?.add(models: models)
+
             for model in models {
                 if let object: Object = try context.existingObject(with: model) {
-                    loaded.append(self.update(model: model, with: object, configuration: configuration))
+                    self.update(model: model, with: object, configuration: configuration)
+                    loaded.append(model)
+                    cache?.add(model: model)
                 } else {
                     failed.append(model)
                 }
@@ -106,13 +116,20 @@ open class Batch<ModelType:ModelProtocol>: BatchProtocol
         return request
     }
 
-    @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil) -> Model {
+    @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil, cache: ModelCache? = nil) -> Model {
 
         // Ideally this should be done in extension, but there seem to be no way to trick around the dynamic dispatch
         // on generic type. Todo: possible?
 
         if let InitialisableModel = Model.self as? ModelInitialiserProtocol.Type {
-            return self.update(model: InitialisableModel.init(id: object.objectID) as! Model, with: object, configuration: configuration)
+            let model: Model = InitialisableModel.init(id: object.objectID) as! Model
+
+            // This is very important that newly constructed and identified model is added to cache before updating, otherwise 
+            // it may result in recursion when construction interdependent relationships.
+
+            cache?.add(model: model)
+
+            return self.update(model: model, with: object, configuration: configuration)
         } else {
             abort()
         }

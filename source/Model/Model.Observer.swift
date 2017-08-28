@@ -83,7 +83,7 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
     // MARK: -
 
     open func update() {
-        let batch: Batch = Batch(models: (self.assigned as! [Batch.Model]?), remodels: (self.remodels + (self.observed ?? []) as! [Batch.Model]))
+        let batch: Batch = Batch(cache: ArrayModelCache(self.observed), models: (self.assigned as! [Batch.Model]?))
         try! batch.load(configuration: self.configuration as! Batch.Configuration?)
 
         self.observed = (batch.models as! [Model])

@@ -5,7 +5,8 @@ Store is a Core Data framework that provides convenient interface for data manag
 - [x] Configurable load, save and delete operations
 - [x] Automatic and configurable migrations
 - [x] No `NSManagedObject` inheritance
-- [x] Awesome relationship management
+- [x] [Smart model caching](#relationships-and-model-caching-)
+- [x] [Awesome relationship management](#relationships-and-model-caching-)
 - [x] Customisable model change observerations
 
 ## Concept 🔬
@@ -69,6 +70,12 @@ Coordinator.default = Coordinator(store: storeUrl, schema: schemaUrl, handler: {
 ☝️ Also worth to mention `handler: { true }`, which gets invoked if migration cannot be completed and indicates if the store file should be deleted and created anew. This is where you can notify user of a problem with alert and ask if he wants to proceed with – something that should never happen, but safe is better than sorry.
 
 ☝️ Entities should use `NSManagedObject` as their class, if class value is left empty make sure `representedClassName` attribute is removed and not set to a blank value in your `*.xdatamodeld/*.cdatamodel/contents` file to avoid compile errors.
+
+## Relationships and model caching 🦄
+
+Consider two interrelated models in our library project, `User` and `Book`, with one to many relationship – user may take a few books and a book can be taken only by one user. When we load user we also load list of all his taken books, which load the user who took them, which loads… 💥☠️
+
+Core Data has lazy loading, which on it's own is enough to solve this. Store doesn't, instead it has custom configurations, which can be used to specify whether to load specific relationships and model caching to ensure that interrelated models are not recursively loaded.
 
 ## Motivation 🤔
 
