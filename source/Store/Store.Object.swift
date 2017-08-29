@@ -42,6 +42,42 @@ extension Object
     }
 }
 
+/// MARK: RawRepresentable
+
+extension Object
+{
+
+    @discardableResult public func value<Key:RawRepresentable, Value>(set value: Value?, for key: Key, transform: ((Value) -> Any?)? = nil) -> Self where Key.RawValue == String {
+        if let value: Value = value, let transform: ((Value) -> Any?) = transform {
+            self.setValue(transform(value), forKey: key.rawValue)
+        } else {
+            self.setValue(value, forKey: key.rawValue)
+        }
+        return self
+    }
+
+    @discardableResult public func value<Key:RawRepresentable>(set value: [Key: Any?]) -> Self where Key.RawValue == String {
+        for (key, value) in value {
+            self.setValue(value, forKey: key.rawValue)
+        }
+        return self
+    }
+
+    public func value<Key:RawRepresentable, Value>(for key: Key) -> Value? where Key.RawValue == String {
+        return self.value(forKey: key.rawValue) as! Value?
+    }
+
+    public func value<Key:RawRepresentable, Raw, Transformed>(for key: Key, transform: ((Raw) -> Transformed?)?) -> Transformed? where Key.RawValue == String {
+        let value: Raw? = self.value(forKey: key.rawValue) as! Raw?
+
+        if let value: Raw = value, let transform: ((Raw) -> Transformed?) = transform {
+            return transform(value)
+        } else {
+            return value as! Transformed?
+        }
+    }
+}
+
 // MARK: relationship
 
 extension Object
@@ -152,6 +188,45 @@ extension Object
         }
     }
 }
+
+/// MARK: RawRepresentable
+
+extension Object
+{
+    @nonobjc open func relationship<Name:RawRepresentable>(for name: Name) -> [Object] where Name.RawValue == String {
+        return self.mutableSetValue(forKey: name.rawValue).allObjects as! [Object]
+    }
+
+    @nonobjc open func relationship<Name:RawRepresentable>(for name: Name) -> Object? where Name.RawValue == String {
+        return self.value(forKey: name.rawValue) as! Object?
+    }
+
+    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> [Model] where Name.RawValue == String {
+        return self.relationship(for: name.rawValue, configuration: configuration, construct: construct, update: update)
+    }
+
+    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> Model? where Name.RawValue == String {
+        return self.relationship(for: name.rawValue, configuration: configuration, construct: construct, update: update)
+    }
+
+    @nonobjc open func relationship<Name:RawRepresentable>(set objects: [Object], for name: Name) where Name.RawValue == String {
+        self.relationship(set: objects, for: name.rawValue)
+    }
+
+    @nonobjc open func relationship<Name:RawRepresentable>(set object: Object?, for name: Name) where Name.RawValue == String {
+        self.relationship(set: object, for: name.rawValue)
+    }
+
+    open func relationship<Name:RawRepresentable, Model:Store.Model>(set models: [Model], for name: Name) throws where Name.RawValue == String {
+        try self.relationship(set: models, for: name.rawValue)
+    }
+
+    open func relationship<Name:RawRepresentable, Model:Store.Model>(set model: Model?, for name: Name) throws where Name.RawValue == String {
+        try self.relationship(set: model, for: name.rawValue)
+    }
+}
+
+// MARK: -
 
 extension Object
 {

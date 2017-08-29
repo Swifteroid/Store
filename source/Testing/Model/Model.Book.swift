@@ -48,13 +48,12 @@ internal class BookBatch: AbstractBatch<BookModel>
 
 extension BookBatch
 {
-    fileprivate struct Key
+    fileprivate enum Key: String
     {
-        fileprivate static let title: String = "title"
-        fileprivate static let author: String = "author"
-        fileprivate static let publisher: String = "publisher"
-
-        fileprivate static let user: String = "user"
+        case title
+        case author
+        case publisher
+        case user
     }
 }
 

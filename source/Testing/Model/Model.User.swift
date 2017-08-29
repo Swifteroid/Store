@@ -45,11 +45,11 @@ internal struct UserConfiguration: ModelConfiguration, ModelFetchConfiguration
 
 extension UserBatch
 {
-    fileprivate struct Key
+    fileprivate enum Key: String
     {
-        fileprivate static let name: String = "name"
-        fileprivate static let address: String = "address"
-        fileprivate static let books: String = "books"
+        case name
+        case address
+        case books
     }
 }
 
