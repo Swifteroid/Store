@@ -1,7 +1,7 @@
 import Store
 import Nimble
 
-internal class ObjectTestCase: TestCase, StoreTestCaseProtocol
+internal class ObjectTestCase: TestCase, PersistentStoreTestCase
 {
     internal static let schemaUrl: URL = PathUtility.genericSchemaUrl
 

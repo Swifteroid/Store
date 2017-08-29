@@ -1,43 +1,26 @@
 import CoreData
 import Foundation
 
-public protocol ModelObserverProtocol: class
-{
-    associatedtype Model: BatchableProtocol
-    associatedtype Batch: BatchProtocol
-    associatedtype Configuration: ModelConfigurationProtocol
-
-    /// Invoked when loading models for the first time when they are not explicitly specified and when consequently
-    /// updating them. 
-
-    func update()
-
-    /// Invoked when the default notification center posts `NSManagedObjectContextDidSave` notification with provided
-    /// context and changed objects.
-
-    func update(context: Context, inserted: Set<Object>, deleted: Set<Object>, updated: Set<Object>)
-}
-
 /// Model observer provides a way of smart global model change tracking by listening for `NSManagedObjectContext` notifications
 /// and selectively merging those changes. 
-/// 
+///
 /// When models are explicitly assigned it monitors only those models and never performs full fetch. When models are not set 
 /// it works in an opposite way. This provides strictly selective observations and more classic fetch style, which makes better
 /// use of fetch configuration.
 
-open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
+open class ModelObserver<Model:Batchable>
 {
-    public typealias Model = ModelType
     public typealias Batch = Model.Batch
     public typealias Configuration = Model.Configuration
 
-    /// - Parameter models: Providing `nil` models will result in all models being loaded in accordance with specified configuration.
+    /// - parameter models: Providing `nil` models will result in all models being loaded in accordance with specified configuration.
 
-    public init(mode: ModelObserverMode? = nil, models: [Model]? = nil, configuration: Configuration? = nil) {
+    public init(mode: ModelObserverMode? = nil, cache: ModelCache? = nil, models: [Model]? = nil, configuration: Configuration? = nil) {
+        self.cache = cache
         self.mode = mode ?? .all
         self.configuration = configuration
 
-        if let models: [Model] = models {
+        if let models = models {
             self.models = models
         } else {
             self.update()
@@ -47,9 +30,7 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
     }
 
     deinit {
-        if let observer: Any = self.observer {
-            NotificationCenter.default.removeObserver(observer)
-        }
+        if let observer: Any = self.observer { NotificationCenter.default.removeObserver(observer) }
     }
 
     // MARK: -
@@ -78,17 +59,23 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
 
     private var observed: [Model]?
 
-    open var remodels: [Model] = []
+    open var cache: ModelCache?
 
     // MARK: -
 
+    /// Invoked when loading models for the first time when they are not explicitly specified and when consequently
+    /// updating them. 
+
     open func update() {
-        let batch: Batch = Batch(cache: ArrayModelCache(self.observed), models: (self.assigned as! [Batch.Model]?))
+        let batch: Batch = Batch(cache: self.cache ?? ArrayModelCache(self.observed), models: (self.assigned as! [Batch.Model]?))
         try! batch.load(configuration: self.configuration as! Batch.Configuration?)
 
         self.observed = (batch.models as! [Model])
         NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
     }
+
+    /// Invoked when the default notification center posts `NSManagedObjectContextDidSave` notification with provided
+    /// context and changed objects.
 
     open func update(context: Context, inserted: Set<Object>, deleted: Set<Object>, updated: Set<Object>) {
         guard let entity: Entity = (context.coordinator ?? Coordinator.default)?.schema.entity(for: Model.self) else { return }
@@ -164,7 +151,7 @@ open class ModelObserver<ModelType:BatchableProtocol>: ModelObserverProtocol
         // make sure that fetch configuration applies to models. This is still a shady area, offset configuration doesn't get applied
         // here, because it's not clear how it would work. Suggestions are welcome! 
 
-        if !insertedById.isEmpty, let configuration: FetchConfiguration = (configuration as? ModelFetchConfigurationProtocol)?.fetch {
+        if !insertedById.isEmpty, let configuration: FetchConfiguration = (configuration as? ModelFetchConfiguration)?.fetch {
             if let sort: [NSSortDescriptor] = configuration.sort, !sort.isEmpty {
                 observed.sort(by: {
                     if objectsByModel[$0] == nil { objectsByModel[$0] = try? context.existingObject(with: $0) }

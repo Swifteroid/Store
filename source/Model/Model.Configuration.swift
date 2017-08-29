@@ -1,10 +1,10 @@
 import CoreData
 
-public protocol ModelConfigurationProtocol
+public protocol ModelConfiguration
 {
 }
 
-public struct NoConfiguration: ModelConfigurationProtocol
+public struct NoConfiguration: ModelConfiguration
 {
 }
 
@@ -23,7 +23,7 @@ public struct FetchConfiguration
     }
 }
 
-public protocol ModelFetchConfigurationProtocol
+public protocol ModelFetchConfiguration
 {
     var fetch: FetchConfiguration? { get set }
 }

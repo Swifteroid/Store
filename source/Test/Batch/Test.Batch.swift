@@ -21,16 +21,16 @@ internal class BatchTestCase: TestCase
     }
 }
 
-fileprivate struct Configuration: ModelConfigurationProtocol, ModelFetchConfigurationProtocol
+fileprivate struct Configuration: ModelConfiguration, ModelFetchConfiguration
 {
     fileprivate var fetch: FetchConfiguration?
 }
 
-fileprivate class Model: Store.InitialisableModel<Configuration>, BatchableProtocol
+fileprivate class Model: Store.InitialisableModel<Configuration>, Batchable
 {
     typealias Batch = Store___Test.Batch
 }
 
-fileprivate class Batch: Store.Batch<Model>
+fileprivate class Batch: Store.AbstractBatch<Model>
 {
 }

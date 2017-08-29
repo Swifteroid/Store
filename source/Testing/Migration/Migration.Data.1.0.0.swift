@@ -1,7 +1,7 @@
 import CoreData
 import Store
 
-internal class MigrationData_1_0_0: MigrationData
+internal class MigrationData_1_0_0: AbstractMigrationData
 {
     internal static var callback: (() -> ())?
 

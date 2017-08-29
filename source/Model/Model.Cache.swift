@@ -1,30 +1,29 @@
-
 /// Provides means for caching already loaded modes. Needed mostly for interrelated model load recursion handling, but can be used
 /// simply to reuse already existing models during the load, like `ModelObserver<…>` does.
 
 public protocol ModelCache: class
 {
 
-    func model<Model:ModelProtocol>(with id: Object.Id) -> Model?
+    func model<Model:Store.Model>(with id: Object.Id) -> Model?
 
     /// Adds model to cache.
 
-    func add<Model:ModelProtocol>(model: Model)
+    func add<Model:Store.Model>(model: Model)
 
-    func add<Model:ModelProtocol>(models: [Model])
+    func add<Model:Store.Model>(models: [Model])
 
-    func remove<Model:ModelProtocol>(model: Model)
+    func remove<Model:Store.Model>(model: Model)
 
-    func remove<Model:ModelProtocol>(models: [Model])
+    func remove<Model:Store.Model>(models: [Model])
 }
 
 extension ModelCache
 {
-    public func add<Model:ModelProtocol>(models: [Model]) {
+    public func add<Model:Store.Model>(models: [Model]) {
         for model in models { self.add(model: model) }
     }
 
-    public func remove<Model:ModelProtocol>(models: [Model]) {
+    public func remove<Model:Store.Model>(models: [Model]) {
         for model in models { self.remove(model: model) }
     }
 }
@@ -39,15 +38,15 @@ open class ArrayModelCache: ModelCache
 
     open var values: [Any]
 
-    open func model<Model:ModelProtocol>(with id: Object.Id) -> Model? {
+    open func model<Model:Store.Model>(with id: Object.Id) -> Model? {
         return self.values.first(where: { ($0 as? Model)?.id == id }) as? Model
     }
 
-    open func add<Model:ModelProtocol>(model: Model) {
+    open func add<Model:Store.Model>(model: Model) {
         self.values.append(model)
     }
 
-    open func remove<Model:ModelProtocol>(model: Model) {
+    open func remove<Model:Store.Model>(model: Model) {
         self.values = self.values.filter({ $0 as? Model !== model })
     }
 }
@@ -60,15 +59,15 @@ open class DictionaryModelCache: ModelCache
 
     open var values: [Object.Id: Any]
 
-    open func model<Model:ModelProtocol>(with id: Object.Id) -> Model? {
+    open func model<Model:Store.Model>(with id: Object.Id) -> Model? {
         return self.values[id] as? Model
     }
 
-    open func add<Model:ModelProtocol>(model: Model) {
+    open func add<Model:Store.Model>(model: Model) {
         if let id: Object.Id = model.id { self.values[id] = model }
     }
 
-    open func remove<Model:ModelProtocol>(model: Model) {
+    open func remove<Model:Store.Model>(model: Model) {
         if let id: Object.Id = model.id { self.values.removeValue(forKey: id) }
     }
 }

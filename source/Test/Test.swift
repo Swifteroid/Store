@@ -4,13 +4,13 @@ import XCTest
 internal class TestCase: XCTestCase
 {
     override internal class func setUp() {
-        if let StoreTestCase: StoreTestCaseProtocol.Type = self as? StoreTestCaseProtocol.Type {
+        if let StoreTestCase: PersistentStoreTestCase.Type = self as? PersistentStoreTestCase.Type {
             StoreTestCase.setUp()
         }
     }
 
     override internal class func tearDown() {
-        if let StoreTestCase: StoreTestCaseProtocol.Type = self as? StoreTestCaseProtocol.Type {
+        if let StoreTestCase: PersistentStoreTestCase.Type = self as? PersistentStoreTestCase.Type {
             StoreTestCase.tearDown()
         }
     }
@@ -18,12 +18,12 @@ internal class TestCase: XCTestCase
 
 // MARK: -
 
-internal protocol StoreTestCaseProtocol
+internal protocol PersistentStoreTestCase
 {
     static var schemaUrl: URL { get }
 }
 
-extension StoreTestCaseProtocol
+extension PersistentStoreTestCase
 {
     internal static func setUp() {
         let storeUrl: URL = Coordinator.url(for: "Store - Test")

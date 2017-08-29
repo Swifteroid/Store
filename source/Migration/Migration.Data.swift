@@ -4,7 +4,7 @@ import CoreData
 /// testing data. Override set up method with custom logic to insert or update stored data before attempting
 /// to migrate it.
 
-public protocol MigrationDataProtocol: class
+public protocol MigrationData: class
 {
     init()
 
@@ -17,7 +17,7 @@ public protocol MigrationDataProtocol: class
     func setUp(coordinator: Coordinator)
 }
 
-open class MigrationData: MigrationDataProtocol
+open class AbstractMigrationData: MigrationData
 {
     public required init() {
     }

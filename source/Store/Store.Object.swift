@@ -61,12 +61,12 @@ extension Object
     /// - parameter construct: construct model instead of using cache.
     /// - parameter update: update cached model.
 
-    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> [Model] {
+    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> [Model] {
 
         // Todo: find a way to not create new batch every single time.
 
         let cache: ModelCache? = (self.managedObjectContext as? CacheableContext)?.cache
-        let batch: Batch<Model> = Model.Batch(models: []) as! Batch<Model>
+        let batch: AbstractBatch<Model> = Model.Batch(models: []) as! AbstractBatch<Model>
         var models: [Model] = []
 
         for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
@@ -89,16 +89,16 @@ extension Object
     /// - parameter construct: construct model instead of using cache.
     /// - parameter update: update cached model.
 
-    open func relationship<Model:BatchableProtocol>(for name: String, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> Model? {
+    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, construct: Bool? = nil, update: Bool? = nil) -> Model? {
         guard let object: Object = self.value(for: name) else { return nil }
         let cache: ModelCache? = (self.managedObjectContext as? CacheableContext)?.cache
 
         // Todo: find a way to not create new batch every single time.
 
         if construct != true, let model: Model = cache?.model(with: object.objectID) {
-            return update == true ? (Model.Batch(models: []) as! Batch<Model>).update(model: model, with: object, configuration: configuration) : model
+            return update == true ? (Model.Batch(models: []) as! AbstractBatch<Model>).update(model: model, with: object, configuration: configuration) : model
         } else if construct != false {
-            let model: Model = (Model.Batch(models: []) as! Batch<Model>).construct(with: object)
+            let model: Model = (Model.Batch(models: []) as! AbstractBatch<Model>).construct(with: object)
             cache?.add(model: model)
             return model
         }
@@ -124,7 +124,7 @@ extension Object
 
     /// Sets new relationship models.
 
-    open func relationship<Model:ModelProtocol>(set models: [Model], for name: String) throws {
+    open func relationship<Model:Store.Model>(set models: [Model], for name: String) throws {
         guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
         var objects: [Object] = []
 
@@ -139,7 +139,7 @@ extension Object
         self.relationship(set: objects, for: name)
     }
 
-    open func relationship<Model:ModelProtocol>(set model: Model?, for name: String) throws {
+    open func relationship<Model:Store.Model>(set model: Model?, for name: String) throws {
         if let model: Model = model {
             guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
             if let object: Object = try context.existingObject(with: model) {

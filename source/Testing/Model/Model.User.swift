@@ -2,7 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal class UserModel: InitialisableModel<UserConfiguration>, BatchableProtocol
+internal class UserModel: InitialisableModel<UserConfiguration>, Batchable
 {
     internal typealias Batch = UserBatch
 
@@ -21,7 +21,7 @@ internal class UserModel: InitialisableModel<UserConfiguration>, BatchableProtoc
     }
 }
 
-internal class UserBatch: Batch<UserModel>
+internal class UserBatch: AbstractBatch<UserModel>
 {
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) -> Model {
         model.name = object.value(for: Key.name)
@@ -38,7 +38,7 @@ internal class UserBatch: Batch<UserModel>
     }
 }
 
-internal struct UserConfiguration: ModelConfigurationProtocol, ModelFetchConfigurationProtocol
+internal struct UserConfiguration: ModelConfiguration, ModelFetchConfiguration
 {
     internal var fetch: FetchConfiguration?
 }

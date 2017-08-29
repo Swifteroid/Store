@@ -1,23 +1,33 @@
-import Foundation
+import CoreData
 
-open class Model<ConfigurationType:ModelConfigurationProtocol>: ModelProtocol
+public protocol Model: class, Equatable, Hashable
 {
-    public typealias Configuration = ConfigurationType
+    associatedtype Configuration: ModelConfiguration
 
-    open var id: Object.Id?
+    var id: Object.Id? { get set }
+}
 
-    // MARK: -
-
-    public convenience init(id: Object.Id?) {
-        self.init()
-        self.id = id
+extension Model
+{
+    public var identified: Bool {
+        return self.id != nil
     }
 }
 
-open class InitialisableModel<ConfigurationType:ModelConfigurationProtocol>: Model<ConfigurationType>, ModelInitialiserProtocol
+extension Model
 {
-    public required init(id: Object.Id? = nil) {
-        super.init()
-        self.id = id
+    public var hashValue: Int {
+        return ObjectIdentifier(self).hashValue
     }
+}
+
+public func ==<Lhs:Model, Rhs:Model>(lhs: Lhs, rhs: Rhs) -> Bool {
+    return lhs === rhs
+}
+
+// MARK: -
+
+public protocol ModelInitialiser
+{
+    init(id: Object.Id?)
 }

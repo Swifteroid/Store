@@ -2,7 +2,7 @@ import CoreData
 import Store
 import Fakery
 
-internal class MigrationData_1_0_1: MigrationData
+internal class MigrationData_1_0_1: AbstractMigrationData
 {
     override internal func setUp(coordinator: Coordinator, context: Context) {
         let bookEntity: Entity = coordinator.schema.entity(for: "Book")!
