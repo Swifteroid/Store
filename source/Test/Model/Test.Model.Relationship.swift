@@ -6,7 +6,7 @@ import Store
 internal class ModelRelationshipTestCase: ModelTestCase
 {
     internal func testRelationships() {
-        let books: [BookModel] = [try! BookModel.fake().save(), try! BookModel.fake().save()]
+        let books: [BookModel] = (0 ..< 5).map({ _ in try! BookModel.fake().save() })
         let titles = equal(books.map({ $0.title }).sorted())
 
         var userA: UserModel = UserModel.fake()
@@ -35,5 +35,13 @@ internal class ModelRelationshipTestCase: ModelTestCase
 
         try! userA.load()
         expect(userA.books).to(beEmpty())
+    }
+
+    internal func testCaching() {
+        let books: [BookModel] = (0 ..< 10).map({ _ in try! BookModel.fake().save() })
+        let _: [UserModel] = (0 ..< 10).map({ try! UserModel.fake(books: Array(books[max(0, $0 - 2) ..< min(books.count, $0 + 2)])).save() })
+
+        try! BookBatch().load()
+        try! UserBatch().load()
     }
 }

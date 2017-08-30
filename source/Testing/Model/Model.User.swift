@@ -57,11 +57,12 @@ extension UserBatch
 
 extension UserModel
 {
-    internal static func fake(name: String? = nil) -> UserModel {
+    internal static func fake(name: String? = nil, books: [BookModel]? = nil) -> UserModel {
         let faker: Faker = Faker()
         return UserModel(
             name: name ?? faker.name.name(),
-            address: faker.address.streetAddress(includeSecondary: true)
+            address: faker.address.streetAddress(includeSecondary: true),
+            books: books
         )
     }
 }

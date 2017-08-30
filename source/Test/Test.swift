@@ -26,8 +26,9 @@ internal protocol PersistentStoreTestCase
 extension PersistentStoreTestCase
 {
     internal static func setUp() {
+        let fileManager: FileManager = FileManager.default
         let storeUrl: URL = Coordinator.url(for: "Store - Test")
-        try! FileManager.default.removeItem(at: storeUrl)
+        if fileManager.fileExists(atPath: storeUrl.deletingLastPathComponent().path) { try! fileManager.removeItem(at: storeUrl.deletingLastPathComponent()) }
         Coordinator.default = Coordinator(store: storeUrl, schema: self.schemaUrl, handler: { true })!
     }
 

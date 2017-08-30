@@ -109,7 +109,7 @@ extension Object
             if construct != true, let model: Model = cache?.model(with: object.objectID) {
                 models.append(update == true ? batch.update(model: model, with: object, configuration: configuration) : model)
             } else if construct != false {
-                let model: Model = batch.construct(with: object, configuration: configuration)
+                let model: Model = batch.construct(with: object, configuration: configuration, cache: cache)
                 models.append(model)
                 cache?.add(model: model)
             }
@@ -134,7 +134,7 @@ extension Object
         if construct != true, let model: Model = cache?.model(with: object.objectID) {
             return update == true ? (Model.Batch(models: []) as! AbstractBatch<Model>).update(model: model, with: object, configuration: configuration) : model
         } else if construct != false {
-            let model: Model = (Model.Batch(models: []) as! AbstractBatch<Model>).construct(with: object)
+            let model: Model = (Model.Batch(models: []) as! AbstractBatch<Model>).construct(with: object, configuration: configuration, cache: cache)
             cache?.add(model: model)
             return model
         }

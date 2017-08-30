@@ -61,12 +61,13 @@ extension BookBatch
 
 extension BookModel
 {
-    internal static func fake() -> BookModel {
+    internal static func fake(user: UserModel? = nil) -> BookModel {
         let faker: Faker = Faker()
         return BookModel(
             title: faker.commerce.productName(),
             author: faker.name.name(),
-            publisher: faker.company.name()
+            publisher: faker.company.name(),
+            user: user
         )
     }
 }
