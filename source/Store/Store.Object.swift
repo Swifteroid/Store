@@ -7,6 +7,24 @@ extension Object
     public typealias Id = NSManagedObjectID
 }
 
+// MARK: -
+
+// Provides access to common set methods.
+
+internal protocol RelationshipSet
+{
+    func removeAllObjects()
+    func addObjects(from array: [Any])
+}
+
+extension NSMutableSet: RelationshipSet
+{
+}
+
+extension NSMutableOrderedSet: RelationshipSet
+{
+}
+
 // MARK: kvc
 
 extension Object
@@ -98,14 +116,22 @@ extension Object
     /// - parameter update: update cached model.
 
     open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) -> [Model] {
+        guard let relationship = self.entity.relationshipsByName[name] else { return [] }
 
         // Todo: find a way to not create new batch every single time.
+        // Todo: since 10.11 we can use objectIDs(forRelationshipNamed: …), should we?
 
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
         let batch: AbstractBatch<Model> = Model.Batch(models: []) as! AbstractBatch<Model>
         var models: [Model] = []
 
-        for object in self.mutableSetValue(forKey: name).allObjects as! [Object] {
+        for object in relationship.isOrdered ? self.mutableOrderedSetValue(forKey: name).array : self.mutableSetValue(forKey: name).allObjects {
+
+            // This is un-elegant as fuck, but the fastest way to iterate over set – tried using both native `NSFastEnumerationIterator`
+            // and casted array… 
+
+            let object: Object = object as! Object
+
             if construct != true, let model: Model = cache?.model(with: object.objectID) {
                 models.append(update == true ? batch.update(model: model, with: object, configuration: configuration) : model)
             } else if construct != false {
@@ -147,7 +173,8 @@ extension Object
     /// Sets new relationship objects replacing all existing ones.
 
     @nonobjc open func relationship(set objects: [Object], for name: String) {
-        let set: NSMutableSet = self.mutableSetValue(forKey: name)
+        guard let relationship = self.entity.relationshipsByName[name] else { return }
+        let set: RelationshipSet = relationship.isOrdered ? self.mutableOrderedSetValue(forKey: name) : self.mutableSetValue(forKey: name)
         set.removeAllObjects()
         set.addObjects(from: objects)
     }
