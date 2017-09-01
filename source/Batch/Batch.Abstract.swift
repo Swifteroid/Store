@@ -70,9 +70,9 @@ open class AbstractBatch<ModelType:Model>: Batch
 
             for object: Object in try context.fetch(request) {
                 if let model: Model = cache?.model(with: object.objectID) {
-                    loaded.append(self.update(model: model, with: object, configuration: configuration))
+                    loaded.append(try self.update(model: model, with: object, configuration: configuration))
                 } else {
-                    let model: Model = self.construct(with: object, configuration: configuration, cache: cache)
+                    let model: Model = try self.construct(with: object, configuration: configuration, cache: cache)
                     loaded.append(model)
                     cache?.add(model: model)
                 }
@@ -86,7 +86,7 @@ open class AbstractBatch<ModelType:Model>: Batch
 
             for model in models {
                 if let object: Object = try context.existingObject(with: model) {
-                    self.update(model: model, with: object, configuration: configuration)
+                    try self.update(model: model, with: object, configuration: configuration)
                     loaded.append(model)
                     cache?.add(model: model)
                 } else {
@@ -116,7 +116,7 @@ open class AbstractBatch<ModelType:Model>: Batch
         return request
     }
 
-    @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil, cache: ModelCache? = nil) -> Model {
+    @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
 
         // Ideally this should be done in extension, but there seem to be no way to trick around the dynamic dispatch
         // on generic type. Todo: possible?
@@ -129,13 +129,13 @@ open class AbstractBatch<ModelType:Model>: Batch
 
             cache?.add(model: model)
 
-            return self.update(model: model, with: object, configuration: configuration)
+            return try self.update(model: model, with: object, configuration: configuration)
         } else {
             abort()
         }
     }
 
-    @discardableResult open func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) -> Model {
+    @discardableResult open func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) throws -> Model {
         return model
     }
 
@@ -154,10 +154,10 @@ open class AbstractBatch<ModelType:Model>: Batch
 
         for model in self.models {
             if let object: Object = try context.existingObject(with: model) {
-                self.update(object: object, with: model, configuration: configuration)
+                try self.update(object: object, with: model, configuration: configuration)
             } else if let entity: Entity = coordinator.schema.entity(for: model) {
                 let object: Object = Object(entity: entity, insertInto: context)
-                self.update(object: object, with: model, configuration: configuration)
+                try self.update(object: object, with: model, configuration: configuration)
                 models[object] = model
             }
 
@@ -179,7 +179,7 @@ open class AbstractBatch<ModelType:Model>: Batch
         return self
     }
 
-    @discardableResult open func update(object: Object, with model: Model, configuration: Model.Configuration? = nil) -> Object {
+    @discardableResult open func update(object: Object, with model: Model, configuration: Model.Configuration? = nil) throws -> Object {
         return object
     }
 

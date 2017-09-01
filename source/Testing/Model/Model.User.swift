@@ -25,20 +25,20 @@ internal class UserModel: InitialisableModel<UserConfiguration>, Batchable
 
 internal class UserBatch: AbstractBatch<UserModel>
 {
-    override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) -> Model {
+    override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         model.name = object.value(for: Key.name)
         model.address = object.value(for: Key.address)
 
-        model.books = object.relationship(for: Key.books)
+        model.books = try object.relationship(for: Key.books)
 
         return model
     }
 
-    override internal func update(object: Object, with model: Model, configuration: Configuration? = nil) -> Object {
+    override internal func update(object: Object, with model: Model, configuration: Configuration? = nil) throws -> Object {
         object.value(set: model.name, for: Key.name)
         object.value(set: model.address, for: Key.address)
 
-        try! object.relationship(set: model.books, for: Key.books)
+        try object.relationship(set: model.books, for: Key.books)
 
         return object
     }

@@ -22,9 +22,9 @@ public protocol Batch: class
     @discardableResult func save(configuration: Configuration?) throws -> Self
     @discardableResult func delete(configuration: Configuration?) throws -> Self
 
-    @discardableResult func construct(with object: Object, configuration: Configuration?, cache: ModelCache?) -> Model
-    @discardableResult func update(model: Model, with object: Object, configuration: Configuration?) -> Model
-    @discardableResult func update(object: Object, with model: Model, configuration: Configuration?) -> Object
+    @discardableResult func construct(with object: Object, configuration: Configuration?, cache: ModelCache?) throws -> Model
+    @discardableResult func update(model: Model, with object: Object, configuration: Configuration?) throws -> Model
+    @discardableResult func update(object: Object, with model: Model, configuration: Configuration?) throws -> Object
 }
 
 // MARK: -
@@ -41,8 +41,8 @@ extension Batch
 
     // MARK: -
 
-    @discardableResult func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) -> Model {
-        return self.construct(with: object, configuration: configuration, cache: cache)
+    @discardableResult func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
+        return try self.construct(with: object, configuration: configuration, cache: cache)
     }
 }
 

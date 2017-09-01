@@ -76,6 +76,8 @@ open class ModelObserver<Model:Batchable>
 
     /// Invoked when the default notification center posts `NSManagedObjectContextDidSave` notification with provided
     /// context and changed objects.
+    ///
+    /// - todo: Add proper error handling.
 
     open func update(context: Context, inserted: Set<Object>, deleted: Set<Object>, updated: Set<Object>) {
         guard let entity: Entity = (context.coordinator ?? Coordinator.default)?.schema.entity(for: Model.self) else { return }
@@ -118,7 +120,7 @@ open class ModelObserver<Model:Batchable>
         }
 
         for (id, object) in insertedById {
-            let model: Model = batch.construct(with: object, configuration: configuration) as! Model
+            let model: Model = try! batch.construct(with: object, configuration: configuration) as! Model
 
             objectsByModel[model] = object
             model.id = id
@@ -128,7 +130,7 @@ open class ModelObserver<Model:Batchable>
 
         for (id, object) in updatedById {
             if let index: Int = modelIndexes[id] {
-                batch.update(model: observed[index] as! Batch.Model, with: object, configuration: configuration)
+                try! batch.update(model: observed[index] as! Batch.Model, with: object, configuration: configuration)
                 objectsByModel[observed[index]] = object
                 updated = true
             }

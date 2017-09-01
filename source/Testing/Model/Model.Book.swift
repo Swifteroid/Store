@@ -27,22 +27,22 @@ internal class BookModel: InitialisableModel<NoConfiguration>, Batchable
 
 internal class BookBatch: AbstractBatch<BookModel>
 {
-    override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) -> Model {
+    override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         model.title = object.value(for: Key.title)!
         model.publisher = object.value(for: Key.publisher)!
 
-        model.authors = object.relationship(for: Key.authors)
-        model.user = object.relationship(for: Key.user)
+        model.authors = try object.relationship(for: Key.authors)
+        model.user = try object.relationship(for: Key.user)
 
         return model
     }
 
-    override internal func update(object: Object, with model: Model, configuration: Configuration? = nil) -> Object {
+    override internal func update(object: Object, with model: Model, configuration: Configuration? = nil) throws -> Object {
         object.value(set: model.title, for: Key.title)
         object.value(set: model.publisher, for: Key.publisher)
 
-        try! object.relationship(set: model.authors, for: Key.authors)
-        try! object.relationship(set: model.user, for: Key.user)
+        try object.relationship(set: model.authors, for: Key.authors)
+        try object.relationship(set: model.user, for: Key.user)
 
         return object
     }
