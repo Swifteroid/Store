@@ -1,9 +1,8 @@
 import CoreData
 import Foundation
 
-/*
-Schema is an attempt to avoid confusion between core data object models and actual store models.
-*/
+/// Schema is an attempt to avoid confusion between core data object models and actual store models.
+
 public typealias Schema = NSManagedObjectModel
 
 private let entityNameExpression = try! NSRegularExpression(pattern: "(\\w+)(?:Model|Batch)")
@@ -55,10 +54,9 @@ extension Schema
 
     // MARK: -
 
-    /*
-    Returns all schemas at the specified url, which is typically a compiled `momd` type file. Schemas will be sorted by name
-    in ascending order, which should go in line if semver is used for versioning.
-    */
+    /// Returns all schemas at the specified url, which is typically a compiled `momd` type file. Schemas will be sorted by name
+    /// in ascending order, which should go in line if semver is used for versioning.
+
     open class func schemas(at url: URL) -> [(Schema, URL)] {
         var schemas: [(Schema, URL)] = []
 

@@ -2,7 +2,9 @@ import CoreData
 import Foundation
 
 /// Batch is a load / save / delete operation, occasionally search, it is responsible for all Core Data handling and populating models
-/// and objects. It's typically one time thing and disposed immediately, it shouldn't be used to store models as they get modified. 
+/// and objects. It's typically one time thing and disposed immediately, it shouldn't be used to store models as they get modified.
+///
+/// - todo: What about cache when saving / deleting models?
 
 open class AbstractBatch<ModelType:Model>: Batch
 {
@@ -34,8 +36,7 @@ open class AbstractBatch<ModelType:Model>: Batch
         let models: [Model] = models ?? self.models
         if models.isEmpty { return false }
 
-        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = self.context ?? CacheableContext(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
         // If any model doesn't exist than we return false.
 
@@ -142,27 +143,27 @@ open class AbstractBatch<ModelType:Model>: Batch
     // MARK: -
 
     @discardableResult open func save(configuration: Model.Configuration? = nil) throws -> Self {
-        guard !self.models.isEmpty else {
-            return self
-        }
+        let models: [Model] = self.models
+        if models.isEmpty { return self }
 
-        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-        var models: [Object: Model] = [:]
+        let context: Context = self.context ?? Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        var saved: [Object: Model] = [:]
+        var failed: [Model] = []
 
-        // Acquire objects for updating. 
+        // YO!!! I know you'll want to take entity retrieval out of the loop… FUCK YOU!!! AND DON'T!!! Reasons
+        // are simple – model entity is worked out based on the model class name, while they all can ba children
+        // of the same common class, their entities might differ. Though, there's one in a million chance…
 
-        for model in self.models {
+        for model in models {
             if let object: Object = try context.existingObject(with: model) {
                 try self.update(object: object, with: model, configuration: configuration)
-            } else if let entity: Entity = coordinator.schema.entity(for: model) {
+            } else if let entity: Entity = context.coordinator?.schema.entity(for: model) {
                 let object: Object = Object(entity: entity, insertInto: context)
                 try self.update(object: object, with: model, configuration: configuration)
-                models[object] = model
+                saved[object] = model
+            } else {
+                failed.append(model)
             }
-
-            // Todo: should collect models that weren't saved and later throw a corresponding error.
-
         }
 
         if context.hasChanges {
@@ -170,10 +171,15 @@ open class AbstractBatch<ModelType:Model>: Batch
             try context.save()
         }
 
-        // Update ids of inserted models.
+        // Update ids of inserted models, this is done separately, because ids become available 
+        // only after context gets saved.
 
-        for (object, model) in models {
+        for (object, model) in saved {
             model.id = object.objectID
+        }
+
+        if !failed.isEmpty {
+            throw Error.save(failed)
         }
 
         return self
@@ -186,14 +192,12 @@ open class AbstractBatch<ModelType:Model>: Batch
     // MARK: -
 
     @discardableResult open func delete(configuration: Model.Configuration? = nil) throws -> Self {
-        guard !self.models.isEmpty else {
-            return self
-        }
+        let models: [Model] = self.models
+        if models.isEmpty { return self }
 
-        let coordinator: Coordinator = (self.coordinator ?? Coordinator.default)
-        let context: Context = Context(coordinator: coordinator, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
-        for model in self.models {
+        for model in models {
             if let object: Object = try context.existingObject(with: model) {
                 context.delete(object)
             }
@@ -211,8 +215,12 @@ open class AbstractBatch<ModelType:Model>: Batch
 
 extension AbstractBatch
 {
+
+    /// - todo: Is this the way to do it?
+
     public enum Error: Swift.Error
     {
         case load([Model])
+        case save([Model])
     }
 }
