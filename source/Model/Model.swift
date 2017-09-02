@@ -1,17 +1,22 @@
 import CoreData
 
-public protocol Model: class, Equatable, Hashable
+public protocol Identified: class
 {
-    associatedtype Configuration: ModelConfiguration
-
     var id: Object.Id? { get set }
 }
 
-extension Model
+extension Identified
 {
     public var identified: Bool {
         return self.id != nil
     }
+}
+
+// MARK: -
+
+public protocol Model: class, Identified, Equatable, Hashable
+{
+    associatedtype Configuration: ModelConfiguration
 }
 
 extension Model
