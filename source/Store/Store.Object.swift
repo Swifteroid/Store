@@ -114,14 +114,14 @@ extension Object
     /// - parameter construct: construct model instead of using cache.
     /// - parameter update: update cached model.
 
-    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] {
+    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         guard let relationship = self.entity.relationshipsByName[name] else { throw RelationshipError.undefined }
 
         // Todo: find a way to not create new batch every single time.
         // Todo: since 10.11 we can use objectIDs(forRelationshipNamed: …), should we?
 
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
-        let batch: AbstractBatch<Model> = Model.Batch(models: []) as! AbstractBatch<Model>
+        let batch: Model.Batch = Model.Batch(models: [])
         var models: [Model] = []
 
         for object in relationship.isOrdered ? self.mutableOrderedSetValue(forKey: name).array : self.mutableSetValue(forKey: name).allObjects {
@@ -150,16 +150,16 @@ extension Object
     /// - parameter construct: construct model instead of using cache.
     /// - parameter update: update cached model.
 
-    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? {
+    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         guard let object: Object = self.value(for: name) else { return nil }
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
 
         // Todo: find a way to not create new batch every single time.
 
         if construct != true, let model: Model = cache?.model(with: object.objectID) {
-            return update == true ? (try (Model.Batch(models: []) as! AbstractBatch<Model>).update(model: model, with: object, configuration: configuration)) : model
+            return update == true ? (try Model.Batch(models: []).update(model: model, with: object, configuration: configuration)) : model
         } else if construct != false {
-            let model: Model = try (Model.Batch(models: []) as! AbstractBatch<Model>).construct(with: object, configuration: configuration, cache: cache)
+            let model: Model = try Model.Batch(models: []).construct(with: object, configuration: configuration, cache: cache)
             cache?.add(model: model)
             return model
         }
@@ -227,11 +227,11 @@ extension Object
         return self.value(forKey: name.rawValue) as! Object?
     }
 
-    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Name.RawValue == String {
+    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Name.RawValue == String, Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         return try self.relationship(for: name.rawValue, configuration: configuration, cache: cache, construct: construct, update: update)
     }
 
-    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Name.RawValue == String {
+    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Name.RawValue == String, Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         return try self.relationship(for: name.rawValue, configuration: configuration, cache: cache, construct: construct, update: update)
     }
 

@@ -6,10 +6,8 @@ import Foundation
 ///
 /// - todo: What about cache when saving / deleting models?
 
-open class AbstractBatch<ModelType:Model>: Batch
+open class AbstractBatch<Model:Store.Model, Configuration>: Batch
 {
-    public typealias Model = ModelType
-
     public required init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
         self.coordinator = coordinator
         self.context = context
@@ -53,7 +51,7 @@ open class AbstractBatch<ModelType:Model>: Batch
     /// fetch operation. Therefore, provided fetch configuration will only be used when models are not explicitly specified. Providing
     /// remodels will result in a full fetch and will also reuse available models instead of creating new ones where possible.
 
-    @discardableResult open func load(configuration: Model.Configuration? = nil) throws -> Self {
+    @discardableResult open func load(configuration: Configuration? = nil) throws -> Self {
 
         // Cache explicitly specified by the batch has higher priority over one specified in cacheable context.  
 
@@ -67,7 +65,7 @@ open class AbstractBatch<ModelType:Model>: Batch
         // and allows to avoid unnecessary updated.
 
         if models.isEmpty {
-            let request: NSFetchRequest<Object> = self.prepare(request: NSFetchRequest(), configuration: configuration)
+            let request: Request = self.prepare(request: Request(), configuration: configuration)
 
             for object: Object in try context.fetch(request) {
                 if let model: Model = cache?.model(with: object.objectID) {
@@ -105,10 +103,10 @@ open class AbstractBatch<ModelType:Model>: Batch
         return self
     }
 
-    @discardableResult open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Model.Configuration? = nil) -> NSFetchRequest<Result> {
+    @discardableResult open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Configuration? = nil) -> NSFetchRequest<Result> {
         request.entity = (self.coordinator ?? Coordinator.default)?.schema.entity(for: self)
 
-        if let configuration: FetchConfiguration = (configuration as? ModelFetchConfiguration)?.fetch {
+        if let configuration: Request.Configuration = (configuration as? BatchRequestConfiguration)?.request {
             if let limit: Int = configuration.limit { request.fetchLimit = limit }
             if let offset: Int = configuration.offset { request.fetchOffset = offset }
             if let sort: [NSSortDescriptor] = configuration.sort { request.sortDescriptors = sort }
@@ -117,13 +115,8 @@ open class AbstractBatch<ModelType:Model>: Batch
         return request
     }
 
-    @discardableResult open func construct(with object: Object, configuration: Model.Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
-
-        // Ideally this should be done in extension, but there seem to be no way to trick around the dynamic dispatch
-        // on generic type. Todo: possible?
-
-        if let Initialiser = Model.self as? ModelInitialiser.Type {
-            let model: Model = Initialiser.init(id: object.objectID) as! Model
+    open func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
+        if let model: Model = (Model.self as? BatchConstructableModel.Type)?.init(id: object.objectID) as? Model {
 
             // This is very important that newly constructed and identified model is added to cache before updating, otherwise 
             // it may result in recursion when construction interdependent relationships.
@@ -132,17 +125,17 @@ open class AbstractBatch<ModelType:Model>: Batch
 
             return try self.update(model: model, with: object, configuration: configuration)
         } else {
-            abort()
+            throw Error.construct
         }
     }
 
-    @discardableResult open func update(model: Model, with object: Object, configuration: Model.Configuration? = nil) throws -> Model {
+    @discardableResult open func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         return model
     }
 
     // MARK: -
 
-    @discardableResult open func save(configuration: Model.Configuration? = nil) throws -> Self {
+    @discardableResult open func save(configuration: Configuration? = nil) throws -> Self {
         let models: [Model] = self.models
         if models.isEmpty { return self }
 
@@ -185,13 +178,13 @@ open class AbstractBatch<ModelType:Model>: Batch
         return self
     }
 
-    @discardableResult open func update(object: Object, with model: Model, configuration: Model.Configuration? = nil) throws -> Object {
+    @discardableResult open func update(object: Object, with model: Model, configuration: Configuration? = nil) throws -> Object {
         return object
     }
 
     // MARK: -
 
-    @discardableResult open func delete(configuration: Model.Configuration? = nil) throws -> Self {
+    @discardableResult open func delete(configuration: Configuration? = nil) throws -> Self {
         let models: [Model] = self.models
         if models.isEmpty { return self }
 
@@ -220,6 +213,7 @@ extension AbstractBatch
 
     public enum Error: Swift.Error
     {
+        case construct
         case load([Model])
         case save([Model])
     }

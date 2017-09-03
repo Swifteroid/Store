@@ -32,11 +32,11 @@ extension ModelCache
 
 open class ArrayModelCache: ModelCache
 {
-    public init(_ values: [Any]? = nil) {
+    public init(_ values: [Model]? = nil) {
         self.values = values ?? []
     }
 
-    open var values: [Any]
+    open var values: [Model]
 
     open func model<Model:Store.Model>(with id: Object.Id) -> Model? {
         return self.values.first(where: { ($0 as? Model)?.id == id }) as? Model
@@ -53,11 +53,11 @@ open class ArrayModelCache: ModelCache
 
 open class DictionaryModelCache: ModelCache
 {
-    public init(_ values: [Object.Id: Any]? = nil) {
+    public init(_ values: [Object.Id: Model]? = nil) {
         self.values = values ?? [:]
     }
 
-    open var values: [Object.Id: Any]
+    open var values: [Object.Id: Model]
 
     open func model<Model:Store.Model>(with id: Object.Id) -> Model? {
         return self.values[id] as? Model

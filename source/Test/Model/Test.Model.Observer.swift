@@ -32,7 +32,7 @@ internal class ModelObserverTestCase: ModelTestCase
 
     internal func testFetch() {
         var users: [UserModel] = ["A", "C", "E"].map({ try! UserModel.fake(name: $0).save() }) + ["G", "I"].map({ UserModel.fake(name: $0) })
-        let configuration: UserConfiguration = UserConfiguration(fetch: FetchConfiguration(limit: 6, offset: 0, sort: [NSSortDescriptor(key: "name", ascending: false)]))
+        let configuration: UserConfiguration = UserConfiguration(request: Request.Configuration(limit: 6, offset: 0, sort: [NSSortDescriptor(key: "name", ascending: false)]))
         let observer: ModelObserver<UserModel> = ModelObserver(models: users, configuration: configuration)
 
         expect(observer.models).to(equal(users))

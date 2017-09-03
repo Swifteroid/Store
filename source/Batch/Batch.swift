@@ -3,7 +3,7 @@ import Foundation
 public protocol Batch: class
 {
     associatedtype Model: Store.Model
-    associatedtype Configuration: ModelConfiguration = Model.Configuration
+    associatedtype Configuration
 
     init(coordinator: Coordinator?, context: Context?, cache: ModelCache?, models: [Model]?)
 
@@ -18,13 +18,15 @@ public protocol Batch: class
     func exist(models: [Model]?) -> Bool
     func exists(model: Model) -> Bool
 
-    @discardableResult func load(configuration: Configuration?) throws -> Self
-    @discardableResult func save(configuration: Configuration?) throws -> Self
-    @discardableResult func delete(configuration: Configuration?) throws -> Self
+    func construct(with object: Object, configuration: Configuration?, cache: ModelCache?) throws -> Model
 
-    @discardableResult func construct(with object: Object, configuration: Configuration?, cache: ModelCache?) throws -> Model
+    @discardableResult func load(configuration: Configuration?) throws -> Self
     @discardableResult func update(model: Model, with object: Object, configuration: Configuration?) throws -> Model
+
+    @discardableResult func save(configuration: Configuration?) throws -> Self
     @discardableResult func update(object: Object, with model: Model, configuration: Configuration?) throws -> Object
+
+    @discardableResult func delete(configuration: Configuration?) throws -> Self
 }
 
 // MARK: -
@@ -41,16 +43,20 @@ extension Batch
 
     // MARK: -
 
-    @discardableResult func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
+    func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
         return try self.construct(with: object, configuration: configuration, cache: cache)
     }
 }
 
 // MARK: -
 
+/// Batchable protocol is needed to separate associated batch type form the model. Batch deals solely with model, but concrete
+/// models do implement batchable protocol purely to simplify individual CRUD operations. 
+
 public protocol Batchable: Model
 {
     associatedtype Batch: Store.Batch
+    associatedtype Configuration = Self.Batch.Configuration
 
     var exists: Bool { get }
 }
@@ -62,7 +68,7 @@ extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Confi
     }
 
     @discardableResult public func load(configuration: Configuration? = nil) throws -> Self {
-        try (Batch(models: [self]) as Batch).load(configuration: configuration)
+        try Batch(models: [self]).load(configuration: configuration)
         return self
     }
 
@@ -75,6 +81,13 @@ extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Confi
         try (Batch(models: [self]) as Batch).delete(configuration: configuration)
         return self
     }
+}
+
+// MARK: -
+
+public protocol BatchRequestConfiguration
+{
+    var request: Request.Configuration? { get set }
 }
 
 // MARK: -

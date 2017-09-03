@@ -7,7 +7,7 @@ internal class BatchTestCase: TestCase
     internal func test() {
         let batch: Batch = Batch()
         let request: NSFetchRequest<NSManagedObject> = NSFetchRequest()
-        let configuration: Configuration = Configuration(fetch: FetchConfiguration(limit: 1, offset: 2, sort: [NSSortDescriptor(key: "foo", ascending: true)]))
+        let configuration: Configuration = Configuration(request: Request.Configuration(limit: 1, offset: 2, sort: [NSSortDescriptor(key: "foo", ascending: true)]))
 
         expect(request.fetchLimit).to(equal(0))
         expect(request.fetchOffset).to(equal(0))
@@ -15,22 +15,22 @@ internal class BatchTestCase: TestCase
 
         batch.prepare(request: request, configuration: configuration)
 
-        expect(request.fetchLimit).to(equal(configuration.fetch!.limit))
-        expect(request.fetchOffset).to(equal(configuration.fetch!.offset))
-        expect(request.sortDescriptors).to(equal(configuration.fetch!.sort))
+        expect(request.fetchLimit).to(equal(configuration.request!.limit))
+        expect(request.fetchOffset).to(equal(configuration.request!.offset))
+        expect(request.sortDescriptors).to(equal(configuration.request!.sort))
     }
 }
 
-fileprivate struct Configuration: ModelConfiguration, ModelFetchConfiguration
+fileprivate struct Configuration: BatchRequestConfiguration
 {
-    fileprivate var fetch: FetchConfiguration?
+    fileprivate var request: Request.Configuration?
 }
 
-fileprivate class Model: Store.InitialisableModel<Configuration>, Batchable
+fileprivate class Model: Store.AbstractBatchConstructableModel, Batchable
 {
     typealias Batch = Store___Test.Batch
 }
 
-fileprivate class Batch: Store.AbstractBatch<Model>
+fileprivate class Batch: Store.AbstractBatch<Model, Configuration>
 {
 }

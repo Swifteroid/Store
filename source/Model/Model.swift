@@ -1,11 +1,11 @@
 import CoreData
 
-public protocol Identified: class
+public protocol Model: class
 {
     var id: Object.Id? { get set }
 }
 
-extension Identified
+extension Model
 {
     public var identified: Bool {
         return self.id != nil
@@ -14,25 +14,7 @@ extension Identified
 
 // MARK: -
 
-public protocol Model: class, Identified, Equatable, Hashable
-{
-    associatedtype Configuration: ModelConfiguration
-}
-
-extension Model
-{
-    public var hashValue: Int {
-        return ObjectIdentifier(self).hashValue
-    }
-}
-
-public func ==<Lhs:Model, Rhs:Model>(lhs: Lhs, rhs: Rhs) -> Bool {
-    return lhs === rhs
-}
-
-// MARK: -
-
-public protocol ModelInitialiser
+public protocol BatchConstructableModel: Model
 {
     init(id: Object.Id?)
 }

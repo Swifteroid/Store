@@ -8,7 +8,7 @@ import Foundation
 /// it works in an opposite way. This provides strictly selective observations and more classic fetch style, which makes better
 /// use of fetch configuration.
 
-open class ModelObserver<Model:Batchable>
+open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration
 {
     public typealias Batch = Model.Batch
     public typealias Configuration = Model.Configuration
@@ -67,10 +67,10 @@ open class ModelObserver<Model:Batchable>
     /// updating them. 
 
     open func update() {
-        let batch: Batch = Batch(cache: self.cache ?? ArrayModelCache(self.observed), models: (self.assigned as! [Batch.Model]?))
-        try! batch.load(configuration: self.configuration as! Batch.Configuration?)
+        let batch: Batch = Batch(cache: self.cache ?? ArrayModelCache(self.observed), models: self.assigned)
+        try! batch.load(configuration: self.configuration)
 
-        self.observed = (batch.models as! [Model])
+        self.observed = batch.models
         NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
     }
 
@@ -101,7 +101,7 @@ open class ModelObserver<Model:Batchable>
             return self.update()
         }
 
-        let configuration: Batch.Configuration? = self.configuration as! Batch.Configuration?
+        let configuration: Configuration? = self.configuration
         let batch: Batch = Batch(models: [])
         var observed: [Model] = self.models
         var updated: Bool = !insertedById.isEmpty
@@ -120,7 +120,7 @@ open class ModelObserver<Model:Batchable>
         }
 
         for (id, object) in insertedById {
-            let model: Model = try! batch.construct(with: object, configuration: configuration) as! Model
+            let model: Model = try! batch.construct(with: object, configuration: configuration)
 
             objectsByModel[model] = object
             model.id = id
@@ -130,7 +130,7 @@ open class ModelObserver<Model:Batchable>
 
         for (id, object) in updatedById {
             if let index: Int = modelIndexes[id] {
-                try! batch.update(model: observed[index] as! Batch.Model, with: object, configuration: configuration)
+                try! batch.update(model: observed[index], with: object, configuration: configuration)
                 objectsByModel[observed[index]] = object
                 updated = true
             }
@@ -153,7 +153,7 @@ open class ModelObserver<Model:Batchable>
         // make sure that fetch configuration applies to models. This is still a shady area, offset configuration doesn't get applied
         // here, because it's not clear how it would work. Suggestions are welcome! 
 
-        if !insertedById.isEmpty, let configuration: FetchConfiguration = (configuration as? ModelFetchConfiguration)?.fetch {
+        if !insertedById.isEmpty, let configuration: Request.Configuration = (configuration as? BatchRequestConfiguration)?.request {
             if let sort: [NSSortDescriptor] = configuration.sort, !sort.isEmpty {
                 observed.sort(by: {
                     if objectsByModel[$0] == nil { objectsByModel[$0] = try? context.existingObject(with: $0) }

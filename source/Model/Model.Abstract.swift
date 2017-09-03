@@ -1,9 +1,7 @@
 import Foundation
 
-open class AbstractModel<ConfigurationType:ModelConfiguration>: Model
+open class AbstractModel
 {
-    public typealias Configuration = ConfigurationType
-
     open var id: Object.Id?
 
     // MARK: -
@@ -14,7 +12,18 @@ open class AbstractModel<ConfigurationType:ModelConfiguration>: Model
     }
 }
 
-open class InitialisableModel<ConfigurationType:ModelConfiguration>: AbstractModel<ConfigurationType>, ModelInitialiser
+extension AbstractModel: Hashable
+{
+    public var hashValue: Int {
+        return ObjectIdentifier(self).hashValue
+    }
+}
+
+public func ==(lhs: AbstractModel, rhs: AbstractModel) -> Bool {
+    return lhs === rhs
+}
+
+open class AbstractBatchConstructableModel: AbstractModel, BatchConstructableModel
 {
     public required init(id: Object.Id? = nil) {
         super.init()
