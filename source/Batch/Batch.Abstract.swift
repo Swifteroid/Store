@@ -6,7 +6,7 @@ import Foundation
 ///
 /// - todo: What about cache when saving / deleting models?
 
-open class AbstractBatch<Model:Store.Model, Configuration>: Batch
+open class AbstractBatch<Model:Store.Model & Hashable, Configuration>: Batch
 {
     public required init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
         self.coordinator = coordinator
@@ -34,7 +34,8 @@ open class AbstractBatch<Model:Store.Model, Configuration>: Batch
         let models: [Model] = models ?? self.models
         if models.isEmpty { return false }
 
-        let context: Context = self.context ?? CacheableContext(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        let transaction: Transaction? = Transaction.current
+        let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
 
         // If any model doesn't exist than we return false.
 
@@ -55,8 +56,10 @@ open class AbstractBatch<Model:Store.Model, Configuration>: Batch
 
         // Cache explicitly specified by the batch has higher priority over one specified in cacheable context.  
 
-        let context: Context = self.context ?? CacheableContext(coordinator: (self.coordinator ?? Coordinator.default), concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType, cache: self.cache)
+        let transaction: Transaction? = Transaction.current
+        let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: (self.coordinator ?? Coordinator.default), concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType, cache: self.cache)
         let cache: ModelCache? = self.cache ?? (context as? CacheableContext)?.cache
+
         let models: [Model] = self.models
         var loaded: [Model] = []
         var failed: [Model] = []
@@ -139,8 +142,9 @@ open class AbstractBatch<Model:Store.Model, Configuration>: Batch
         let models: [Model] = self.models
         if models.isEmpty { return self }
 
-        let context: Context = self.context ?? Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-        var saved: [Object: Model] = [:]
+        let transaction: Transaction? = Transaction.current
+        let context: Context = self.context ?? transaction?.context ?? Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        var saved: [Model: Object] = [:]
         var failed: [Model] = []
 
         // YO!!! I know you'll want to take entity retrieval out of the loop… FUCK YOU!!! AND DON'T!!! Reasons
@@ -153,22 +157,22 @@ open class AbstractBatch<Model:Store.Model, Configuration>: Batch
             } else if let entity: Entity = context.coordinator?.schema.entity(for: model) {
                 let object: Object = Object(entity: entity, insertInto: context)
                 try self.update(object: object, with: model, configuration: configuration)
-                saved[object] = model
+                saved[model] = object
             } else {
                 failed.append(model)
             }
         }
 
-        if context.hasChanges {
+        // Update ids of inserted models, this is done separately, because ids become available only after 
+        // context gets saved. If we're inside a transaction, we tell that son of a bitch to identify our
+        // models whenever it completes.
+
+        if let transaction: Transaction = transaction {
+            transaction.save(models: saved)
+        } else if context.hasChanges {
             NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
             try context.save()
-        }
-
-        // Update ids of inserted models, this is done separately, because ids become available 
-        // only after context gets saved.
-
-        for (object, model) in saved {
-            model.id = object.objectID
+            for (model, object) in saved { model.id = object.objectID }
         }
 
         if !failed.isEmpty {

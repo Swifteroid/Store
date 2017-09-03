@@ -117,7 +117,7 @@ extension Object
     open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         guard let relationship = self.entity.relationshipsByName[name] else { throw RelationshipError.undefined }
 
-        // Todo: find a way to not create new batch every single time.
+        // Todo: find a way to not create new batch every single time. Perhaps move this into entity?
         // Todo: since 10.11 we can use objectIDs(forRelationshipNamed: …), should we?
 
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
@@ -154,7 +154,7 @@ extension Object
         guard let object: Object = self.value(for: name) else { return nil }
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
 
-        // Todo: find a way to not create new batch every single time.
+        // Todo: find a way to not create new batch every single time. Perhaps move this into entity?
 
         if construct != true, let model: Model = cache?.model(with: object.objectID) {
             return update == true ? (try Model.Batch(models: []).update(model: model, with: object, configuration: configuration)) : model
@@ -186,12 +186,13 @@ extension Object
 
     /// Sets new relationship models.
 
-    open func relationship<Model:Store.Model>(set models: [Model], for name: String) throws {
-        guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
+    open func relationship<Model:Store.Model & Hashable>(set models: [Model], for name: String) throws {
+        let transaction: Transaction? = Transaction.current
+        guard let context: Context = transaction?.context ?? self.managedObjectContext else { throw RelationshipError.noContext }
         var objects: [Object] = []
 
         for model in models {
-            if let object: Object = try context.existingObject(with: model) {
+            if let object: Object = try transaction?.object(for: model) ?? context.existingObject(with: model) {
                 objects.append(object)
             } else {
                 throw RelationshipError.noObject
@@ -201,10 +202,12 @@ extension Object
         try self.relationship(set: objects, for: name)
     }
 
-    open func relationship<Model:Store.Model>(set model: Model?, for name: String) throws {
+    open func relationship<Model:Store.Model & Hashable>(set model: Model?, for name: String) throws {
         if let model: Model = model {
-            guard let context: Context = self.managedObjectContext else { throw RelationshipError.noContext }
-            if let object: Object = try context.existingObject(with: model) {
+            let transaction: Transaction? = Transaction.current
+            guard let context: Context = transaction?.context ?? self.managedObjectContext else { throw RelationshipError.noContext }
+
+            if let object: Object = try transaction?.object(for: model) ?? context.existingObject(with: model) {
                 self.relationship(set: object, for: name)
             } else {
                 throw RelationshipError.noObject
@@ -243,11 +246,11 @@ extension Object
         self.relationship(set: object, for: name.rawValue)
     }
 
-    open func relationship<Name:RawRepresentable, Model:Store.Model>(set models: [Model], for name: Name) throws where Name.RawValue == String {
+    open func relationship<Name:RawRepresentable, Model:Store.Model & Hashable>(set models: [Model], for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: models, for: name.rawValue)
     }
 
-    open func relationship<Name:RawRepresentable, Model:Store.Model>(set model: Model?, for name: Name) throws where Name.RawValue == String {
+    open func relationship<Name:RawRepresentable, Model:Store.Model & Hashable>(set model: Model?, for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: model, for: name.rawValue)
     }
 }
