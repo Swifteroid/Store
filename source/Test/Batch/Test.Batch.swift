@@ -26,11 +26,11 @@ fileprivate struct Configuration: BatchRequestConfiguration
     fileprivate var request: Request.Configuration?
 }
 
-fileprivate class Model: Store.AbstractBatchConstructableModel, Batchable
+fileprivate class Model: Abstract.BatchConstructableModel, Batchable
 {
     typealias Batch = Store___Test.Batch
 }
 
-fileprivate class Batch: Store.AbstractBatch<Model, Configuration>
+fileprivate class Batch: Abstract.Batch<Model, Configuration>
 {
 }

@@ -24,6 +24,7 @@
 		17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD01F2D6E2C10BA63540CC /* Extension.Foundation.FileManager.swift */; };
 		17FD0565A5180CB7901A5C64 /* Migration.Data.1.0.0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD025AEE1CCB4193B08CEB /* Migration.Data.1.0.0.swift */; };
 		17FD05F812CBDE154A4FCF3A /* Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD091DBFC2D248A26C048E /* Model.User.swift */; };
+		17FD0610E7357EA11E7B59FE /* Store.Abstract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */; };
 		17FD06EDD4EFFBD054AE50A6 /* Store.Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD04FDB184719EA74907DA /* Store.Request.swift */; };
 		17FD074DCC1E98BD812963A1 /* Test.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */; };
 		17FD07F5C266D315A1A8B2F2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07E5B1C4793149700DA4 /* Model.swift */; };
@@ -37,6 +38,7 @@
 		17FD0C719C976A9789FBB9BE /* Test.Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0A49EC0685345EF4E819 /* Test.Model.User.swift */; };
 		17FD0C74FC7E67D50DA83397 /* Model.Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0BD2594332A5CB166CB4 /* Model.Cache.swift */; };
 		17FD0CF496FE510E536E2B08 /* Store.Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0951E1ED302B0F56D96A /* Store.Schema.swift */; };
+		17FD0D62FFA266FC26253493 /* Migration.Data.Abstract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD06803000359536A35EC4 /* Migration.Data.Abstract.swift */; };
 		17FD0DADC6A662EDAC547B3E /* Test.Model.Relationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0928D14C257016233F7A /* Test.Model.Relationship.swift */; };
 		17FD0DE24B1ED6FE7C9EAD92 /* Utility.Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD02E9D406040C55FBF3A4 /* Utility.Path.swift */; };
 		17FD0DEE69FF52C8D41A1749 /* Model.Abstract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0BECD5BD4310CAEF64A0 /* Model.Abstract.swift */; };
@@ -101,6 +103,7 @@
 		17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Coordinator.swift; sourceTree = "<group>"; };
 		17FD05D666E8135024B884A1 /* Base - Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Base - Release.xcconfig"; sourceTree = "<group>"; };
 		17FD05FA44C66778BB925C8E /* Migration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
+		17FD06803000359536A35EC4 /* Migration.Data.Abstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Data.Abstract.swift; sourceTree = "<group>"; };
 		17FD06B915850D45AD6F0C31 /* Store.Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Object.swift; sourceTree = "<group>"; };
 		17FD0747D2D1D5255CB1AB2C /* test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; path = test; sourceTree = "<group>"; };
 		17FD07B122ED1AF20F93FB0A /* Batch.Abstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.Abstract.swift; sourceTree = "<group>"; };
@@ -128,6 +131,7 @@
 		17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		17FD0EA3D14033A8AF4F64C8 /* framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = framework.plist; sourceTree = "<group>"; };
 		17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Framework.xcconfig"; sourceTree = "<group>"; };
+		17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Abstract.swift; sourceTree = "<group>"; };
 		17FD0FBC8B1E012043ED435D /* Store.Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Entity.swift; sourceTree = "<group>"; };
 		E605B6521E86761A00A0E60A /* 1.0.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.0.xcdatamodel; sourceTree = "<group>"; };
 		E605B6531E86761A00A0E60A /* 1.0.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.1.xcdatamodel; sourceTree = "<group>"; };
@@ -354,6 +358,7 @@
 				17FD0AA93BF44C9646CC59C7 /* Store.Context.Cacheable.swift */,
 				17FD0B0F99A746180A9F8318 /* Store.Transaction.swift */,
 				17FD04FDB184719EA74907DA /* Store.Request.swift */,
+				17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -364,6 +369,7 @@
 				17FD05FA44C66778BB925C8E /* Migration.swift */,
 				17FD0DF25DC251C069945292 /* Migration.Utility.swift */,
 				17FD02FE09DC90C14E5428BC /* Migration.Data.swift */,
+				17FD06803000359536A35EC4 /* Migration.Data.Abstract.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -515,13 +521,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				17FD054DA783F812504E3A25 /* Extension.Foundation.FileManager.swift in Sources */,
+				17FD0610E7357EA11E7B59FE /* Store.Abstract.swift in Sources */,
 				17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */,
-				17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */,
 				17FD0FE6B146009DDEF22734 /* Store.Context.swift in Sources */,
+				17FD00B96110E6FAAA66E6C1 /* Store.Context.Cacheable.swift in Sources */,
 				17FD0FDB7B47BEB8327D050A /* Store.Entity.swift in Sources */,
+				17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */,
+				17FD06EDD4EFFBD054AE50A6 /* Store.Request.swift in Sources */,
 				17FD0CF496FE510E536E2B08 /* Store.Schema.swift in Sources */,
+				17FD02C8D0193F5C45CD4C12 /* Store.Transaction.swift in Sources */,
 				17FD03FC7625C79B85FE333D /* Migration.swift in Sources */,
 				17FD0B660C3FF2B2B32AD4DB /* Migration.Data.swift in Sources */,
+				17FD0D62FFA266FC26253493 /* Migration.Data.Abstract.swift in Sources */,
 				17FD0BAD955765086A087E06 /* Migration.Utility.swift in Sources */,
 				17FD07F5C266D315A1A8B2F2 /* Model.swift in Sources */,
 				17FD0DEE69FF52C8D41A1749 /* Model.Abstract.swift in Sources */,
@@ -529,9 +540,6 @@
 				17FD054745289379020A0115 /* Model.Observer.swift in Sources */,
 				17FD0E49167DAA1D916817DC /* Batch.swift in Sources */,
 				17FD0AC13B4D5BE2C93E6A2A /* Batch.Abstract.swift in Sources */,
-				17FD00B96110E6FAAA66E6C1 /* Store.Context.Cacheable.swift in Sources */,
-				17FD02C8D0193F5C45CD4C12 /* Store.Transaction.swift in Sources */,
-				17FD06EDD4EFFBD054AE50A6 /* Store.Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
