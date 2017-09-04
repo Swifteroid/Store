@@ -2,7 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal class UserModel: Abstract.BatchConstructableModel, Batchable
+internal final class UserModel: Abstract.BatchConstructableModel, Batchable
 {
     internal typealias Batch = UserBatch
 
@@ -23,7 +23,7 @@ internal class UserModel: Abstract.BatchConstructableModel, Batchable
     internal var books: [BookModel] = []
 }
 
-internal class UserBatch: Abstract.Batch<UserModel, UserConfiguration>
+internal final class UserBatch: Abstract.Batch<UserModel, UserConfiguration>
 {
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         model.name = object.value(for: Key.name)

@@ -121,7 +121,7 @@ extension Abstract
         }
 
         open func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
-            if let model: Model = (Model.self as? BatchConstructableModel.Type)?.init(id: object.objectID) as? Model {
+            if let model: Model = (Model.self as? Store.BatchConstructableModel.Type)?.init(id: object.objectID) as? Model {
 
                 // This is very important that newly constructed and identified model is added to cache before updating, otherwise 
                 // it may result in recursion when construction interdependent relationships.

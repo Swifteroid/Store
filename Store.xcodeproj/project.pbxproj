@@ -594,6 +594,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */;
 			buildSettings = {
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
