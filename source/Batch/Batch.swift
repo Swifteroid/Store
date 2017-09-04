@@ -87,7 +87,7 @@ extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Confi
 
 public protocol BatchRequestConfiguration
 {
-    var request: Request.Configuration? { get set }
+    var request: Request.Configuration? { get }
 }
 
 // MARK: -
