@@ -52,4 +52,34 @@ internal class ModelRelationshipTestCase: ModelTestCase
         try! BookBatch().load()
         try! UserBatch().load()
     }
+
+    internal func testConfiguration() {
+
+        // Consider we have 3 authors and 2 books, each book has 2 authors – 1 unique authors and 1 shared. Loading first book without
+        // configuration will result in 1 shared author pulling 2 books, which will also pull another author, which is not the desired
+        // outcome in most cases. With configuration we shall end up with only 1 book and 4 referenced authors.
+
+        let authors: [AuthorModel] = (0 ..< 3).map({ _ in try! AuthorModel.fake().save() })
+        let books: [BookModel] = [
+            try! BookModel.fake(authors: Array(authors[0 ..< authors.count - 1])).save(),
+            try! BookModel.fake(authors: Array(authors[0 + 1 ..< authors.count])).save()
+        ]
+
+        var book: BookModel
+
+        book = try! BookModel(id: books[0].id).load()
+        expect(book.authors).to(haveCount(2))
+        expect(book.authors[0].books).to(haveCount(1))
+        expect(book.authors[1].books).to(haveCount(2))
+        expect(book.authors[1].books[0]).to(beIdenticalTo(book))
+        expect(book.authors[1].books[1]).toNot(beIdenticalTo(book))
+        expect(book.authors[1].books[1].authors[1].books).to(haveCount(1))
+        expect(book.authors[1].books[1].authors[1].books[0]).toNot(beIdenticalTo(book))
+
+        book = try! BookModel(id: books[0].id).load(configuration: BookConfiguration(authors: AuthorConfiguration(relationship: [])))
+        expect(book.authors).to(haveCount(2))
+        expect(book.authors[0].books).to(haveCount(1))
+        expect(book.authors[1].books).to(haveCount(1))
+        expect(book.authors[1].books[0]).to(beIdenticalTo(book))
+    }
 }

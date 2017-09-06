@@ -25,8 +25,10 @@
 		17FD0565A5180CB7901A5C64 /* Migration.Data.1.0.0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD025AEE1CCB4193B08CEB /* Migration.Data.1.0.0.swift */; };
 		17FD05F812CBDE154A4FCF3A /* Model.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD091DBFC2D248A26C048E /* Model.User.swift */; };
 		17FD0610E7357EA11E7B59FE /* Store.Abstract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */; };
+		17FD0626BEF623A45215574A /* Batch.Configuration.Relationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0EA3EA5CBB05E14F3CC7 /* Batch.Configuration.Relationship.swift */; };
 		17FD06EDD4EFFBD054AE50A6 /* Store.Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD04FDB184719EA74907DA /* Store.Request.swift */; };
 		17FD074DCC1E98BD812963A1 /* Test.Model.Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD08974968F65CD86EA7EA /* Test.Model.Book.swift */; };
+		17FD07F0573B5D991BC78FF2 /* Batch.Configuration.Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD09647C999211A2392D38 /* Batch.Configuration.Request.swift */; };
 		17FD07F5C266D315A1A8B2F2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD07E5B1C4793149700DA4 /* Model.swift */; };
 		17FD0875591334E0EFDB8B53 /* Test.Model.Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD024BC63A57B0F6B474D0 /* Test.Model.Author.swift */; };
 		17FD08AEC750303E7FC903B3 /* Test.Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD04474F74538B52D9DD2A /* Test.Store.swift */; };
@@ -114,6 +116,7 @@
 		17FD091DBFC2D248A26C048E /* Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.User.swift; sourceTree = "<group>"; };
 		17FD0928D14C257016233F7A /* Test.Model.Relationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Relationship.swift; sourceTree = "<group>"; };
 		17FD0951E1ED302B0F56D96A /* Store.Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Schema.swift; sourceTree = "<group>"; };
+		17FD09647C999211A2392D38 /* Batch.Configuration.Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.Configuration.Request.swift; sourceTree = "<group>"; };
 		17FD0A49EC0685345EF4E819 /* Test.Model.User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.User.swift; sourceTree = "<group>"; };
 		17FD0A8B688592F35A12FA00 /* Migration.Data.1.0.1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Data.1.0.1.swift; sourceTree = "<group>"; };
 		17FD0AA93BF44C9646CC59C7 /* Store.Context.Cacheable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Context.Cacheable.swift; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 		17FD0DF25DC251C069945292 /* Migration.Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Utility.swift; sourceTree = "<group>"; };
 		17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		17FD0EA3D14033A8AF4F64C8 /* framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = framework.plist; sourceTree = "<group>"; };
+		17FD0EA3EA5CBB05E14F3CC7 /* Batch.Configuration.Relationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.Configuration.Relationship.swift; sourceTree = "<group>"; };
 		17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Framework.xcconfig"; sourceTree = "<group>"; };
 		17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Abstract.swift; sourceTree = "<group>"; };
 		17FD0FBC8B1E012043ED435D /* Store.Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Entity.swift; sourceTree = "<group>"; };
@@ -388,6 +392,8 @@
 			children = (
 				17FD07B122ED1AF20F93FB0A /* Batch.Abstract.swift */,
 				17FD0063AB70BBBC8C369947 /* Batch.swift */,
+				17FD0EA3EA5CBB05E14F3CC7 /* Batch.Configuration.Relationship.swift */,
+				17FD09647C999211A2392D38 /* Batch.Configuration.Request.swift */,
 			);
 			path = Batch;
 			sourceTree = "<group>";
@@ -540,6 +546,8 @@
 				17FD054745289379020A0115 /* Model.Observer.swift in Sources */,
 				17FD0E49167DAA1D916817DC /* Batch.swift in Sources */,
 				17FD0AC13B4D5BE2C93E6A2A /* Batch.Abstract.swift in Sources */,
+				17FD0626BEF623A45215574A /* Batch.Configuration.Relationship.swift in Sources */,
+				17FD07F0573B5D991BC78FF2 /* Batch.Configuration.Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

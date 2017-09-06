@@ -26,10 +26,13 @@ internal final class AuthorModel: Abstract.BatchConstructableModel, Batchable
 internal final class AuthorBatch: Abstract.Batch<AuthorModel, AuthorConfiguration>
 {
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
+        let construct: Bool? = configuration?.relationship?.contains(.construct)
+        let update: Bool? = configuration?.relationship?.contains(.update)
+
         model.firstName = object.value(for: Key.firstName)
         model.lastName = object.value(for: Key.lastName)
 
-        model.books = try object.relationship(for: Key.books)
+        model.books = try object.relationship(for: Key.books, construct: construct, update: update)
 
         return model
     }
@@ -44,9 +47,13 @@ internal final class AuthorBatch: Abstract.Batch<AuthorModel, AuthorConfiguratio
     }
 }
 
-internal struct AuthorConfiguration: BatchRequestConfiguration
+internal class AuthorConfiguration: BatchRelationshipConfiguration
 {
-    internal var request: Request.Configuration?
+    internal let relationship: RelationshipConfiguration?
+
+    internal init(relationship: RelationshipConfiguration? = nil) {
+        self.relationship = relationship
+    }
 }
 
 extension AuthorBatch

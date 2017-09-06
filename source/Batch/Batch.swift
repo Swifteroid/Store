@@ -85,13 +85,6 @@ extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Confi
 
 // MARK: -
 
-public protocol BatchRequestConfiguration
-{
-    var request: Request.Configuration? { get }
-}
-
-// MARK: -
-
 public struct BatchNotification
 {
     public static let willSaveContext: Notification.Name = Notification.Name("BatchWillSaveNotification")
