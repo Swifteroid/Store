@@ -5,7 +5,8 @@ public protocol BatchRelationshipConfiguration
 
 /// Relationship configuration tells batch how it should retrieve relationship models – can be used during loading
 /// to pass into object relationship accessor corresponding configuration. Useful with interrelated models when
-/// child refers to parents and shouldn't load any new ones.
+/// child refers to parents and shouldn't load any new ones. Todo: clear up this documentation and outline that
+/// todo: this is not model's relationship, but when the model is the relationship itself…
 
 public struct RelationshipConfiguration: OptionSet
 {

@@ -28,10 +28,12 @@ internal final class BookModel: Abstract.BatchConstructableModel, Batchable
 internal final class BookBatch: Abstract.Batch<BookModel, BookConfiguration>
 {
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
+        let cfg: Configuration = configuration ?? Configuration.default
+
         model.title = object.value(for: Key.title)!
         model.publisher = object.value(for: Key.publisher)!
 
-        model.authors = try object.relationship(for: Key.authors, configuration: configuration?.authors)
+        if let cfg = cfg.authors { model.authors = try object.relationship(for: Key.authors, configuration: cfg) }
         model.user = try object.relationship(for: Key.user)
 
         return model
@@ -48,12 +50,16 @@ internal final class BookBatch: Abstract.Batch<BookModel, BookConfiguration>
     }
 }
 
-internal class BookConfiguration
+internal class BookConfiguration: BatchRelationshipConfiguration
 {
-    internal let authors: AuthorConfiguration?
+    internal static let `default`: BookConfiguration = BookConfiguration(authors: AuthorConfiguration(books: BookConfiguration(relationship: [])))
 
-    internal init(authors: AuthorConfiguration? = nil) {
+    internal let authors: AuthorConfiguration?
+    internal let relationship: RelationshipConfiguration?
+
+    internal init(authors: AuthorConfiguration? = nil, relationship: RelationshipConfiguration? = nil) {
         self.authors = authors
+        self.relationship = relationship
     }
 }
 

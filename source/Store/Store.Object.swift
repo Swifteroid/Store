@@ -121,6 +121,8 @@ extension Object
         // Todo: since 10.11 we can use objectIDs(forRelationshipNamed: …), should we?
 
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
+        let construct: Bool? = construct ?? (configuration as? BatchRelationshipConfiguration)?.relationship?.contains(.construct)
+        let update: Bool? = update ?? (configuration as? BatchRelationshipConfiguration)?.relationship?.contains(.update)
         let batch: Model.Batch = Model.Batch(models: [])
         var models: [Model] = []
 
@@ -153,6 +155,8 @@ extension Object
     open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         guard let object: Object = self.value(for: name) else { return nil }
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
+        let construct: Bool? = construct ?? (configuration as? BatchRelationshipConfiguration)?.relationship?.contains(.construct)
+        let update: Bool? = update ?? (configuration as? BatchRelationshipConfiguration)?.relationship?.contains(.update)
 
         // Todo: find a way to not create new batch every single time. Perhaps move this into entity?
 

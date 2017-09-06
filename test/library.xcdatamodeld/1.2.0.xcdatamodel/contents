@@ -17,8 +17,8 @@
         <relationship name="books" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Book" inverseName="user" inverseEntity="Book" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Author" positionX="0" positionY="81" width="128" height="90"/>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="105"/>
-        <element name="User" positionX="-63" positionY="9" width="128" height="90"/>
+        <element name="Author" positionX="-216" positionY="81" width="146" height="90"/>
+        <element name="Book" positionX="-432" positionY="72" width="144" height="105"/>
+        <element name="User" positionX="-648" positionY="81" width="144" height="90"/>
     </elements>
 </model>

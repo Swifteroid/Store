@@ -67,7 +67,7 @@ internal class ModelRelationshipTestCase: ModelTestCase
 
         var book: BookModel
 
-        book = try! BookModel(id: books[0].id).load()
+        book = try! BookModel(id: books[0].id).load(configuration: BookConfiguration(authors: AuthorConfiguration(books: BookConfiguration(authors: AuthorConfiguration(books: BookConfiguration())))))
         expect(book.authors).to(haveCount(2))
         expect(book.authors[0].books).to(haveCount(1))
         expect(book.authors[1].books).to(haveCount(2))
@@ -76,7 +76,7 @@ internal class ModelRelationshipTestCase: ModelTestCase
         expect(book.authors[1].books[1].authors[1].books).to(haveCount(1))
         expect(book.authors[1].books[1].authors[1].books[0]).toNot(beIdenticalTo(book))
 
-        book = try! BookModel(id: books[0].id).load(configuration: BookConfiguration(authors: AuthorConfiguration(relationship: [])))
+        book = try! BookModel(id: books[0].id).load(configuration: BookConfiguration(authors: AuthorConfiguration(books: BookConfiguration(relationship: []))))
         expect(book.authors).to(haveCount(2))
         expect(book.authors[0].books).to(haveCount(1))
         expect(book.authors[1].books).to(haveCount(1))
