@@ -18,7 +18,7 @@ public protocol Batch: class
     func exist(models: [Model]?) -> Bool
     func exists(model: Model) -> Bool
 
-    func construct(with object: Object, configuration: Configuration?, cache: ModelCache?) throws -> Model
+    func construct(with object: Object, configuration: Configuration?, cache: ModelCache?, update: Bool?) throws -> Model
 
     @discardableResult func load(configuration: Configuration?) throws -> Self
     @discardableResult func update(model: Model, with object: Object, configuration: Configuration?) throws -> Model
@@ -43,8 +43,8 @@ extension Batch
 
     // MARK: -
 
-    func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
-        return try self.construct(with: object, configuration: configuration, cache: cache)
+    func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil, update: Bool? = nil) throws -> Model {
+        return try self.construct(with: object, configuration: configuration, cache: cache, update: update)
     }
 }
 

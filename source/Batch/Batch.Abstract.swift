@@ -50,6 +50,26 @@ extension Abstract
             return true
         }
 
+        // MARK: -
+
+        open func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil, update: Bool? = nil) throws -> Model {
+            if let model: Model = (Model.self as? Store.BatchConstructableModel.Type)?.init(id: object.objectID) as? Model {
+
+                // This is very important that newly constructed and identified model is added to cache before updating, otherwise 
+                // it may result in recursion when construction interdependent relationships.
+
+                cache?.add(model: model)
+
+                // By default the model will be updated, unless it's explicitly specified otherwise.
+
+                return update == false ? model : try self.update(model: model, with: object, configuration: configuration)
+            } else {
+                throw Error.construct
+            }
+        }
+
+        // MARK: -
+
         /// Depending on whether models are provided / empty or not load operation either pulls and updates these exact models or uses standard
         /// fetch operation. Therefore, provided fetch configuration will only be used when models are not explicitly specified. Providing
         /// remodels will result in a full fetch and will also reuse available models instead of creating new ones where possible.
@@ -63,7 +83,7 @@ extension Abstract
             let cache: ModelCache? = self.cache ?? (context as? CacheableContext)?.cache
 
             let models: [Model] = self.models
-            var loaded: [Model] = []
+            var loaded: [(Model, Object)] = []
             var failed: [Model] = []
 
             // It's worth mentioning that models retrieved from cache get updated – this behaviour is different when accessing relationships
@@ -74,10 +94,10 @@ extension Abstract
 
                 for object: Object in try context.fetch(request) {
                     if let model: Model = cache?.model(with: object.objectID) {
-                        loaded.append(try self.update(model: model, with: object, configuration: configuration))
+                        loaded.append(model, object)
                     } else {
-                        let model: Model = try self.construct(with: object, configuration: configuration, cache: cache)
-                        loaded.append(model)
+                        let model: Model = try self.construct(with: object, configuration: configuration, cache: cache, update: false)
+                        loaded.append(model, object)
                         cache?.add(model: model)
                     }
                 }
@@ -90,8 +110,7 @@ extension Abstract
 
                 for model in models {
                     if let object: Object = try context.existingObject(with: model) {
-                        try self.update(model: model, with: object, configuration: configuration)
-                        loaded.append(model)
+                        loaded.append(model, object)
                         cache?.add(model: model)
                     } else {
                         failed.append(model)
@@ -99,7 +118,14 @@ extension Abstract
                 }
             }
 
-            self.models = loaded
+            // Actual model updating happens after they all get constructed, this is needed for interrelated one-to-many and many-to-many
+            // relationships, when construction is disabled on sub-models – without this sub-models may end up not having relationships
+            // constructed after their update. Complicated… // Todo: this is not efficient. Perhaps we should do this only if current
+            // todo: configuration conforms to batch relationship configuration protocol and if cache is available.
+
+            // Todo: uh… oh… mapping… try doing it with regular loops.
+
+            self.models = try loaded.map({ try self.update(model: $0.0, with: $0.1, configuration: configuration) })
 
             if !failed.isEmpty {
                 throw Error.load(failed)
@@ -108,7 +134,11 @@ extension Abstract
             return self
         }
 
-        @discardableResult open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Configuration? = nil) -> NSFetchRequest<Result> {
+        @discardableResult open func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
+            return model
+        }
+
+        open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Configuration? = nil) -> NSFetchRequest<Result> {
             request.entity = (self.coordinator ?? Coordinator.default)?.schema.entity(for: self)
 
             if let configuration: Request.Configuration = (configuration as? BatchRequestConfiguration)?.request {
@@ -118,24 +148,6 @@ extension Abstract
             }
 
             return request
-        }
-
-        open func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil) throws -> Model {
-            if let model: Model = (Model.self as? Store.BatchConstructableModel.Type)?.init(id: object.objectID) as? Model {
-
-                // This is very important that newly constructed and identified model is added to cache before updating, otherwise 
-                // it may result in recursion when construction interdependent relationships.
-
-                cache?.add(model: model)
-
-                return try self.update(model: model, with: object, configuration: configuration)
-            } else {
-                throw Error.construct
-            }
-        }
-
-        @discardableResult open func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
-            return model
         }
 
         // MARK: -
