@@ -23,7 +23,8 @@ extension Abstract
         }
 
         open func setUp(coordinator: Coordinator) {
-            self.setUp(coordinator: coordinator, context: Context(coordinator: coordinator, concurrency: .mainQueueConcurrencyType))
+            let context: Context = Context(coordinator: coordinator, concurrency: .privateQueueConcurrencyType)
+            context.performAndWait({ self.setUp(coordinator: coordinator, context: context) })
         }
 
         open func setUp(coordinator: Coordinator, context: Context) {

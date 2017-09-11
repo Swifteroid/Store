@@ -37,17 +37,21 @@ extension Abstract
             if models.isEmpty { return false }
 
             let transaction: Transaction? = Transaction.current
-            let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+            let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: self.coordinator ?? Coordinator.default, concurrency: .privateQueueConcurrencyType)
+            var exists: Bool = true
 
             // If any model doesn't exist than we return false.
 
-            for model in models {
-                if (try? context.existingObject(with: model)) ?? nil == nil { // This is priceless…
-                    return false
+            context.performAndWait({
+                for model in models {
+                    if (try? context.existingObject(with: model)) ?? nil == nil { // This is fucking priceless…
+                        exists = false
+                        return
+                    }
                 }
-            }
+            })
 
-            return true
+            return exists
         }
 
         // MARK: -
@@ -79,59 +83,71 @@ extension Abstract
             // Cache explicitly specified by the batch has higher priority over one specified in cacheable context.  
 
             let transaction: Transaction? = Transaction.current
-            let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: (self.coordinator ?? Coordinator.default), concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType, cache: self.cache)
-            let cache: ModelCache? = self.cache ?? (context as? CacheableContext)?.cache
+            let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: (self.coordinator ?? Coordinator.default), concurrency: .privateQueueConcurrencyType, cache: self.cache)
+            var error: Swift.Error?
 
-            let models: [Model] = self.models
-            var loaded: [(Model, Object)] = []
-            var failed: [Model] = []
+            context.performAndWait({
+                do {
+                    let cache: ModelCache? = self.cache ?? (context as? CacheableContext)?.cache
 
-            // It's worth mentioning that models retrieved from cache get updated – this behaviour is different when accessing relationships
-            // and allows to avoid unnecessary updated.
+                    let models: [Model] = self.models
+                    var loaded: [(Model, Object)] = []
+                    var failed: [Model] = []
 
-            if models.isEmpty {
-                let request: Request = self.prepare(request: Request(), configuration: configuration)
+                    // It's worth mentioning that models retrieved from cache get updated – this behaviour is different when accessing relationships
+                    // and allows to avoid unnecessary updated.
 
-                for object: Object in try context.fetch(request) {
-                    if let model: Model = cache?.model(with: object.objectID) {
-                        loaded.append(model, object)
+                    if models.isEmpty {
+                        let request: Request = self.prepare(request: Request(), configuration: configuration)
+
+                        for object: Object in try context.fetch(request) {
+                            if let model: Model = cache?.model(with: object.objectID) {
+                                loaded.append(model, object)
+                            } else {
+                                let model: Model = try self.construct(with: object, configuration: configuration, cache: cache, update: false)
+                                loaded.append(model, object)
+                                cache?.add(model: model)
+                            }
+                        }
                     } else {
-                        let model: Model = try self.construct(with: object, configuration: configuration, cache: cache, update: false)
-                        loaded.append(model, object)
-                        cache?.add(model: model)
+
+                        // It is essential to add loaded models to cache before they get updated, otherwise interrelated relationships may end
+                        // up creating exact copies of these models.
+
+                        cache?.add(models: models)
+
+                        for model in models {
+                            if let object: Object = try context.existingObject(with: model) {
+                                loaded.append(model, object)
+                                cache?.add(model: model)
+                            } else {
+                                failed.append(model)
+                            }
+                        }
                     }
+
+                    // Actual model updating happens after they all get constructed, this is needed for interrelated one-to-many and many-to-many
+                    // relationships, when construction is disabled on sub-models – without this sub-models may end up not having relationships
+                    // constructed after their update. Complicated… // Todo: this is not efficient. Perhaps we should do this only if current
+                    // todo: configuration conforms to batch relationship configuration protocol and if cache is available.
+
+                    // Todo: uh… oh… mapping… try doing it with regular loops.
+
+                    self.models = try loaded.map({ try self.update(model: $0.0, with: $0.1, configuration: configuration) })
+
+                    if !failed.isEmpty {
+                        throw Error.load(failed)
+                    }
+                } catch let caught {
+                    error = caught
                 }
+            })
+
+            if let error = error {
+                throw error
             } else {
-
-                // It is essential to add loaded models to cache before they get updated, otherwise interrelated relationships may end
-                // up creating exact copies of these models.
-
-                cache?.add(models: models)
-
-                for model in models {
-                    if let object: Object = try context.existingObject(with: model) {
-                        loaded.append(model, object)
-                        cache?.add(model: model)
-                    } else {
-                        failed.append(model)
-                    }
-                }
+                return self
             }
-
-            // Actual model updating happens after they all get constructed, this is needed for interrelated one-to-many and many-to-many
-            // relationships, when construction is disabled on sub-models – without this sub-models may end up not having relationships
-            // constructed after their update. Complicated… // Todo: this is not efficient. Perhaps we should do this only if current
-            // todo: configuration conforms to batch relationship configuration protocol and if cache is available.
-
-            // Todo: uh… oh… mapping… try doing it with regular loops.
-
-            self.models = try loaded.map({ try self.update(model: $0.0, with: $0.1, configuration: configuration) })
-
-            if !failed.isEmpty {
-                throw Error.load(failed)
-            }
-
-            return self
         }
 
         @discardableResult open func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
@@ -158,43 +174,55 @@ extension Abstract
             if models.isEmpty { return self }
 
             let transaction: Transaction? = Transaction.current
-            let context: Context = self.context ?? transaction?.context ?? Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-            var saved: [Model: Object] = [:]
-            var failed: [Model] = []
+            let context: Context = self.context ?? transaction?.context ?? Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: .privateQueueConcurrencyType)
+            var error: Swift.Error?
 
-            // YO!!! I know you'll want to take entity retrieval out of the loop… FUCK YOU!!! AND DON'T!!! Reasons
-            // are simple – model entity is worked out based on the model class name, while they all can ba children
-            // of the same common class, their entities might differ. Though, there's one in a million chance…
+            context.performAndWait({
+                do {
+                    var saved: [Model: Object] = [:]
+                    var failed: [Model] = []
 
-            for model in models {
-                if let object: Object = try context.existingObject(with: model) {
-                    try self.update(object: object, with: model, configuration: configuration)
-                } else if let entity: Entity = context.coordinator?.schema.entity(for: model) {
-                    let object: Object = Object(entity: entity, insertInto: context)
-                    try self.update(object: object, with: model, configuration: configuration)
-                    saved[model] = object
-                } else {
-                    failed.append(model)
+                    // YO!!! I know you'll want to take entity retrieval out of the loop… FUCK YOU!!! AND DON'T!!! Reasons
+                    // are simple – model entity is worked out based on the model class name, while they all can ba children
+                    // of the same common class, their entities might differ. Though, there's one in a million chance…
+
+                    for model in models {
+                        if let object: Object = try context.existingObject(with: model) {
+                            try self.update(object: object, with: model, configuration: configuration)
+                        } else if let entity: Entity = context.coordinator?.schema.entity(for: model) {
+                            let object: Object = Object(entity: entity, insertInto: context)
+                            try self.update(object: object, with: model, configuration: configuration)
+                            saved[model] = object
+                        } else {
+                            failed.append(model)
+                        }
+                    }
+
+                    // Update ids of inserted models, this is done separately, because ids become available only after 
+                    // context gets saved. If we're inside a transaction, we tell that son of a bitch to identify our
+                    // models whenever it completes.
+
+                    if let transaction: Transaction = transaction {
+                        transaction.save(models: saved)
+                    } else if context.hasChanges {
+                        NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
+                        try context.save()
+                        for (model, object) in saved { model.id = object.objectID }
+                    }
+
+                    if !failed.isEmpty {
+                        throw Error.save(failed)
+                    }
+                } catch let caught {
+                    error = caught
                 }
+            })
+
+            if let error = error {
+                throw error
+            } else {
+                return self
             }
-
-            // Update ids of inserted models, this is done separately, because ids become available only after 
-            // context gets saved. If we're inside a transaction, we tell that son of a bitch to identify our
-            // models whenever it completes.
-
-            if let transaction: Transaction = transaction {
-                transaction.save(models: saved)
-            } else if context.hasChanges {
-                NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
-                try context.save()
-                for (model, object) in saved { model.id = object.objectID }
-            }
-
-            if !failed.isEmpty {
-                throw Error.save(failed)
-            }
-
-            return self
         }
 
         @discardableResult open func update(object: Object, with model: Model, configuration: Configuration? = nil) throws -> Object {
@@ -207,21 +235,33 @@ extension Abstract
             let models: [Model] = self.models
             if models.isEmpty { return self }
 
-            let context: Context = Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+            let context: Context = Context(coordinator: self.coordinator ?? Coordinator.default, concurrency: .privateQueueConcurrencyType)
+            var error: Swift.Error?
 
-            for model in models {
-                if let object: Object = try context.existingObject(with: model) {
-                    context.delete(object)
+            context.performAndWait({
+                do {
+                    for model in models {
+                        if let object: Object = try context.existingObject(with: model) {
+                            context.delete(object)
+                        }
+                    }
+
+                    if context.hasChanges {
+                        NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
+                        try context.save()
+                    }
+
+                    self.models = []
+                } catch let caught {
+                    error = caught
                 }
-            }
+            })
 
-            if context.hasChanges {
-                NotificationCenter.default.post(name: BatchNotification.willSaveContext, object: self, userInfo: [BatchNotification.Key.context: context])
-                try context.save()
+            if let error = error {
+                throw error
+            } else {
+                return self
             }
-
-            self.models = []
-            return self
         }
     }
 }

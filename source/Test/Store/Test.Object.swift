@@ -7,7 +7,7 @@ internal class ObjectTestCase: TestCase, PersistentStoreTestCase
 
     internal func testKvc() {
         let coordinator: Coordinator = Coordinator.default
-        let context: Context = Context(coordinator: coordinator, concurrency: .mainQueueConcurrencyType)
+        let context: Context = Context(coordinator: coordinator, concurrency: .privateQueueConcurrencyType)
         let object: Object = Object(entity: coordinator.schema.entity(for: "Foo")!, insertInto: context)
 
         // Test optional accessor.

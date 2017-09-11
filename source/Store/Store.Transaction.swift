@@ -10,7 +10,7 @@ internal class Transaction
     // MARK: -
 
     internal init(coordinator: Coordinator? = nil, context: Context? = nil) {
-        self.context = context ?? CacheableContext(coordinator: coordinator ?? Coordinator.default, concurrency: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
+        self.context = context ?? CacheableContext(coordinator: coordinator ?? Coordinator.default, concurrency: .privateQueueConcurrencyType)
     }
 
     // MARK: -
