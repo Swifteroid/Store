@@ -27,6 +27,12 @@ internal final class BookModel: Abstract.BatchConstructableModel, Batchable
 
 internal final class BookBatch: Abstract.Batch<BookModel, BookConfiguration>
 {
+    internal func find(title: String) throws -> Self {
+        return try self.load(configuration: Configuration(request: Request.Configuration(block: {
+            $0.predicate = Predicate(format: "\(Key.title) == %@", title)
+        })))
+    }
+
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         let cfg: Configuration = configuration ?? Configuration.default
 
@@ -50,16 +56,18 @@ internal final class BookBatch: Abstract.Batch<BookModel, BookConfiguration>
     }
 }
 
-internal class BookConfiguration: BatchRelationshipConfiguration
+internal class BookConfiguration: BatchRequestConfiguration, BatchRelationshipConfiguration
 {
     internal static let `default`: BookConfiguration = BookConfiguration(authors: AuthorConfiguration(books: BookConfiguration(relationship: [])))
 
     internal let authors: AuthorConfiguration?
     internal let relationship: RelationshipConfiguration?
+    internal let request: Request.Configuration?
 
-    internal init(authors: AuthorConfiguration? = nil, relationship: RelationshipConfiguration? = nil) {
+    internal init(authors: AuthorConfiguration? = nil, relationship: RelationshipConfiguration? = nil, request: Request.Configuration? = nil) {
         self.authors = authors
         self.relationship = relationship
+        self.request = request
     }
 }
 

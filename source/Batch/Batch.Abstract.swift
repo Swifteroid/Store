@@ -138,13 +138,14 @@ extension Abstract
             return model
         }
 
-        open func prepare<Result>(request: NSFetchRequest<Result>, configuration: Configuration? = nil) -> NSFetchRequest<Result> {
+        open func prepare(request: Request, configuration: Configuration? = nil) -> Request {
             request.entity = (self.coordinator ?? Coordinator.default)?.schema.entity(for: self)
 
             if let configuration: Request.Configuration = (configuration as? BatchRequestConfiguration)?.request {
                 if let limit: Int = configuration.limit { request.fetchLimit = limit }
                 if let offset: Int = configuration.offset { request.fetchOffset = offset }
                 if let sort: [NSSortDescriptor] = configuration.sort { request.sortDescriptors = sort }
+                configuration.block?(request)
             }
 
             return request

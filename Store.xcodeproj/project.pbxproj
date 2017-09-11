@@ -10,6 +10,7 @@
 		17FD0050E2A449B64FC845EB /* Test.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0B25044E79C93F75D0C8 /* Test.Model.swift */; };
 		17FD00602094F4F64F4AA918 /* Store.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */; };
 		17FD00B96110E6FAAA66E6C1 /* Store.Context.Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0AA93BF44C9646CC59C7 /* Store.Context.Cacheable.swift */; };
+		17FD00EED04429CECC8435E3 /* Store.Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0FBFA7A0FE890A2F2F12 /* Store.Predicate.swift */; };
 		17FD0164771FAD872BA89FA7 /* Test.Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0C7706D75EDDA427F606 /* Test.Transaction.swift */; };
 		17FD017BB4DD706B35692CEB /* Model.Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD058AE723B899A89EF924 /* Model.Author.swift */; };
 		17FD01CD4C5E0B3BBAF11338 /* Migration.Policy.1.1.0.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD03115F10C35BFFB27F54 /* Migration.Policy.1.1.0.swift */; };
@@ -137,6 +138,7 @@
 		17FD0EF781ACCC65556E1443 /* macOS - Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "macOS - Framework.xcconfig"; sourceTree = "<group>"; };
 		17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Abstract.swift; sourceTree = "<group>"; };
 		17FD0FBC8B1E012043ED435D /* Store.Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Entity.swift; sourceTree = "<group>"; };
+		17FD0FBFA7A0FE890A2F2F12 /* Store.Predicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Predicate.swift; sourceTree = "<group>"; };
 		E605B6521E86761A00A0E60A /* 1.0.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.0.xcdatamodel; sourceTree = "<group>"; };
 		E605B6531E86761A00A0E60A /* 1.0.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.1.xcdatamodel; sourceTree = "<group>"; };
 		E60746411E83949000B75E21 /* Store.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Store.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -363,6 +365,7 @@
 				17FD0B0F99A746180A9F8318 /* Store.Transaction.swift */,
 				17FD04FDB184719EA74907DA /* Store.Request.swift */,
 				17FD0F2B48A8D8344211E2B2 /* Store.Abstract.swift */,
+				17FD0FBFA7A0FE890A2F2F12 /* Store.Predicate.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				17FD00B96110E6FAAA66E6C1 /* Store.Context.Cacheable.swift in Sources */,
 				17FD0FDB7B47BEB8327D050A /* Store.Entity.swift in Sources */,
 				17FD02EF7B0CAC898B9C2044 /* Store.Object.swift in Sources */,
+				17FD00EED04429CECC8435E3 /* Store.Predicate.swift in Sources */,
 				17FD06EDD4EFFBD054AE50A6 /* Store.Request.swift in Sources */,
 				17FD0CF496FE510E536E2B08 /* Store.Schema.swift in Sources */,
 				17FD02C8D0193F5C45CD4C12 /* Store.Transaction.swift in Sources */,
