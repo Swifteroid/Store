@@ -187,11 +187,9 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
             }
         }
 
+        if updated { NotificationCenter.default.post(name: ModelObserverNotification.willUpdate, object: self) }
         self.observed = observed
-
-        if updated {
-            NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self)
-        }
+        if updated { NotificationCenter.default.post(name: ModelObserverNotification.didUpdate, object: self) }
     }
 
     // MARK: -
@@ -230,5 +228,6 @@ public struct ModelObserverMode: OptionSet
 
 public struct ModelObserverNotification
 {
+    public static let willUpdate: Notification.Name = Notification.Name("ModelObserverWillUpdateNotification")
     public static let didUpdate: Notification.Name = Notification.Name("ModelObserverDidUpdateNotification")
 }
