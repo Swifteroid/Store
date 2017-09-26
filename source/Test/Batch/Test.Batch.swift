@@ -6,14 +6,14 @@ internal class BatchTestCase: TestCase
 {
     internal func test() {
         let batch: Batch = Batch()
-        let request: NSFetchRequest<NSManagedObject> = NSFetchRequest()
+        var request: NSFetchRequest<NSManagedObject> = NSFetchRequest()
         let configuration: Configuration = Configuration(request: Request.Configuration(limit: 1, offset: 2, sort: [NSSortDescriptor(key: "foo", ascending: true)]))
 
         expect(request.fetchLimit).to(equal(0))
         expect(request.fetchOffset).to(equal(0))
         expect(request.sortDescriptors).to(beNil())
 
-        batch.prepare(request: request, configuration: configuration)
+        request = batch.prepare(request: request, configuration: configuration)
 
         expect(request.fetchLimit).to(equal(configuration.request!.limit))
         expect(request.fetchOffset).to(equal(configuration.request!.offset))
