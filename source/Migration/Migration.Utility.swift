@@ -60,7 +60,7 @@ open class MigrationUtility
 
         // Creates new store or validates that existing one is compatible with the specified schema.
 
-        let data: MigrationData? = self.data(for: name)
+        let data: MigrationDataProtocol? = self.data(for: name)
         let schema: Schema = data?.setUp(schema: schema) ?? schema
         let coordinator: Coordinator = Coordinator(managedObjectModel: schema)
 
@@ -85,7 +85,7 @@ open class MigrationUtility
 
     /// Looks up for the named migration data class and returns an instance.
 
-    open static func data(for name: String) -> MigrationData? {
+    open static func data(for name: String) -> MigrationDataProtocol? {
         let className: String = "\(MigrationData.self)_\(name.replacingOccurrences(of: ".", with: "_"))"
 
         // There is an easy and not so easy way of doing this. First is to check and just see if we have the required 
@@ -93,12 +93,12 @@ open class MigrationUtility
         // be recognised unless we specify module name, which we can't find out easily. Lastly we can check all loaded 
         // classes and try to match our one and save it's module name for later magic.
 
-        if let DataClass: MigrationData.Type = NSClassFromString(className) as? MigrationData.Type {
+        if let DataClass: MigrationDataProtocol.Type = NSClassFromString(className) as? MigrationDataProtocol.Type {
             return DataClass.init()
         }
 
         for moduleName in self.dataModuleNames {
-            if let DataClass: MigrationData.Type = NSClassFromString("\(moduleName).\(className)") as? MigrationData.Type {
+            if let DataClass: MigrationDataProtocol.Type = NSClassFromString("\(moduleName).\(className)") as? MigrationDataProtocol.Type {
                 return DataClass.init()
             }
         }
@@ -109,7 +109,7 @@ open class MigrationUtility
         objc_getClassList(classes, Int32(classCount))
 
         for i in 0 ..< classCount {
-            if let DataClass: MigrationData.Type = classes[i] as? MigrationData.Type {
+            if let DataClass: MigrationDataProtocol.Type = classes[i] as? MigrationDataProtocol.Type {
 
                 // We know this is a migration data class and now is a good idea to save to get the module name
                 // and cache it in known data module name list for later reuse.
@@ -133,7 +133,7 @@ open class MigrationUtility
 
                 if fullClassName.hasSuffix(className) {
                     return DataClass.init()
-                } else if let moduleName: String = moduleName, let DataClass: MigrationData.Type = NSClassFromString("\(moduleName).\(className)") as? MigrationData.Type {
+                } else if let moduleName: String = moduleName, let DataClass: MigrationDataProtocol.Type = NSClassFromString("\(moduleName).\(className)") as? MigrationDataProtocol.Type {
                     return DataClass.init()
                 }
             }

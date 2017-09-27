@@ -2,7 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal final class BookModel: Abstract.BatchConstructableModel, Batchable
+internal final class BookModel: BatchConstructableModel, Batchable
 {
     internal typealias Batch = BookBatch
 
@@ -25,7 +25,7 @@ internal final class BookModel: Abstract.BatchConstructableModel, Batchable
     internal var user: UserModel?
 }
 
-internal final class BookBatch: Abstract.Batch<BookModel, BookConfiguration>
+internal final class BookBatch: Batch<BookModel, BookConfiguration>
 {
     internal func find(title: String) throws -> Self {
         return try self.load(configuration: Configuration(request: Request.Configuration(block: {

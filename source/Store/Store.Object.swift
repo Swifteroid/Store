@@ -190,7 +190,7 @@ extension Object
 
     /// Sets new relationship models.
 
-    open func relationship<Model:Store.Model & Hashable>(set models: [Model], for name: String) throws {
+    open func relationship<Model:ModelProtocol & Hashable>(set models: [Model], for name: String) throws {
         let transaction: Transaction? = Transaction.current
         guard let context: Context = transaction?.context ?? self.managedObjectContext else { throw RelationshipError.noContext }
         var objects: [Object] = []
@@ -206,7 +206,7 @@ extension Object
         try self.relationship(set: objects, for: name)
     }
 
-    open func relationship<Model:Store.Model & Hashable>(set model: Model?, for name: String) throws {
+    open func relationship<Model:ModelProtocol & Hashable>(set model: Model?, for name: String) throws {
         if let model: Model = model {
             let transaction: Transaction? = Transaction.current
             guard let context: Context = transaction?.context ?? self.managedObjectContext else { throw RelationshipError.noContext }
@@ -250,11 +250,11 @@ extension Object
         self.relationship(set: object, for: name.rawValue)
     }
 
-    open func relationship<Name:RawRepresentable, Model:Store.Model & Hashable>(set models: [Model], for name: Name) throws where Name.RawValue == String {
+    open func relationship<Name:RawRepresentable, Model:ModelProtocol & Hashable>(set models: [Model], for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: models, for: name.rawValue)
     }
 
-    open func relationship<Name:RawRepresentable, Model:Store.Model & Hashable>(set model: Model?, for name: Name) throws where Name.RawValue == String {
+    open func relationship<Name:RawRepresentable, Model:ModelProtocol & Hashable>(set model: Model?, for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: model, for: name.rawValue)
     }
 }

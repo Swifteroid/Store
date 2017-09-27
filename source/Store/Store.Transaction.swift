@@ -24,17 +24,17 @@ internal class Transaction
 
     private var objects: [AnyHashable: Object] = [:]
 
-    internal func save<Model:Store.Model & Hashable>(model: Model, object: Object) {
+    internal func save<Model:ModelProtocol & Hashable>(model: Model, object: Object) {
         self.objects[AnyHashable(model)] = object
     }
 
-    internal func save<Model:Store.Model & Hashable>(models: [Model: Object]) {
+    internal func save<Model:ModelProtocol>(models: [Model: Object]) {
         for (model, object) in models {
             self.objects[AnyHashable(model)] = object
         }
     }
 
-    internal func object<Model:Store.Model & Hashable>(for model: Model) -> Object? {
+    internal func object<Model:ModelProtocol & Hashable>(for model: Model) -> Object? {
         return self.objects[AnyHashable(model)]
     }
 
@@ -48,7 +48,7 @@ internal class Transaction
         try self.context.save()
 
         for (model, object) in self.objects {
-            (model.base as! Model).id = object.objectID
+            (model.base as! ModelProtocol).id = object.objectID
         }
 
         type(of: self).current = nil

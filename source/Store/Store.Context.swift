@@ -9,7 +9,7 @@ extension Context
         self.coordinator = coordinator
     }
 
-    open func existingObject<Model:Store.Model>(with model: Model) throws -> Object? {
+    open func existingObject<Model:ModelProtocol>(with model: Model) throws -> Object? {
         if let id: Object.Id = model.id {
             return try self.existingObject(with: id)
         } else {

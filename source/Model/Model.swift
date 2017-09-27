@@ -1,22 +1,32 @@
-import CoreData
+import Foundation
 
-/// - todo: Perhaps we should allow models to be structs, i.e., remove class conformance?
-
-public protocol Model: class
+open class Model: ModelProtocol
 {
-    var id: Object.Id? { get set }
-}
+    open var id: Object.Id?
 
-extension Model
-{
-    public var identified: Bool {
-        return self.id != nil
+    // MARK: -
+
+    public convenience init(id: Object.Id?) {
+        self.init()
+        self.id = id
     }
 }
 
-// MARK: -
-
-public protocol BatchConstructableModel: Model
+extension Model: Hashable
 {
-    init(id: Object.Id?)
+    public var hashValue: Int {
+        return ObjectIdentifier(self).hashValue
+    }
+}
+
+public func ==(lhs: Model, rhs: Model) -> Bool {
+    return lhs === rhs
+}
+
+open class BatchConstructableModel: Model, BatchConstructableModelProtocol
+{
+    public required init(id: Object.Id? = nil) {
+        super.init()
+        self.id = id
+    }
 }

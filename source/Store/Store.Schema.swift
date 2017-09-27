@@ -14,19 +14,19 @@ extension Schema
         return self.entitiesByName[name]
     }
 
-    open func entity<Model:Store.Model>(for model: Model) -> Entity? {
+    open func entity<Model:ModelProtocol>(for model: Model) -> Entity? {
         return entity(for: type(of: model))
     }
 
-    open func entity<Model:Store.Model>(for model: Model.Type) -> Entity? {
+    open func entity<Model:ModelProtocol>(for model: Model.Type) -> Entity? {
         return entity(for: model)
     }
 
-    open func entity<Batch:Store.Batch>(for batch: Batch) -> Entity? {
+    open func entity<Batch:BatchProtocol>(for batch: Batch) -> Entity? {
         return entity(for: type(of: batch))
     }
 
-    open func entity<Batch:Store.Batch>(for batch: Batch.Type) -> Entity? {
+    open func entity<Batch:BatchProtocol>(for batch: Batch.Type) -> Entity? {
         return entity(for: batch)
     }
 
