@@ -131,6 +131,7 @@
 		17FD0C7706D75EDDA427F606 /* Test.Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Transaction.swift; sourceTree = "<group>"; };
 		17FD0CA19A89F54D70281C7D /* Test.Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Object.swift; sourceTree = "<group>"; };
 		17FD0D39D4156F8596008D0B /* Test.Model.Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Observer.swift; sourceTree = "<group>"; };
+		17FD0DB38373454930D210AF /* Store.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = Store.podspec; sourceTree = "<group>"; };
 		17FD0DF25DC251C069945292 /* Migration.Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Utility.swift; sourceTree = "<group>"; };
 		17FD0E4ECEE26063F06C6D13 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		17FD0EA3D14033A8AF4F64C8 /* framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = framework.plist; sourceTree = "<group>"; };
@@ -448,6 +449,7 @@
 				17FD0875A929F2B81ABF0673 /* source */,
 				17FD0923FF76BC2D796E1029 /* test */,
 				17FD08C5C85112377CC6D852 /* README.md */,
+				17FD0DB38373454930D210AF /* Store.podspec */,
 			);
 			sourceTree = "<group>";
 		};
