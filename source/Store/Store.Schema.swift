@@ -36,8 +36,8 @@ extension Schema
 
         if let string: String = entityNameCache[string] {
             name = string
-        } else if let match: NSTextCheckingResult = entityNameExpression.firstMatch(in: string, range: NSRange(0 ..< string.characters.count)) {
-            name = (string as NSString).substring(with: match.rangeAt(1))
+        } else if let match: NSTextCheckingResult = entityNameExpression.firstMatch(in: string, range: NSRange(0 ..< string.count)) {
+            name = (string as NSString).substring(with: match.range(at: 1))
             entityNameCache[string] = name
         } else {
             name = string
@@ -62,7 +62,7 @@ extension Schema
 
         for case let file as URL in FileManager.default.enumerator(at: url, includingPropertiesForKeys: [])! {
             if file.pathExtension == "mom", let schema: Schema = Schema(contentsOf: file) {
-                schemas.append(schema, file)
+                schemas.append((schema, file))
             }
         }
 

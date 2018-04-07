@@ -104,7 +104,7 @@ open class MigrationUtility
         }
 
         let classCount: Int = Int(objc_getClassList(nil, 0))
-        let classes: AutoreleasingUnsafeMutablePointer<AnyClass?> = AutoreleasingUnsafeMutablePointer(UnsafeMutablePointer<AnyClass?>.allocate(capacity: classCount))
+        let classes: AutoreleasingUnsafeMutablePointer<AnyClass> = AutoreleasingUnsafeMutablePointer(UnsafeMutablePointer<AnyClass>.allocate(capacity: classCount))
 
         objc_getClassList(classes, Int32(classCount))
 
@@ -118,8 +118,8 @@ open class MigrationUtility
                 let expression: NSRegularExpression = try! NSRegularExpression(pattern: "^(\\w+)\\..+$")
                 var moduleName: String?
 
-                if let match: NSTextCheckingResult = expression.firstMatch(in: fullClassName, range: NSRange(location: 0, length: fullClassName.characters.count)) {
-                    moduleName = (fullClassName as NSString).substring(with: match.rangeAt(1))
+                if let match: NSTextCheckingResult = expression.firstMatch(in: fullClassName, range: NSRange(location: 0, length: fullClassName.count)) {
+                    moduleName = (fullClassName as NSString).substring(with: match.range(at: 1))
 
                     if self.dataModuleNames.contains(moduleName!) {
                         moduleName = nil

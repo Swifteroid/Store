@@ -6,7 +6,7 @@ import Foundation
 ///
 /// - todo: What about cache when saving / deleting models?
 
-open class Batch<Model:ModelProtocol & Hashable, Configuration>: BatchProtocol
+open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
 {
     public required init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
         self.coordinator = coordinator
@@ -98,12 +98,12 @@ open class Batch<Model:ModelProtocol & Hashable, Configuration>: BatchProtocol
                 if models.isEmpty {
                     let request: Request = self.prepare(request: Request(), configuration: configuration)
 
-                    for object: Object in try context.fetch(request) {
+                    for object in try context.fetch(request) {
                         if let model: Model = cache?.model(with: object.objectID) {
-                            loaded.append(model, object)
+                            loaded.append((model, object))
                         } else {
                             let model: Model = try self.construct(with: object, configuration: configuration, cache: cache, update: false)
-                            loaded.append(model, object)
+                            loaded.append((model, object))
                             cache?.add(model: model)
                         }
                     }
@@ -116,7 +116,7 @@ open class Batch<Model:ModelProtocol & Hashable, Configuration>: BatchProtocol
 
                     for model in models {
                         if let object: Object = try context.existingObject(with: model) {
-                            loaded.append(model, object)
+                            loaded.append((model, object))
                             cache?.add(model: model)
                         } else {
                             failed.append(model)

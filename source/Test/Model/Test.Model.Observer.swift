@@ -11,17 +11,17 @@ internal class ModelObserverTestCase: ModelTestCase
         var expectations: [XCTestExpectation] = []
 
         model = BookModel.fake()
-        expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate.rawValue, object: observer))
+        expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate, object: observer))
         try! model.save()
         expect(observer.models.first?.id).to(equal(model.id))
 
         model.title = "bar"
-        expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate.rawValue, object: observer))
+        expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate, object: observer))
         try! model.save()
         expect(observer.models.first?.title).to(equal(model.title))
 
         model.title = "qux"
-        expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate.rawValue, object: observer))
+        expectations.append(self.expectation(forNotification: ModelObserverNotification.didUpdate, object: observer))
         try! model.save()
         expect(observer.models.first?.title).to(equal(model.title))
 
