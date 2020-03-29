@@ -42,7 +42,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
 
         context.performAndWait({
             for model in models {
-                if (try? context.existingObject(with: model)) ?? nil == nil { // This is fucking priceless…
+                if (((try? context.existingObject(with: model)) as Object??)) ?? nil == nil { // This is fucking priceless…
                     exists = false
                     return
                 }

@@ -14,8 +14,8 @@ open class Model: ModelProtocol
 
 extension Model: Hashable
 {
-    public var hashValue: Int {
-        return ObjectIdentifier(self).hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
     }
 }
 

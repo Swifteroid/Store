@@ -24,7 +24,7 @@ open class Migration
         // damaging it along the way.
 
         let metadata: [String: Any] = try Coordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: store)
-        let index: Int = schemas.reversed().index(where: { $0.compatible(with: metadata) }) ?? -1
+        let index: Int = schemas.reversed().firstIndex(where: { $0.compatible(with: metadata) }) ?? -1
 
         if index == -1 {
             throw Error.noCompatibleSchema

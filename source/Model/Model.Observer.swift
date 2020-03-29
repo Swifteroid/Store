@@ -156,8 +156,8 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
         if !insertedById.isEmpty, let configuration: Request.Configuration = (configuration as? BatchRequestConfiguration)?.request {
             if let sort: [NSSortDescriptor] = configuration.sort, !sort.isEmpty {
                 observed.sort(by: {
-                    if objectsByModel[$0] == nil { objectsByModel[$0] = try? context.existingObject(with: $0) }
-                    if objectsByModel[$1] == nil { objectsByModel[$1] = try? context.existingObject(with: $1) }
+                    if objectsByModel[$0] == nil { objectsByModel[$0] = ((try? context.existingObject(with: $0)) as Object??) }
+                    if objectsByModel[$1] == nil { objectsByModel[$1] = ((try? context.existingObject(with: $1)) as Object??) }
 
                     let lhs: Object! = objectsByModel[$0] ?? nil
                     let rhs: Object! = objectsByModel[$1] ?? nil
@@ -171,7 +171,7 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
                     }
 
                     for sort in sort {
-                        switch sort.compare(lhs, to: rhs) {
+                        switch sort.compare(lhs!, to: rhs!) {
                             case .orderedAscending: return true
                             case .orderedDescending: return false
                             case .orderedSame: continue

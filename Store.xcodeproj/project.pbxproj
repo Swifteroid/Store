@@ -500,10 +500,12 @@
 				TargetAttributes = {
 					E60746401E83949000B75E21 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 					E60746491E83949000B75E21 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -513,6 +515,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = E6B63BE01E838FD100AA678E;
@@ -634,7 +637,7 @@
 				FRAMEWORK_SEARCH_PATHS = dependency/Carthage/Build/Mac;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swifteroid.store;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -645,7 +648,7 @@
 				FRAMEWORK_SEARCH_PATHS = dependency/Carthage/Build/Mac;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swifteroid.store;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

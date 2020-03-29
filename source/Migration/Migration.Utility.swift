@@ -31,7 +31,7 @@ open class MigrationUtility
     ///
     /// - Returns: Created store url. 
 
-    open static func setUpPersistentStore(at storeUrl: URL, name: String, schema: Schema, template templateUrl: URL? = nil) -> URL? {
+    public static func setUpPersistentStore(at storeUrl: URL, name: String, schema: Schema, template templateUrl: URL? = nil) -> URL? {
         let destinationStoreUrl: URL = storeUrl.appendingPathComponent("\(name).sqlite", isDirectory: false)
         let destinationSupportUrl: URL = storeUrl.appendingPathComponent(".\(name)_SUPPORT", isDirectory: true)
         let fileManager: FileManager = FileManager.default
@@ -75,7 +75,7 @@ open class MigrationUtility
     ///
     /// - Returns: Created store urls for each found schema and that schema along with it.
 
-    open static func setUpPersistentStores(at url: URL, schemas: [(Schema, URL)], template templateUrl: URL? = nil) -> [(URL, Schema)] {
+    public static func setUpPersistentStores(at url: URL, schemas: [(Schema, URL)], template templateUrl: URL? = nil) -> [(URL, Schema)] {
         return schemas.map({ (self.setUpPersistentStore(at: url, name: $1.deletingPathExtension().lastPathComponent, schema: $0, template: templateUrl)!, $0) })
     }
 
@@ -85,7 +85,7 @@ open class MigrationUtility
 
     /// Looks up for the named migration data class and returns an instance.
 
-    open static func data(for name: String) -> MigrationDataProtocol? {
+    public static func data(for name: String) -> MigrationDataProtocol? {
         let className: String = "\(MigrationData.self)_\(name.replacingOccurrences(of: ".", with: "_"))"
 
         // There is an easy and not so easy way of doing this. First is to check and just see if we have the required 
@@ -104,9 +104,9 @@ open class MigrationUtility
         }
 
         let classCount: Int = Int(objc_getClassList(nil, 0))
-        let classes: AutoreleasingUnsafeMutablePointer<AnyClass> = AutoreleasingUnsafeMutablePointer(UnsafeMutablePointer<AnyClass>.allocate(capacity: classCount))
+        let classes: UnsafeMutablePointer<AnyClass> = UnsafeMutablePointer.allocate(capacity: classCount)
 
-        objc_getClassList(classes, Int32(classCount))
+        objc_getClassList(AutoreleasingUnsafeMutablePointer(classes), Int32(classCount))
 
         for i in 0 ..< classCount {
             if let DataClass: MigrationDataProtocol.Type = classes[i] as? MigrationDataProtocol.Type {

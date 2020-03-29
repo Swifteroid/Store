@@ -59,7 +59,7 @@ extension Coordinator
 
     // MARK: -
 
-    open static var `default`: Coordinator! {
+    public static var `default`: Coordinator! {
         get { return coordinator }
         set { coordinator = newValue }
     }

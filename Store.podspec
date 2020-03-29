@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   spec.source = { :git => 'https://github.com/swifteroid/store.git', :tag => "#{spec.version}" }
   spec.source_files = 'source/**/*.{swift,h,m}'
   spec.exclude_files = 'source/{Test,Testing}/**/*'
-  spec.swift_version = '4.0'
+  spec.swift_version = '5.2'
 
   spec.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS[config=Release]' => '-suppress-warnings' }
 end
