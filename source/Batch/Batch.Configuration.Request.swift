@@ -1,15 +1,12 @@
 import CoreData
 
-public protocol BatchRequestConfiguration
-{
+public protocol BatchRequestConfiguration {
     var request: Request.Configuration? { get }
 }
 
-extension NSFetchRequest where ResultType == Object
-{
-    public struct Configuration
-    {
-        public typealias Block = (_ request: Request) -> ()
+extension NSFetchRequest where ResultType == Object {
+    public struct Configuration {
+        public typealias Block = (_ request: Request) -> Void
 
         public var limit: Int?
         public var offset: Int?

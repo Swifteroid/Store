@@ -1,5 +1,4 @@
-/// "Namespace" for abstract implementations. 
+/// "Namespace" for abstract implementations.
 
-public struct Abstract
-{
+public struct Abstract {
 }

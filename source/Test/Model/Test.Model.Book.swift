@@ -2,8 +2,7 @@ import Foundation
 import Nimble
 import Store
 
-internal class BookModelTestCase: ModelTestCase
-{
+internal class BookModelTestCase: ModelTestCase {
     internal func test() {
         self.test((0 ..< 10).map({ _ in BookModel.fake() }), {
             expect($0.title).toNot(beNil())

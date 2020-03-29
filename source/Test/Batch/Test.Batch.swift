@@ -2,8 +2,7 @@ import CoreData
 import Store
 import Nimble
 
-internal class BatchTestCase: TestCase
-{
+internal class BatchTestCase: TestCase {
     internal func test() {
         let batch: Batch = Batch()
         var request: NSFetchRequest<NSManagedObject> = NSFetchRequest()
@@ -21,20 +20,17 @@ internal class BatchTestCase: TestCase
     }
 }
 
-fileprivate struct Configuration: BatchRequestConfiguration
-{
+fileprivate struct Configuration: BatchRequestConfiguration {
     fileprivate var request: Request.Configuration?
 }
 
-fileprivate class Model: BatchConstructableModel, Batchable
-{
+fileprivate class Model: BatchConstructableModel, Batchable {
     typealias Batch = Store___Test.Batch
 
     public var exists: Bool {
-        return (Batch(models: []) as Batch).exist(models: [self])
+        (Batch(models: []) as Batch).exist(models: [self])
     }
 }
 
-fileprivate class Batch: Store.Batch<Model, Configuration>
-{
+fileprivate class Batch: Store.Batch<Model, Configuration> {
 }

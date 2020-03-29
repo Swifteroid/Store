@@ -2,8 +2,7 @@ import Foundation
 import Nimble
 import Store
 
-internal class UserModelTestCase: ModelTestCase
-{
+internal class UserModelTestCase: ModelTestCase {
     internal func test() {
         self.test((0 ..< 10).map({ _ in UserModel.fake() }), {
             expect($0.name).toNot(beNil())

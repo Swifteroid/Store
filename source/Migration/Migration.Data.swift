@@ -1,7 +1,6 @@
 import Foundation
 
-open class MigrationData: MigrationDataProtocol
-{
+open class MigrationData: MigrationDataProtocol {
     public required init() {
     }
 

@@ -2,21 +2,18 @@ import CoreData
 
 /// - todo: Perhaps we should allow models to be structs, i.e., remove class conformance?
 
-public protocol ModelProtocol: class
-{
+public protocol ModelProtocol: class {
     var id: Object.Id? { get set }
 }
 
-extension ModelProtocol
-{
+extension ModelProtocol {
     public var identified: Bool {
-        return self.id != nil
+        self.id != nil
     }
 }
 
 // MARK: -
 
-public protocol BatchConstructableModelProtocol: ModelProtocol
-{
+public protocol BatchConstructableModelProtocol: ModelProtocol {
     init(id: Object.Id?)
 }

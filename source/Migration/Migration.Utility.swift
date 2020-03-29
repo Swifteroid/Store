@@ -1,7 +1,7 @@
 import CoreData
 import Foundation
 
-/// Migration utility is very useful for testing data migrations and creating initial stores with different schema 
+/// Migration utility is very useful for testing data migrations and creating initial stores with different schema
 /// versions. The very basic testing approach is to ensure that store for each schema can be migrated without any
 /// faults.
 ///
@@ -16,12 +16,11 @@ import Foundation
 ///         expect(expression: { try Migration().migrate(store: url, schemas: schemas) }).toNot(throwError())
 ///     }
 ///
-/// - See: Test.Migration.swift for an actual example. 
+/// - See: Test.Migration.swift for an actual example.
 
-open class MigrationUtility
-{
+open class MigrationUtility {
 
-    /// Sets up persistent store at the given url with specified name and schema, returns store url. Will copy existing store 
+    /// Sets up persistent store at the given url with specified name and schema, returns store url. Will copy existing store
     /// file if it's found in specified template directory or will create new one otherwise.
     ///
     /// - Parameter at: Destination directory where persistent store will be created.
@@ -29,7 +28,7 @@ open class MigrationUtility
     /// - Parameter schema: Schema to use for creating new store or validating the template.
     /// - Parameter template: Template directory from where stores with the same name will be copied to destination directory.
     ///
-    /// - Returns: Created store url. 
+    /// - Returns: Created store url.
 
     public static func setUpPersistentStore(at storeUrl: URL, name: String, schema: Schema, template templateUrl: URL? = nil) -> URL? {
         let destinationStoreUrl: URL = storeUrl.appendingPathComponent("\(name).sqlite", isDirectory: false)
@@ -51,7 +50,7 @@ open class MigrationUtility
             try! fileManager.copyItem(at: storeUrl, to: destinationStoreUrl)
             try! fileManager.copyItem(at: supportUrl, to: destinationSupportUrl)
 
-            // Verify that copied store schema is compatible with current schema. 
+            // Verify that copied store schema is compatible with current schema.
 
             if !schema.compatible(with: try! Coordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: destinationStoreUrl)) {
                 return nil
@@ -71,12 +70,12 @@ open class MigrationUtility
     }
 
     /// Creates persistent stores at the specified url from the given managed object models using model index as version
-    /// identifier in the store name. 
+    /// identifier in the store name.
     ///
     /// - Returns: Created store urls for each found schema and that schema along with it.
 
     public static func setUpPersistentStores(at url: URL, schemas: [(Schema, URL)], template templateUrl: URL? = nil) -> [(URL, Schema)] {
-        return schemas.map({ (self.setUpPersistentStore(at: url, name: $1.deletingPathExtension().lastPathComponent, schema: $0, template: templateUrl)!, $0) })
+        schemas.map({ (self.setUpPersistentStore(at: url, name: $1.deletingPathExtension().lastPathComponent, schema: $0, template: templateUrl)!, $0) })
     }
 
     // MARK: -
@@ -88,9 +87,9 @@ open class MigrationUtility
     public static func data(for name: String) -> MigrationDataProtocol? {
         let className: String = "\(MigrationData.self)_\(name.replacingOccurrences(of: ".", with: "_"))"
 
-        // There is an easy and not so easy way of doing this. First is to check and just see if we have the required 
-        // class. This typically would fail, because this class would usually be in another bundle and will simply not 
-        // be recognised unless we specify module name, which we can't find out easily. Lastly we can check all loaded 
+        // There is an easy and not so easy way of doing this. First is to check and just see if we have the required
+        // class. This typically would fail, because this class would usually be in another bundle and will simply not
+        // be recognised unless we specify module name, which we can't find out easily. Lastly we can check all loaded
         // classes and try to match our one and save it's module name for later magic.
 
         if let DataClass: MigrationDataProtocol.Type = NSClassFromString(className) as? MigrationDataProtocol.Type {

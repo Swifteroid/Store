@@ -2,8 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal final class BookModel: BatchConstructableModel, Batchable
-{
+internal final class BookModel: BatchConstructableModel, Batchable {
     internal typealias Batch = BookBatch
 
     internal convenience init(id: Object.Id? = nil, title: String? = nil, publisher: String? = nil, authors: [AuthorModel]? = nil, user: UserModel? = nil) {
@@ -25,10 +24,9 @@ internal final class BookModel: BatchConstructableModel, Batchable
     internal var user: UserModel?
 }
 
-internal final class BookBatch: Batch<BookModel, BookConfiguration>
-{
+internal final class BookBatch: Batch<BookModel, BookConfiguration> {
     internal func find(title: String) throws -> Self {
-        return try self.load(configuration: Configuration(request: Request.Configuration(block: {
+        try self.load(configuration: Configuration(request: Request.Configuration(block: {
             $0.predicate = Predicate(format: "\(Key.title) == %@", title)
         })))
     }
@@ -56,8 +54,7 @@ internal final class BookBatch: Batch<BookModel, BookConfiguration>
     }
 }
 
-internal class BookConfiguration: BatchRequestConfiguration, BatchRelationshipConfiguration
-{
+internal class BookConfiguration: BatchRequestConfiguration, BatchRelationshipConfiguration {
     internal static let `default`: BookConfiguration = BookConfiguration(authors: AuthorConfiguration(books: BookConfiguration(relationship: [])))
 
     internal let authors: AuthorConfiguration?
@@ -71,10 +68,8 @@ internal class BookConfiguration: BatchRequestConfiguration, BatchRelationshipCo
     }
 }
 
-extension BookBatch
-{
-    fileprivate enum Key: String
-    {
+extension BookBatch {
+    fileprivate enum Key: String {
         case title
         case authors
         case publisher
@@ -84,8 +79,7 @@ extension BookBatch
 
 // MARK: -
 
-extension BookModel
-{
+extension BookModel {
     internal static func fake(authors: [AuthorModel]? = nil, user: UserModel? = nil) -> BookModel {
         let faker: Faker = Faker()
         return BookModel(

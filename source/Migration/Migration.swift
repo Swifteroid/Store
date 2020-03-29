@@ -8,8 +8,7 @@ import Foundation
  - http://9elements.com/io/index.php/customizing-core-data-migrations/
  - http://themainthread.com/blog/2014/03/replacing-a-core-data-store.html
  */
-open class Migration
-{
+open class Migration {
 
     /// Migrates data store at the given url using specified schemas and returns final schema used by the store, schemas must
     /// be ordered by their version.
@@ -89,7 +88,7 @@ open class Migration
         return schemas.last!
     }
 
-    /// Find existing mapping model for two schemas or create an inferred one if it doesn't exist. 
+    /// Find existing mapping model for two schemas or create an inferred one if it doesn't exist.
 
     open func mapping(from source: Schema, to destination: Schema, in bundles: [Bundle]? = nil) -> NSMappingModel {
         let bundles: [Bundle] = bundles ?? Bundle.allBundles + Bundle.allFrameworks
@@ -101,17 +100,14 @@ open class Migration
     }
 }
 
-extension Migration
-{
-    public enum Error: Swift.Error
-    {
+extension Migration {
+    public enum Error: Swift.Error {
         case noCompatibleSchema
         case file(String)
     }
 }
 
-extension DateFormatter
-{
+extension DateFormatter {
     fileprivate convenience init(dateFormat: String) {
         self.init()
         self.dateFormat = dateFormat

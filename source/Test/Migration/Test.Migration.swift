@@ -3,8 +3,7 @@ import Foundation
 import Nimble
 import XCTest
 
-internal class MigrationTestCase: ModelTestCase
-{
+internal class MigrationTestCase: ModelTestCase {
     internal func test() {
 
         // Make sure migration data is setup as expected during migration.
@@ -42,8 +41,7 @@ internal class MigrationTestCase: ModelTestCase
 
 // MARK: -
 
-extension DateFormatter
-{
+extension DateFormatter {
     fileprivate convenience init(dateFormat: String) {
         self.init()
         self.dateFormat = dateFormat

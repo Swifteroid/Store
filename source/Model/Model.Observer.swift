@@ -2,14 +2,13 @@ import CoreData
 import Foundation
 
 /// Model observer provides a way of smart global model change tracking by listening for `NSManagedObjectContext` notifications
-/// and selectively merging those changes. 
+/// and selectively merging those changes.
 ///
-/// When models are explicitly assigned it monitors only those models and never performs full fetch. When models are not set 
+/// When models are explicitly assigned it monitors only those models and never performs full fetch. When models are not set
 /// it works in an opposite way. This provides strictly selective observations and more classic fetch style, which makes better
 /// use of fetch configuration.
 
-open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration
-{
+open class ModelObserver<Model: Batchable & Hashable> where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
     public typealias Batch = Model.Batch
     public typealias Configuration = Model.Configuration
 
@@ -43,7 +42,7 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
 
     open var models: [Model] {
         get {
-            return self.observed ?? self.assigned ?? []
+            self.observed ?? self.assigned ?? []
         }
         set {
             self.assigned = newValue.isEmpty ? nil : newValue
@@ -64,7 +63,7 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
     // MARK: -
 
     /// Invoked when loading models for the first time when they are not explicitly specified and when consequently
-    /// updating them. 
+    /// updating them.
 
     open func update() {
         let batch: Batch = Batch(cache: self.cache ?? ArrayModelCache(self.observed), models: self.assigned)
@@ -82,7 +81,7 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
     open func update(context: Context, inserted: Set<Object>, deleted: Set<Object>, updated: Set<Object>) {
         guard let entity: Entity = (context.coordinator ?? Coordinator.default)?.schema.entity(for: Model.self) else { return }
 
-        // First we must figure out if any of saved changed relate to our observation. 
+        // First we must figure out if any of saved changed relate to our observation.
 
         var insertedById: [Object.Id: Object] = [:]
         var deletedById: [Object.Id: Object] = [:]
@@ -149,9 +148,9 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
             observed.remove(at: index)
         }
 
-        // Serious black magic here… typically we want to ensure that updates happen as if they were real fetches, therefore, we must 
+        // Serious black magic here… typically we want to ensure that updates happen as if they were real fetches, therefore, we must
         // make sure that fetch configuration applies to models. This is still a shady area, offset configuration doesn't get applied
-        // here, because it's not clear how it would work. Suggestions are welcome! 
+        // here, because it's not clear how it would work. Suggestions are welcome!
 
         if !insertedById.isEmpty, let configuration: Request.Configuration = (configuration as? BatchRequestConfiguration)?.request {
             if let sort: [NSSortDescriptor] = configuration.sort, !sort.isEmpty {
@@ -208,8 +207,7 @@ open class ModelObserver<Model:Batchable & Hashable> where Model.Batch.Model == 
 
 // MARK: -
 
-public struct ModelObserverMode: OptionSet
-{
+public struct ModelObserverMode: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
@@ -226,8 +224,7 @@ public struct ModelObserverMode: OptionSet
 
 // MARK: -
 
-public struct ModelObserverNotification
-{
+public struct ModelObserverNotification {
     public static let willUpdate: Notification.Name = Notification.Name("ModelObserverWillUpdateNotification")
     public static let didUpdate: Notification.Name = Notification.Name("ModelObserverDidUpdateNotification")
 }

@@ -6,8 +6,7 @@ import Foundation
 ///
 /// - todo: What about cache when saving / deleting models?
 
-open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
-{
+open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol {
     public required init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
         self.coordinator = coordinator
         self.context = context
@@ -23,7 +22,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
 
     open var cache: ModelCache?
 
-    /// Explicitly defined or resulted set of models, which may change after each operation, thus, two identical operations invoked 
+    /// Explicitly defined or resulted set of models, which may change after each operation, thus, two identical operations invoked
     /// consecutively may product different result, because their input may differ.
 
     open var models: [Model]
@@ -57,7 +56,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
     open func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil, update: Bool? = nil) throws -> Model {
         if let model: Model = (Model.self as? Store.BatchConstructableModelProtocol.Type)?.init(id: object.objectID) as? Model {
 
-            // This is very important that newly constructed and identified model is added to cache before updating, otherwise 
+            // This is very important that newly constructed and identified model is added to cache before updating, otherwise
             // it may result in recursion when construction interdependent relationships.
 
             cache?.add(model: model)
@@ -78,7 +77,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
 
     @discardableResult open func load(configuration: Configuration? = nil) throws -> Self {
 
-        // Cache explicitly specified by the batch has higher priority over one specified in cacheable context.  
+        // Cache explicitly specified by the batch has higher priority over one specified in cacheable context.
 
         let transaction: Transaction? = Transaction.current
         let context: Context = self.context ?? transaction?.context ?? CacheableContext(coordinator: (self.coordinator ?? Coordinator.default), concurrency: .privateQueueConcurrencyType, cache: self.cache)
@@ -149,7 +148,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
     }
 
     @discardableResult open func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
-        return model
+        model
     }
 
     open func prepare(request: Request, configuration: Configuration? = nil) -> Request {
@@ -196,7 +195,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
                     }
                 }
 
-                // Update ids of inserted models, this is done separately, because ids become available only after 
+                // Update ids of inserted models, this is done separately, because ids become available only after
                 // context gets saved. If we're inside a transaction, we tell that son of a bitch to identify our
                 // models whenever it completes.
 
@@ -224,7 +223,7 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
     }
 
     @discardableResult open func update(object: Object, with model: Model, configuration: Configuration? = nil) throws -> Object {
-        return object
+        object
     }
 
     // MARK: -
@@ -263,13 +262,11 @@ open class Batch<Model: ModelProtocol & Hashable, Configuration>: BatchProtocol
     }
 }
 
-extension Batch
-{
+extension Batch {
 
     /// - todo: Is this the way to do it?
 
-    public enum Error: Swift.Error
-    {
+    public enum Error: Swift.Error {
         case construct
         case load([Model])
         case save([Model])

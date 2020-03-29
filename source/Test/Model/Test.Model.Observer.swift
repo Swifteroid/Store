@@ -3,8 +3,7 @@ import Nimble
 import Store
 import XCTest
 
-internal class ModelObserverTestCase: ModelTestCase
-{
+internal class ModelObserverTestCase: ModelTestCase {
     internal func testObservation() {
         let observer: ModelObserver<BookModel> = ModelObserver()
         let model: BookModel
@@ -37,7 +36,7 @@ internal class ModelObserverTestCase: ModelTestCase
 
         expect(observer.models).to(equal(users))
 
-        // Manually sort users in accordance with fetch sort configuration. 
+        // Manually sort users in accordance with fetch sort configuration.
 
         users.sort(by: { !$0.identified && $1.identified || $0.identified && $1.identified && $0.name > $1.name }) // G, I, E, C, A
 

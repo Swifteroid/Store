@@ -3,8 +3,7 @@ import Foundation
 import Nimble
 import Store
 
-internal class ModelRelationshipTestCase: ModelTestCase
-{
+internal class ModelRelationshipTestCase: ModelTestCase {
     internal func testRelationship() {
         let books: [BookModel] = (0 ..< 5).map({ _ in try! BookModel.fake().save() })
         let titles = equal(books.map({ $0.title }).sorted())
@@ -62,7 +61,7 @@ internal class ModelRelationshipTestCase: ModelTestCase
         let authors: [AuthorModel] = (0 ..< 3).map({ _ in try! AuthorModel.fake().save() })
         let books: [BookModel] = [
             try! BookModel.fake(authors: Array(authors[0 ..< authors.count - 1])).save(),
-            try! BookModel.fake(authors: Array(authors[0 + 1 ..< authors.count])).save()
+            try! BookModel.fake(authors: Array(authors[0 + 1 ..< authors.count])).save(),
         ]
 
         var book: BookModel

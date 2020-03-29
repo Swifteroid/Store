@@ -2,8 +2,7 @@ import Store
 import Foundation
 import Nimble
 
-internal class TransactionTestCase: TestCase, PersistentStoreTestCase
-{
+internal class TransactionTestCase: TestCase, PersistentStoreTestCase {
     internal static let schemaUrl: URL = PathUtility.librarySchemaUrl
 
     internal func test() {
@@ -42,7 +41,7 @@ internal class TransactionTestCase: TestCase, PersistentStoreTestCase
         })
     }
 
-    private func measure(description: String, block: () -> ()) {
+    private func measure(description: String, block: () -> Void) {
         let date: Date = Date()
         let interval: TimeInterval
 

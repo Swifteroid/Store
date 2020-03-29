@@ -1,7 +1,6 @@
 import Foundation
 
-internal class PathUtility
-{
+internal class PathUtility {
 
     /*
     Requires bundle definition in injection and `Path.Root` value defined in `Info.plist`.
@@ -13,7 +12,7 @@ internal class PathUtility
     // MARK: -
 
     internal static var testUrl: URL {
-        return self.root.appendingPathComponent("test", isDirectory: true)
+        self.root.appendingPathComponent("test", isDirectory: true)
     }
 
     internal static func testUrl(directory: String? = nil, file: String? = nil) -> URL {
@@ -29,7 +28,7 @@ internal class PathUtility
     Returns output directory for test products.
     */
     internal static var outputUrl: URL {
-        return self.root.appendingPathComponent("product/test", isDirectory: true)
+        self.root.appendingPathComponent("product/test", isDirectory: true)
     }
 
     internal static func outputUrl(directory: String? = nil, file: String? = nil, cleanup: Bool = false) -> URL {
@@ -46,10 +45,10 @@ internal class PathUtility
     // MARK: -
 
     internal static var librarySchemaUrl: URL {
-        return Bundle(for: self).url(forResource: "library", withExtension: "momd")!
+        Bundle(for: self).url(forResource: "library", withExtension: "momd")!
     }
 
     internal static var genericSchemaUrl: URL {
-        return Bundle(for: self).url(forResource: "generic", withExtension: "momd")!
+        Bundle(for: self).url(forResource: "generic", withExtension: "momd")!
     }
 }

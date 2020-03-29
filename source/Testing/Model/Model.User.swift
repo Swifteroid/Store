@@ -2,8 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal final class UserModel: BatchConstructableModel, Batchable
-{
+internal final class UserModel: BatchConstructableModel, Batchable {
     internal typealias Batch = UserBatch
 
     internal convenience init(id: Object.Id? = nil, name: String? = nil, address: String? = nil, books: [BookModel]? = nil) {
@@ -23,8 +22,7 @@ internal final class UserModel: BatchConstructableModel, Batchable
     internal var books: [BookModel] = []
 }
 
-internal final class UserBatch: Batch<UserModel, UserConfiguration>
-{
+internal final class UserBatch: Batch<UserModel, UserConfiguration> {
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         model.name = object.value(for: Key.name)
         model.address = object.value(for: Key.address)
@@ -44,15 +42,12 @@ internal final class UserBatch: Batch<UserModel, UserConfiguration>
     }
 }
 
-internal struct UserConfiguration: BatchRequestConfiguration
-{
+internal struct UserConfiguration: BatchRequestConfiguration {
     internal var request: Request.Configuration?
 }
 
-extension UserBatch
-{
-    fileprivate enum Key: String
-    {
+extension UserBatch {
+    fileprivate enum Key: String {
         case name
         case address
         case books
@@ -61,8 +56,7 @@ extension UserBatch
 
 // MARK: -
 
-extension UserModel
-{
+extension UserModel {
     internal static func fake(name: String? = nil, books: [BookModel]? = nil) -> UserModel {
         let faker: Faker = Faker()
         return UserModel(
@@ -73,9 +67,8 @@ extension UserModel
     }
 }
 
-extension UserModel: CustomStringConvertible
-{
+extension UserModel: CustomStringConvertible {
     public var description: String {
-        return "\(type(of: self))(name: \(self.name ?? ""))"
+        "\(type(of: self))(name: \(self.name ?? ""))"
     }
 }

@@ -4,8 +4,7 @@ public typealias Coordinator = NSPersistentStoreCoordinator
 
 private var coordinator: Coordinator!
 
-extension Coordinator
-{
+extension Coordinator {
     public convenience init(schema: Schema) {
         self.init(managedObjectModel: schema)
     }
@@ -16,7 +15,7 @@ extension Coordinator
     when migration fails and specifies whether store should be deleted, so it can be recreated. Inside it you can ask user if he really wants
     to delete broken data file or attempt to repair it.
     */
-    public convenience init?(store storeUrl: URL, schema schemaUrl: URL, handler: () -> (Bool)) {
+    public convenience init?(store storeUrl: URL, schema schemaUrl: URL, handler: () -> Bool) {
         let fileManager: FileManager = FileManager.default
         let schemas: [Schema] = Schema.schemas(at: schemaUrl).map({ $0.0 })
         var schema: Schema?
@@ -60,12 +59,12 @@ extension Coordinator
     // MARK: -
 
     public static var `default`: Coordinator! {
-        get { return coordinator }
+        get { coordinator }
         set { coordinator = newValue }
     }
 
     open var schema: Schema {
-        return self.managedObjectModel
+        self.managedObjectModel
     }
 
     // MARK: -
@@ -75,7 +74,7 @@ extension Coordinator
     */
     @nonobjc open class func url(for name: String, file: String? = nil) -> URL {
 
-        // The directory the application uses to store the Core Data store file. This code uses a file 
+        // The directory the application uses to store the Core Data store file. This code uses a file
         // named "Store.sqlite" in the application data directory.
 
         let url: URL = try! FileManager.default.url(for: FileManager.SearchPathDirectory.applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask, appropriateFor: nil, create: true)

@@ -1,10 +1,9 @@
 import CoreData
 
 /// Todo: while this works and it's cool, the biggest issue seems to be the number of calls we make to retrieve objects. Perhaps a better
-/// todo: approach would be to introduce `Transactional` model protocol and store objects there until transaction is complete. 
+/// todo: approach would be to introduce `Transactional` model protocol and store objects there until transaction is complete.
 
-internal class Transaction
-{
+internal class Transaction {
     internal fileprivate(set) static var current: Transaction?
 
     // MARK: -
@@ -24,18 +23,18 @@ internal class Transaction
 
     private var objects: [AnyHashable: Object] = [:]
 
-    internal func save<Model:ModelProtocol & Hashable>(model: Model, object: Object) {
+    internal func save<Model: ModelProtocol & Hashable>(model: Model, object: Object) {
         self.objects[AnyHashable(model)] = object
     }
 
-    internal func save<Model:ModelProtocol>(models: [Model: Object]) {
+    internal func save<Model: ModelProtocol>(models: [Model: Object]) {
         for (model, object) in models {
             self.objects[AnyHashable(model)] = object
         }
     }
 
-    internal func object<Model:ModelProtocol & Hashable>(for model: Model) -> Object? {
-        return self.objects[AnyHashable(model)]
+    internal func object<Model: ModelProtocol & Hashable>(for model: Model) -> Object? {
+        self.objects[AnyHashable(model)]
     }
 
     // MARK: -
@@ -55,7 +54,7 @@ internal class Transaction
     }
 }
 
-public func transaction(coordinator: Coordinator? = nil, context: Context? = nil, _ block: () throws -> ()) throws {
+public func transaction(coordinator: Coordinator? = nil, context: Context? = nil, _ block: () throws -> Void) throws {
     if let _ = Transaction.current { throw Transaction.Error.nestedTransaction }
     let transaction: Transaction = Transaction(coordinator: coordinator, context: context)
 
@@ -64,10 +63,8 @@ public func transaction(coordinator: Coordinator? = nil, context: Context? = nil
     try transaction.end()
 }
 
-extension Transaction
-{
-    internal enum Error: Swift.Error
-    {
+extension Transaction {
+    internal enum Error: Swift.Error {
 
         /// We don't support nested transactions at the moment.
         case nestedTransaction

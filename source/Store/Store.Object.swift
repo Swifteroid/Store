@@ -2,8 +2,7 @@ import CoreData
 
 public typealias Object = NSManagedObject
 
-extension Object
-{
+extension Object {
     public typealias Id = NSManagedObjectID
 }
 
@@ -11,26 +10,22 @@ extension Object
 
 // Provides access to common set methods.
 
-internal protocol RelationshipSet
-{
+internal protocol RelationshipSet {
     func removeAllObjects()
     func addObjects(from array: [Any])
 }
 
-extension NSMutableSet: RelationshipSet
-{
+extension NSMutableSet: RelationshipSet {
 }
 
-extension NSMutableOrderedSet: RelationshipSet
-{
+extension NSMutableOrderedSet: RelationshipSet {
 }
 
 // MARK: kvc
 
-extension Object
-{
+extension Object {
     @discardableResult public func value<Value>(set value: Value?, for key: String, transform: ((Value) -> Any?)? = nil) -> Self {
-        if let value: Value = value, let transform: ((Value) -> Any?) = transform {
+        if let value: Value = value, let transform: (Value) -> Any? = transform {
             self.setValue(transform(value), forKey: key)
         } else {
             self.setValue(value, forKey: key)
@@ -46,13 +41,13 @@ extension Object
     }
 
     public func value<Value>(for key: String) -> Value? {
-        return self.value(forKey: key) as! Value?
+        self.value(forKey: key) as! Value?
     }
 
     public func value<Raw, Transformed>(for key: String, transform: ((Raw) -> Transformed?)?) -> Transformed? {
         let value: Raw? = self.value(forKey: key) as! Raw?
 
-        if let value: Raw = value, let transform: ((Raw) -> Transformed?) = transform {
+        if let value: Raw = value, let transform: (Raw) -> Transformed? = transform {
             return transform(value)
         } else {
             return value as! Transformed?
@@ -60,12 +55,11 @@ extension Object
     }
 }
 
-/// MARK: RawRepresentable
+// MARK: RawRepresentable
 
-extension Object
-{
-    @discardableResult public func value<Key:RawRepresentable, Value>(set value: Value?, for key: Key, transform: ((Value) -> Any?)? = nil) -> Self where Key.RawValue == String {
-        if let value: Value = value, let transform: ((Value) -> Any?) = transform {
+extension Object {
+    @discardableResult public func value<Key: RawRepresentable, Value>(set value: Value?, for key: Key, transform: ((Value) -> Any?)? = nil) -> Self where Key.RawValue == String {
+        if let value: Value = value, let transform: (Value) -> Any? = transform {
             self.setValue(transform(value), forKey: key.rawValue)
         } else {
             self.setValue(value, forKey: key.rawValue)
@@ -73,21 +67,21 @@ extension Object
         return self
     }
 
-    @discardableResult public func value<Key:RawRepresentable>(set value: [Key: Any?]) -> Self where Key.RawValue == String {
+    @discardableResult public func value<Key: RawRepresentable>(set value: [Key: Any?]) -> Self where Key.RawValue == String {
         for (key, value) in value {
             self.setValue(value, forKey: key.rawValue)
         }
         return self
     }
 
-    public func value<Key:RawRepresentable, Value>(for key: Key) -> Value? where Key.RawValue == String {
-        return self.value(forKey: key.rawValue) as! Value?
+    public func value<Key: RawRepresentable, Value>(for key: Key) -> Value? where Key.RawValue == String {
+        self.value(forKey: key.rawValue) as! Value?
     }
 
-    public func value<Key:RawRepresentable, Raw, Transformed>(for key: Key, transform: ((Raw) -> Transformed?)?) -> Transformed? where Key.RawValue == String {
+    public func value<Key: RawRepresentable, Raw, Transformed>(for key: Key, transform: ((Raw) -> Transformed?)?) -> Transformed? where Key.RawValue == String {
         let value: Raw? = self.value(forKey: key.rawValue) as! Raw?
 
-        if let value: Raw = value, let transform: ((Raw) -> Transformed?) = transform {
+        if let value: Raw = value, let transform: (Raw) -> Transformed? = transform {
             return transform(value)
         } else {
             return value as! Transformed?
@@ -97,14 +91,13 @@ extension Object
 
 // MARK: relationship
 
-extension Object
-{
+extension Object {
     @nonobjc open func relationship(for name: String) -> [Object] {
-        return self.mutableSetValue(forKey: name).allObjects as! [Object]
+        self.mutableSetValue(forKey: name).allObjects as! [Object]
     }
 
     @nonobjc open func relationship(for name: String) -> Object? {
-        return self.value(forKey: name) as! Object?
+        self.value(forKey: name) as! Object?
     }
 
     // MARK: -
@@ -114,7 +107,7 @@ extension Object
     /// - parameter construct: construct model instead of using cache.
     /// - parameter update: update cached model.
 
-    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
+    open func relationship<Model: Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         guard let relationship = self.entity.relationshipsByName[name] else { throw RelationshipError.undefined }
 
         // Todo: find a way to not create new batch every single time. Perhaps move this into entity?
@@ -129,7 +122,7 @@ extension Object
         for object in relationship.isOrdered ? self.mutableOrderedSetValue(forKey: name).array : self.mutableSetValue(forKey: name).allObjects {
 
             // This is un-elegant as fuck, but the fastest way to iterate over set – tried using both native `NSFastEnumerationIterator`
-            // and casted array… 
+            // and casted array…
 
             let object: Object = object as! Object
 
@@ -152,7 +145,7 @@ extension Object
     /// - parameter construct: construct model instead of using cache.
     /// - parameter update: update cached model.
 
-    open func relationship<Model:Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
+    open func relationship<Model: Batchable>(for name: String, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         guard let object: Object = self.value(for: name) else { return nil }
         let cache: ModelCache? = cache ?? (self.managedObjectContext as? CacheableContext)?.cache
         let construct: Bool? = construct ?? (configuration as? BatchRelationshipConfiguration)?.relationship?.contains(.construct)
@@ -190,7 +183,7 @@ extension Object
 
     /// Sets new relationship models.
 
-    open func relationship<Model:ModelProtocol & Hashable>(set models: [Model], for name: String) throws {
+    open func relationship<Model: ModelProtocol & Hashable>(set models: [Model], for name: String) throws {
         let transaction: Transaction? = Transaction.current
         guard let context: Context = transaction?.context ?? self.managedObjectContext else { throw RelationshipError.noContext }
         var objects: [Object] = []
@@ -206,7 +199,7 @@ extension Object
         try self.relationship(set: objects, for: name)
     }
 
-    open func relationship<Model:ModelProtocol & Hashable>(set model: Model?, for name: String) throws {
+    open func relationship<Model: ModelProtocol & Hashable>(set model: Model?, for name: String) throws {
         if let model: Model = model {
             let transaction: Transaction? = Transaction.current
             guard let context: Context = transaction?.context ?? self.managedObjectContext else { throw RelationshipError.noContext }
@@ -222,55 +215,52 @@ extension Object
     }
 }
 
-/// MARK: RawRepresentable
+// MARK: RawRepresentable
 
-extension Object
-{
-    @nonobjc open func relationship<Name:RawRepresentable>(for name: Name) -> [Object] where Name.RawValue == String {
-        return self.mutableSetValue(forKey: name.rawValue).allObjects as! [Object]
+extension Object {
+    @nonobjc open func relationship<Name: RawRepresentable>(for name: Name) -> [Object] where Name.RawValue == String {
+        self.mutableSetValue(forKey: name.rawValue).allObjects as! [Object]
     }
 
-    @nonobjc open func relationship<Name:RawRepresentable>(for name: Name) -> Object? where Name.RawValue == String {
-        return self.value(forKey: name.rawValue) as! Object?
+    @nonobjc open func relationship<Name: RawRepresentable>(for name: Name) -> Object? where Name.RawValue == String {
+        self.value(forKey: name.rawValue) as! Object?
     }
 
-    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Name.RawValue == String, Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
-        return try self.relationship(for: name.rawValue, configuration: configuration, cache: cache, construct: construct, update: update)
+    open func relationship<Name: RawRepresentable, Model: Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> [Model] where Name.RawValue == String, Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
+        try self.relationship(for: name.rawValue, configuration: configuration, cache: cache, construct: construct, update: update)
     }
 
-    open func relationship<Name:RawRepresentable, Model:Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Name.RawValue == String, Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
-        return try self.relationship(for: name.rawValue, configuration: configuration, cache: cache, construct: construct, update: update)
+    open func relationship<Name: RawRepresentable, Model: Batchable>(for name: Name, configuration: Model.Configuration? = nil, cache: ModelCache? = nil, construct: Bool? = nil, update: Bool? = nil) throws -> Model? where Name.RawValue == String, Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
+        try self.relationship(for: name.rawValue, configuration: configuration, cache: cache, construct: construct, update: update)
     }
 
-    @nonobjc open func relationship<Name:RawRepresentable>(set objects: [Object], for name: Name) throws where Name.RawValue == String {
+    @nonobjc open func relationship<Name: RawRepresentable>(set objects: [Object], for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: objects, for: name.rawValue)
     }
 
-    @nonobjc open func relationship<Name:RawRepresentable>(set object: Object?, for name: Name) where Name.RawValue == String {
+    @nonobjc open func relationship<Name: RawRepresentable>(set object: Object?, for name: Name) where Name.RawValue == String {
         self.relationship(set: object, for: name.rawValue)
     }
 
-    open func relationship<Name:RawRepresentable, Model:ModelProtocol & Hashable>(set models: [Model], for name: Name) throws where Name.RawValue == String {
+    open func relationship<Name: RawRepresentable, Model: ModelProtocol & Hashable>(set models: [Model], for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: models, for: name.rawValue)
     }
 
-    open func relationship<Name:RawRepresentable, Model:ModelProtocol & Hashable>(set model: Model?, for name: Name) throws where Name.RawValue == String {
+    open func relationship<Name: RawRepresentable, Model: ModelProtocol & Hashable>(set model: Model?, for name: Name) throws where Name.RawValue == String {
         try self.relationship(set: model, for: name.rawValue)
     }
 }
 
 // MARK: -
 
-extension Object
-{
-    public enum RelationshipError: Error
-    {
+extension Object {
+    public enum RelationshipError: Error {
 
         /// Managed object upon which a relationship is being updated has no context making it impossible to retrieve model
         /// managed objects.
         case noContext
 
-        /// Cannot retrieve model's managed object, it's probably not saved or got deleted. 
+        /// Cannot retrieve model's managed object, it's probably not saved or got deleted.
         case noObject
 
         /// The specified relationship doesn't exist in entity.
@@ -280,8 +270,7 @@ extension Object
 
 // MARK: -
 
-extension String
-{
+extension String {
     internal init(id: NSManagedObjectID) {
         self = id.uriRepresentation().absoluteString
     }

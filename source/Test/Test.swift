@@ -1,8 +1,7 @@
 import Store
 import XCTest
 
-internal class TestCase: XCTestCase
-{
+internal class TestCase: XCTestCase {
     override internal class func setUp() {
         if let StoreTestCase: PersistentStoreTestCase.Type = self as? PersistentStoreTestCase.Type {
             StoreTestCase.setUp()
@@ -18,13 +17,11 @@ internal class TestCase: XCTestCase
 
 // MARK: -
 
-internal protocol PersistentStoreTestCase
-{
+internal protocol PersistentStoreTestCase {
     static var schemaUrl: URL { get }
 }
 
-extension PersistentStoreTestCase
-{
+extension PersistentStoreTestCase {
     internal static func setUp() {
         let fileManager: FileManager = FileManager.default
         let storeUrl: URL = Coordinator.url(for: "Store - Test")

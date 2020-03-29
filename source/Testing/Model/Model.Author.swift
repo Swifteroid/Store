@@ -2,8 +2,7 @@ import CoreData
 import Fakery
 import Store
 
-internal final class AuthorModel: BatchConstructableModel, Batchable
-{
+internal final class AuthorModel: BatchConstructableModel, Batchable {
     internal typealias Batch = AuthorBatch
 
     internal convenience init(id: Object.Id? = nil, firstName: String? = nil, lastName: String? = nil, books: [BookModel]? = nil) {
@@ -23,8 +22,7 @@ internal final class AuthorModel: BatchConstructableModel, Batchable
     internal var books: [BookModel] = []
 }
 
-internal final class AuthorBatch: Batch<AuthorModel, AuthorConfiguration>
-{
+internal final class AuthorBatch: Batch<AuthorModel, AuthorConfiguration> {
     override internal func update(model: Model, with object: Object, configuration: Configuration? = nil) throws -> Model {
         let cfg: Configuration = configuration ?? Configuration.default
 
@@ -46,8 +44,7 @@ internal final class AuthorBatch: Batch<AuthorModel, AuthorConfiguration>
     }
 }
 
-internal class AuthorConfiguration: BatchRelationshipConfiguration
-{
+internal class AuthorConfiguration: BatchRelationshipConfiguration {
     internal static let `default`: AuthorConfiguration = AuthorConfiguration(books: BookConfiguration(authors: AuthorConfiguration(relationship: [])))
 
     internal let books: BookConfiguration?
@@ -59,10 +56,8 @@ internal class AuthorConfiguration: BatchRelationshipConfiguration
     }
 }
 
-extension AuthorBatch
-{
-    fileprivate enum Key: String
-    {
+extension AuthorBatch {
+    fileprivate enum Key: String {
         case firstName
         case lastName
         case books
@@ -71,8 +66,7 @@ extension AuthorBatch
 
 // MARK: -
 
-extension AuthorModel
-{
+extension AuthorModel {
     internal static func fake(books: [BookModel]? = nil) -> AuthorModel {
         let faker: Faker = Faker()
         return AuthorModel(
@@ -83,9 +77,8 @@ extension AuthorModel
     }
 }
 
-extension AuthorModel: CustomStringConvertible
-{
+extension AuthorModel: CustomStringConvertible {
     public var description: String {
-        return "\(type(of: self))(firstName: \(self.firstName ?? ""), lastName: \(self.lastName ?? ""))"
+        "\(type(of: self))(firstName: \(self.firstName ?? ""), lastName: \(self.lastName ?? ""))"
     }
 }

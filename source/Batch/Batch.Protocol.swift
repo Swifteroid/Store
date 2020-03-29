@@ -1,7 +1,6 @@
 import Foundation
 
-public protocol BatchProtocol: class
-{
+public protocol BatchProtocol: class {
     associatedtype Model: ModelProtocol
     associatedtype Configuration
 
@@ -31,10 +30,9 @@ public protocol BatchProtocol: class
 
 // MARK: -
 
-extension BatchProtocol
-{
+extension BatchProtocol {
     public func exists(model: Model) -> Bool {
-        return self.exist(models: [model])
+        self.exist(models: [model])
     }
 
     public init(coordinator: Coordinator? = nil, context: Context? = nil, cache: ModelCache? = nil, models: [Model]? = nil) {
@@ -44,27 +42,25 @@ extension BatchProtocol
     // MARK: -
 
     func construct(with object: Object, configuration: Configuration? = nil, cache: ModelCache? = nil, update: Bool? = nil) throws -> Model {
-        return try self.construct(with: object, configuration: configuration, cache: cache, update: update)
+        try self.construct(with: object, configuration: configuration, cache: cache, update: update)
     }
 }
 
 // MARK: -
 
 /// Batchable protocol is needed to separate associated batch type form the model. Batch deals solely with model, but concrete
-/// models do implement batchable protocol purely to simplify individual CRUD operations. 
+/// models do implement batchable protocol purely to simplify individual CRUD operations.
 
-public protocol Batchable: ModelProtocol
-{
+public protocol Batchable: ModelProtocol {
     associatedtype Batch: BatchProtocol
     associatedtype Configuration = Self.Batch.Configuration
 
     var exists: Bool { get }
 }
 
-extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Configuration
-{
+extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Configuration {
     public var exists: Bool {
-        return (Batch(models: []) as Batch).exist(models: [self])
+        (Batch(models: []) as Batch).exist(models: [self])
     }
 
     @discardableResult public func load(configuration: Configuration? = nil) throws -> Self {
@@ -85,15 +81,12 @@ extension Batchable where Batch.Model == Self, Batch.Configuration == Self.Confi
 
 // MARK: -
 
-public struct BatchNotification
-{
+public struct BatchNotification {
     public static let willSaveContext: Notification.Name = Notification.Name("BatchWillSaveNotification")
 }
 
-extension BatchNotification
-{
-    public struct Key
-    {
+extension BatchNotification {
+    public struct Key {
         public static let context: String = "context"
     }
 }

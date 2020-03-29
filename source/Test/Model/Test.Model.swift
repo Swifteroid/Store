@@ -2,11 +2,10 @@ import Foundation
 import Nimble
 import Store
 
-internal class ModelTestCase: TestCase, PersistentStoreTestCase
-{
+internal class ModelTestCase: TestCase, PersistentStoreTestCase {
     internal static let schemaUrl: URL = PathUtility.librarySchemaUrl
 
-    internal func test<Model:Batchable>(_ models: [Model], _ test: (Model) -> ()) where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
+    internal func test<Model: Batchable>(_ models: [Model], _ test: (Model) -> Void) where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         var models: [Model] = models
         var batch: Model.Batch
 
@@ -31,9 +30,9 @@ internal class ModelTestCase: TestCase, PersistentStoreTestCase
         expect(batch.models).to(beEmpty())
     }
 
-    /// Take a single model and ensure it passes the synthetic test. 
+    /// Take a single model and ensure it passes the synthetic test.
 
-    private func test<Model:Batchable>(_ model: Model) where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
+    private func test<Model: Batchable>(_ model: Model) where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         expect(model.exists).to(beFalse())
         try! model.save()
         expect(model.exists).toNot(beFalse())

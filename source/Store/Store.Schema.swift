@@ -8,26 +8,25 @@ public typealias Schema = NSManagedObjectModel
 private let entityNameExpression = try! NSRegularExpression(pattern: "(\\w+)(?:Model|Batch)")
 private var entityNameCache: [String: String] = [:]
 
-extension Schema
-{
+extension Schema {
     open func entity(for name: String) -> Entity? {
-        return self.entitiesByName[name]
+        self.entitiesByName[name]
     }
 
-    open func entity<Model:ModelProtocol>(for model: Model) -> Entity? {
-        return entity(for: type(of: model))
+    open func entity<Model: ModelProtocol>(for model: Model) -> Entity? {
+        entity(for: type(of: model))
     }
 
-    open func entity<Model:ModelProtocol>(for model: Model.Type) -> Entity? {
-        return entity(for: model)
+    open func entity<Model: ModelProtocol>(for model: Model.Type) -> Entity? {
+        entity(for: model)
     }
 
-    open func entity<Batch:BatchProtocol>(for batch: Batch) -> Entity? {
-        return entity(for: type(of: batch))
+    open func entity<Batch: BatchProtocol>(for batch: Batch) -> Entity? {
+        entity(for: type(of: batch))
     }
 
-    open func entity<Batch:BatchProtocol>(for batch: Batch.Type) -> Entity? {
-        return entity(for: batch)
+    open func entity<Batch: BatchProtocol>(for batch: Batch.Type) -> Entity? {
+        entity(for: batch)
     }
 
     private func entity(for type: Any.Type) -> Entity? {
@@ -49,7 +48,7 @@ extension Schema
     // MARK: -
 
     open func compatible(with metadata: [String: Any]) -> Bool {
-        return self.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+        self.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
     }
 
     // MARK: -
