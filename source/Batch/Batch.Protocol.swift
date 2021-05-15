@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol BatchProtocol: class {
+public protocol BatchProtocol: AnyObject {
     associatedtype Model: ModelProtocol
     associatedtype Configuration
 

@@ -1,7 +1,7 @@
 /// Provides means for caching already loaded modes. Needed mostly for interrelated model load recursion handling, but can be used
 /// simply to reuse already existing models during the load, like `ModelObserver<…>` does.
 
-public protocol ModelCache: class {
+public protocol ModelCache: AnyObject {
 
     func model<Model: ModelProtocol>(with id: Object.Id) -> Model?
 

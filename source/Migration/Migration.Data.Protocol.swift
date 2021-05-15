@@ -4,7 +4,7 @@ import CoreData
 /// testing data. Override set up method with custom logic to insert or update stored data before attempting
 /// to migrate it.
 
-public protocol MigrationDataProtocol: class {
+public protocol MigrationDataProtocol: AnyObject {
     init()
 
     /// Sets up schema before it gets used to initialise the coordinator.
