@@ -143,7 +143,7 @@
 		E605B6521E86761A00A0E60A /* 1.0.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.0.xcdatamodel; sourceTree = "<group>"; };
 		E605B6531E86761A00A0E60A /* 1.0.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.0.1.xcdatamodel; sourceTree = "<group>"; };
 		E60746411E83949000B75E21 /* Store.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Store.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E607464A1E83949000B75E21 /* Store - Test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Store - Test.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E607464A1E83949000B75E21 /* Store-Test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Store-Test.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64105FA1EE0993A00FAC57D /* generic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = generic.xcdatamodel; sourceTree = "<group>"; };
 		E642BFD91E87A9630001C699 /* 1.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = 1.1.0.xcdatamodel; sourceTree = "<group>"; };
 		E64D9D561EF126CC0073E164 /* library.1.1.0.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = library.1.1.0.xcmappingmodel; sourceTree = "<group>"; };
@@ -434,7 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				E60746411E83949000B75E21 /* Store.framework */,
-				E607464A1E83949000B75E21 /* Store - Test.xctest */,
+				E607464A1E83949000B75E21 /* Store-Test.xctest */,
 			);
 			name = build;
 			path = ..;
@@ -471,9 +471,9 @@
 			productReference = E60746411E83949000B75E21 /* Store.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		E60746491E83949000B75E21 /* Store - Test */ = {
+		E60746491E83949000B75E21 /* Store-Test */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E60746581E83949000B75E21 /* Build configuration list for PBXNativeTarget "Store - Test" */;
+			buildConfigurationList = E60746581E83949000B75E21 /* Build configuration list for PBXNativeTarget "Store-Test" */;
 			buildPhases = (
 				E60746461E83949000B75E21 /* Sources */,
 				E60746471E83949000B75E21 /* Frameworks */,
@@ -484,9 +484,9 @@
 			dependencies = (
 				E607464D1E83949000B75E21 /* PBXTargetDependency */,
 			);
-			name = "Store - Test";
+			name = "Store-Test";
 			productName = StoreTests;
-			productReference = E607464A1E83949000B75E21 /* Store - Test.xctest */;
+			productReference = E607464A1E83949000B75E21 /* Store-Test.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -524,7 +524,7 @@
 			projectRoot = "";
 			targets = (
 				E60746401E83949000B75E21 /* Store */,
-				E60746491E83949000B75E21 /* Store - Test */,
+				E60746491E83949000B75E21 /* Store-Test */,
 			);
 		};
 /* End PBXProject section */
@@ -664,7 +664,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E60746581E83949000B75E21 /* Build configuration list for PBXNativeTarget "Store - Test" */ = {
+		E60746581E83949000B75E21 /* Build configuration list for PBXNativeTarget "Store-Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E60746551E83949000B75E21 /* Debug */,

@@ -10,7 +10,7 @@
             <plist version="1.0">
                 <dict>
                     <key>NSPersistenceFrameworkVersion</key>
-                    <integer>754</integer>
+                    <integer>1048</integer>
                     <key>NSStoreModelVersionHashes</key>
                     <dict>
                         <key>XDDevAttributeMapping</key>
@@ -34,6 +34,8 @@
 		akYY9LhehVA/mCb4ATLWuI9XGLcjpm14wWL1oEBtIcs=
 		</data>
                     </dict>
+                    <key>NSStoreModelVersionHashesDigest</key>
+                    <string>+Hmc2uYZK6og+Pvx5GUJ7oW75UG4V/ksQanTjfTKUnxyGWJRMtB5tIRgVwGsrd7lz/QR57++wbvWsr6nxwyS0A==</string>
                     <key>NSStoreModelVersionHashesVersion</key>
                     <integer>3</integer>
                     <key>NSStoreModelVersionIdentifiers</key>
@@ -45,14 +47,14 @@
         </metadata>
     </databaseInfo>
     <object type="XDDEVENTITYMAPPING" id="z102">
-        <attribute name="migrationpolicyclassname" type="string">Store___Test.MigrationPolicy_1_1_0</attribute>
+        <attribute name="migrationpolicyclassname" type="string">Store_Test.MigrationPolicy_1_1_0</attribute>
         <attribute name="sourcename" type="string">Book</attribute>
         <attribute name="mappingtypename" type="string">Undefined</attribute>
         <attribute name="mappingnumber" type="int16">2</attribute>
         <attribute name="destinationname" type="string">Book</attribute>
         <attribute name="autogenerateexpression" type="bool">1</attribute>
         <relationship name="mappingmodel" type="1/1" destination="XDDEVMAPPINGMODEL" idrefs="z110"></relationship>
-        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z111 z109 z108"></relationship>
+        <relationship name="attributemappings" type="0/0" destination="XDDEVATTRIBUTEMAPPING" idrefs="z108 z111 z109"></relationship>
         <relationship name="relationshipmappings" type="0/0" destination="XDDEVRELATIONSHIPMAPPING" idrefs="z103"></relationship>
     </object>
     <object type="XDDEVRELATIONSHIPMAPPING" id="z103">

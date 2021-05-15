@@ -25,7 +25,7 @@ fileprivate struct Configuration: BatchRequestConfiguration {
 }
 
 fileprivate class Model: BatchConstructableModel, Batchable {
-    typealias Batch = Store___Test.Batch
+    typealias Batch = Store_Test.Batch
 
     public var exists: Bool {
         (Batch(models: []) as Batch).exist(models: [self])
