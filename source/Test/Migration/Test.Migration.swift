@@ -32,7 +32,7 @@ internal class MigrationTestCase: ModelTestCase {
         // Todo: running this without errors is great, but would be good to have actual tests to verify it has worked.
 
         for url in stores.map({ $0.0 }) {
-            expect(expression: { try Migration().migrate(store: url, schemas: schemas) }).toNot(throwError())
+            expect({ try Migration().migrate(store: url, schemas: schemas) }).toNot(throwError())
         }
 
         self.waitForExpectations(timeout: 0)

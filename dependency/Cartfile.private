@@ -1,2 +1,2 @@
-github "quick/nimble" ~> 8.0
-github "vadymmarkov/fakery" ~> 4.0
+github "quick/nimble" ~> 9.0
+github "vadymmarkov/fakery" ~> 5.0
