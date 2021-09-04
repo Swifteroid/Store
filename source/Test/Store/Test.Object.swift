@@ -3,7 +3,7 @@ import Store
 import Nimble
 
 internal class ObjectTestCase: TestCase, PersistentStoreTestCase {
-    internal static let schemaUrl: URL = PathUtility.genericSchemaUrl
+    internal static let schemaUrl: URL = PathUtility.genericSchemaURL
 
     internal func testKvc() {
         let coordinator: Coordinator = Coordinator.default

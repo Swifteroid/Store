@@ -21,9 +21,9 @@ internal class MigrationTestCase: ModelTestCase {
         // Prepare output directory and testing stores.
 
         let date: String = DateFormatter(dateFormat: "yyyy-MM-dd-HH-mm-ss").string(from: Date())
-        let outputUrl: URL = PathUtility.outputUrl(directory: "migration", cleanup: true).appendingPathComponent(date)
-        let schemaUrl: URL = PathUtility.librarySchemaUrl
-        let templateUrl: URL = PathUtility.testUrl(directory: "migration")
+        let outputUrl: URL = PathUtility.outputURL(directory: "migration", cleanup: true).appendingPathComponent(date)
+        let schemaUrl: URL = PathUtility.librarySchemaURL
+        let templateUrl: URL = PathUtility.testURL(directory: "migration")
         let stores: [(URL, Schema)] = MigrationUtility.setUpPersistentStores(at: outputUrl, schemas: Schema.schemas(at: schemaUrl), template: templateUrl)
         let schemas: [Schema] = stores.map({ $0.1 })
 

@@ -3,7 +3,7 @@ import Nimble
 import Store
 
 internal class ModelTestCase: TestCase, PersistentStoreTestCase {
-    internal static let schemaUrl: URL = PathUtility.librarySchemaUrl
+    internal static let schemaUrl: URL = PathUtility.librarySchemaURL
 
     internal func test<Model: Batchable>(_ models: [Model], _ test: (Model) -> Void) where Model.Batch.Model == Model, Model.Batch.Configuration == Model.Configuration {
         var models: [Model] = models

@@ -2,21 +2,18 @@ import Foundation
 
 internal class PathUtility {
 
-    /*
-    Requires bundle definition in injection and `Path.Root` value defined in `Info.plist`.
-    */
+    /// Requires bundle definition in injection and `Path.Root` value defined in `Info.plist`.
     private static let path: [String: String] = Bundle(for: PathUtility.self).object(forInfoDictionaryKey: "Path") as! [String: String]
-
-    private static let root: URL = URL(fileURLWithPath: PathUtility.path["Root"]!, isDirectory: true)
+    private static let rootURL: URL = URL(fileURLWithPath: PathUtility.path["Root"]!, isDirectory: true)
 
     // MARK: -
 
-    internal static var testUrl: URL {
-        self.root.appendingPathComponent("test", isDirectory: true)
+    internal static var testURL: URL {
+        self.rootURL.appendingPathComponent("test", isDirectory: true)
     }
 
-    internal static func testUrl(directory: String? = nil, file: String? = nil) -> URL {
-        var url: URL = self.testUrl
+    internal static func testURL(directory: String? = nil, file: String? = nil) -> URL {
+        var url: URL = self.testURL
         if let component: String = directory { url.appendPathComponent(component, isDirectory: true) }
         if let component: String = file { url.appendPathComponent(component, isDirectory: false) }
         return url
@@ -24,31 +21,27 @@ internal class PathUtility {
 
     // MARK: -
 
-    /*
-    Returns output directory for test products.
-    */
-    internal static var outputUrl: URL {
-        self.root.appendingPathComponent("product/test", isDirectory: true)
+    /// Returns output directory for test products.
+    internal static var outputURL: URL {
+        self.rootURL.appendingPathComponent("product/test", isDirectory: true)
     }
 
-    internal static func outputUrl(directory: String? = nil, file: String? = nil, cleanup: Bool = false) -> URL {
+    internal static func outputURL(directory: String? = nil, file: String? = nil, cleanup: Bool = false) -> URL {
         let fileManager: FileManager = FileManager.default
-        var url: URL = self.outputUrl
-
+        var url: URL = self.outputURL
         if let component: String = directory { url.appendPathComponent(component, isDirectory: true) }
         if let component: String = file { url.appendPathComponent(component, isDirectory: false) }
         if cleanup && fileManager.fileExists(atPath: url.path) { try! fileManager.removeItem(at: url) }
-
         return url
     }
 
     // MARK: -
 
-    internal static var librarySchemaUrl: URL {
+    internal static var librarySchemaURL: URL {
         Bundle(for: self).url(forResource: "library", withExtension: "momd")!
     }
 
-    internal static var genericSchemaUrl: URL {
+    internal static var genericSchemaURL: URL {
         Bundle(for: self).url(forResource: "generic", withExtension: "momd")!
     }
 }

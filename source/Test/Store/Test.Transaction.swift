@@ -3,7 +3,7 @@ import Foundation
 import Nimble
 
 internal class TransactionTestCase: TestCase, PersistentStoreTestCase {
-    internal static let schemaUrl: URL = PathUtility.librarySchemaUrl
+    internal static let schemaUrl: URL = PathUtility.librarySchemaURL
 
     internal func test() {
         try! transaction({
