@@ -1,3 +1,4 @@
+import Foundation
 import Store
 import Nimble
 
