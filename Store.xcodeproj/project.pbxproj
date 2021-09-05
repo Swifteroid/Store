@@ -94,6 +94,7 @@
 		17FD03115F10C35BFFB27F54 /* Migration.Policy.1.1.0.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Policy.1.1.0.swift; sourceTree = "<group>"; };
 		17FD031A2F3C58FC0FB9EC08 /* Model.Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Observer.swift; sourceTree = "<group>"; };
 		17FD04474F74538B52D9DD2A /* Test.Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Store.swift; sourceTree = "<group>"; };
+		17FD0481FCB31B2914F2B7C3 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		17FD04FDB184719EA74907DA /* Store.Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Request.swift; sourceTree = "<group>"; };
 		17FD058AE723B899A89EF924 /* Model.Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.Author.swift; sourceTree = "<group>"; };
 		17FD05B26BF65B69CA906D45 /* Store.Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.Coordinator.swift; sourceTree = "<group>"; };
@@ -415,6 +416,7 @@
 				17FD0923FF76BC2D796E1029 /* test */,
 				E6948765267F45B10057A76A /* .gitignore */,
 				E6948764267F45B10057A76A /* .swiftlint.yml */,
+				17FD0481FCB31B2914F2B7C3 /* Package.swift */,
 				17FD0DB38373454930D210AF /* Store.podspec */,
 				E6948766267F45B10057A76A /* LICENSE.md */,
 				17FD08C5C85112377CC6D852 /* README.md */,

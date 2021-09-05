@@ -16,5 +16,8 @@
 /.idea/dictionaries
 /.idea/runConfigurations
 
+# Swift
+/.build
+
 # Product
 /product/*
