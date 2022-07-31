@@ -49,6 +49,7 @@
 		17FD0EE3EDAF889BCF78F53E /* Test.Batch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD00AF394024CBEF35D418 /* Test.Batch.swift */; };
 		17FD0FDB7B47BEB8327D050A /* Store.Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD0FBC8B1E012043ED435D /* Store.Entity.swift */; };
 		17FD0FE6B146009DDEF22734 /* Store.Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FD02743E2C247A4840E877 /* Store.Context.swift */; };
+		4867B38728986EA400F54B00 /* Store.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60746411E83949000B75E21 /* Store.framework */; };
 		E605B6551E8680E800A0E60A /* library.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E605B6511E86761A00A0E60A /* library.xcdatamodeld */; };
 		E64105FB1EE0993A00FAC57D /* generic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E64105F91EE0993A00FAC57D /* generic.xcdatamodeld */; };
 		E64D9D581EF126EB0073E164 /* library.1.1.0.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = E64D9D561EF126CC0073E164 /* library.1.1.0.xcmappingmodel */; };
@@ -65,19 +66,6 @@
 			remoteInfo = Store;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		E605B64E1E86643700A0E60A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		17FD0063AB70BBBC8C369947 /* Batch.Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.Protocol.swift; sourceTree = "<group>"; };
@@ -121,7 +109,6 @@
 		17FD0C7706D75EDDA427F606 /* Test.Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Transaction.swift; sourceTree = "<group>"; };
 		17FD0CA19A89F54D70281C7D /* Test.Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Object.swift; sourceTree = "<group>"; };
 		17FD0D39D4156F8596008D0B /* Test.Model.Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.Model.Observer.swift; sourceTree = "<group>"; };
-		17FD0DB38373454930D210AF /* Store.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = Store.podspec; sourceTree = "<group>"; };
 		17FD0DF25DC251C069945292 /* Migration.Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Migration.Utility.swift; sourceTree = "<group>"; };
 		17FD0EA3D14033A8AF4F64C8 /* framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = framework.plist; sourceTree = "<group>"; };
 		17FD0EA3EA5CBB05E14F3CC7 /* Batch.Configuration.Relationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Batch.Configuration.Relationship.swift; sourceTree = "<group>"; };
@@ -158,6 +145,7 @@
 			files = (
 				E666059326E3F2ED00AA0DAE /* Fakery in Frameworks */,
 				E666059026E3F2D300AA0DAE /* Nimble in Frameworks */,
+				4867B38728986EA400F54B00 /* Store.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,7 +405,6 @@
 				E6948765267F45B10057A76A /* .gitignore */,
 				E6948764267F45B10057A76A /* .swiftlint.yml */,
 				17FD0481FCB31B2914F2B7C3 /* Package.swift */,
-				17FD0DB38373454930D210AF /* Store.podspec */,
 				E6948766267F45B10057A76A /* LICENSE.md */,
 				17FD08C5C85112377CC6D852 /* README.md */,
 			);
@@ -447,7 +434,6 @@
 			buildPhases = (
 				E60746461E83949000B75E21 /* Sources */,
 				E60746471E83949000B75E21 /* Frameworks */,
-				E605B64E1E86643700A0E60A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -583,6 +569,7 @@
 			baseConfigurationReference = E6948769267F46640057A76A /* macOS-Framework.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "$(inherited)/framework.plist";
+				MACH_O_TYPE = staticlib;
 			};
 			name = Debug;
 		};
@@ -591,6 +578,7 @@
 			baseConfigurationReference = E6948769267F46640057A76A /* macOS-Framework.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = "$(inherited)/framework.plist";
+				MACH_O_TYPE = staticlib;
 			};
 			name = Release;
 		};
@@ -681,7 +669,7 @@
 			repositoryURL = "https://github.com/Quick/Nimble.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.2.1;
+				minimumVersion = 10.0.0;
 			};
 		};
 		E666059126E3F2ED00AA0DAE /* XCRemoteSwiftPackageReference "Fakery" */ = {
